@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1090379104026",
+    "project_id": "rokto-b3df2",
+    "storage_bucket": "rokto-b3df2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1090379104026:android:c8144ab35fc163e3f176a3",
+        "android_client_info": {
+          "package_name": "com.app.roktoDorkar"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1090379104026-sk4ce4o50o8eq7f3lo843k7ubjrrdr5l.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB5L4G0ovNB973SWsaZw8Lu-BQ1mAsHYN4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1090379104026-sk4ce4o50o8eq7f3lo843k7ubjrrdr5l.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
