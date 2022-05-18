@@ -2,6 +2,9 @@
     <string name="app_name">Rokto</string>
     <string name="sign_in">Sign In</string>
     <string name="sign_up">Sign Up</string>
+    <string name="find_donor">Find Donor</string>
+    <string name="search_blood">Search for blood donor arround you</string>
+    <string name="location">Location</string>
     <string-array name="donate_blood">
         <item>Do you want to donate blood?</item>
         <item>Yes</item>
@@ -9,6 +12,17 @@
     </string-array>
     <string-array name="donate_type">
         <item>Select Blood Type</item>
+        <item>(A+)</item>
+        <item>(A-)</item>
+        <item>(B+)</item>
+        <item>(B-)</item>
+        <item>(O+)</item>
+        <item>(O-)</item>
+        <item>(AB+)</item>
+        <item>(AB-)</item>
+    </string-array>
+    <string-array name="donateBlood_type">
+        <item>Choose Blood Group</item>
         <item>(A+)</item>
         <item>(A-)</item>
         <item>(B+)</item>

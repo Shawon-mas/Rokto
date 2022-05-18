@@ -187,6 +187,7 @@ public class SignUpActivity extends AppCompatActivity {
         Map<String, Object> usersInfo = new HashMap<>();
         usersInfo.put("userName",binding.editTextName.getText().toString());
         usersInfo.put("userEmail", email);
+        usersInfo.put("userNumber",binding.editTextNumber.getText().toString());
         usersInfo.put("userDob", binding.birthDate.getText().toString());
         usersInfo.put("userAge", binding.age.getText().toString());
         if (bloodType.isEmpty())
@@ -204,6 +205,9 @@ public class SignUpActivity extends AppCompatActivity {
            public void onSuccess(Void unused)
            {
                Toast.makeText(getApplicationContext(),"Data Saved",Toast.LENGTH_SHORT).show();
+               Intent intent = new Intent(getApplicationContext(),SignInActivity.class);
+               startActivity(intent);
+               finish();
            }
        }).addOnFailureListener(new OnFailureListener() {
            @Override

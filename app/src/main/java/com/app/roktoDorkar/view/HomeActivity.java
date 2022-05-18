@@ -22,14 +22,21 @@ import com.app.roktoDorkar.view.bottomViewActivites.BloodReqActivity;
 import com.app.roktoDorkar.view.bottomViewActivites.HistoryActivity;
 import com.app.roktoDorkar.view.bottomViewActivites.RequestActivity;
 import com.etebarian.meowbottomnavigation.MeowBottomNavigation;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
 public class HomeActivity extends AppCompatActivity {
     private ActivityHomeBinding binding;
     private String[] bloodItem;
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,18 +53,18 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private void gridView() {
-        ArrayList<BloodItem> bloodItems=new ArrayList<BloodItem>();
+       /* ArrayList<BloodItem> bloodItems=new ArrayList<BloodItem>();
         bloodItems.add(new BloodItem("A+"));
         bloodItems.add(new BloodItem("B+"));
         bloodItems.add(new BloodItem("C+"));
         bloodItems.add(new BloodItem("D+"));
-        /*bloodItems.add(new BloodItem(bloodItem[2]));
+        *//*bloodItems.add(new BloodItem(bloodItem[2]));
         bloodItems.add(new BloodItem(bloodItem[3]));
         bloodItems.add(new BloodItem(bloodItem[4]));
         bloodItems.add(new BloodItem(bloodItem[5]));
         bloodItems.add(new BloodItem(bloodItem[6]));
         bloodItems.add(new BloodItem(bloodItem[7]));
-        bloodItems.add(new BloodItem(bloodItem[8]));*/
+        bloodItems.add(new BloodItem(bloodItem[8]));*//*
         BloodItemAdapter adapter=new BloodItemAdapter(this,bloodItems);
         binding.bloodItemGrid.setAdapter(adapter);
         binding.bloodItemGrid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -67,8 +74,45 @@ public class HomeActivity extends AppCompatActivity {
                 adapter.getItem(position);
                 adapter.notifyDataSetChanged();
             }
-        });
+        });*/
+      binding.button.setOnClickListener(new View.OnClickListener() {
+          @Override
+          public void onClick(View v) {
+              binding.homeIndicator.setVisibility(View.VISIBLE);
+            String type=  binding.spinnerdonateBlood.getSelectedItem().toString();
+           //   Toast.makeText(HomeActivity.this, type, Toast.LENGTH_SHORT).show();
+              db.collection("UserProfile").whereEqualTo("bloodType",type)
+                              .whereEqualTo("upzilla",  binding.location.getText().toString())
+                      .get()
+                      .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                          @Override
+                          public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                              if (task.isSuccessful())
+                              {
+                                  binding.homeIndicator.setVisibility(View.GONE);
+                                  for (QueryDocumentSnapshot documentSnapshot:task.getResult())
+                                  {
+                                      String name=documentSnapshot.getString("userName");
+                                      String bllod=documentSnapshot.getString("bloodType");
 
+                                      Log.d("User Name:",name);
+                                      Log.d("User Blood group:",bllod);
+                                  }
+                              }if (task.getResult().size()==0)
+                              {
+                                  binding.homeIndicator.setVisibility(View.GONE);
+                                  Toast.makeText(HomeActivity.this, "There is no donor right now your location", Toast.LENGTH_SHORT).show();
+                              }
+
+                          }
+                      }).addOnFailureListener(new OnFailureListener() {
+                          @Override
+                          public void onFailure(@NonNull Exception e) {
+
+                          }
+                      });
+          }
+      });
 
     }
 

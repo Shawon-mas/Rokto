@@ -20,7 +20,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="start"
                 android:layout_marginHorizontal="@dimen/_10sdp"
-                android:layout_marginTop="@dimen/_40sdp"
+                android:layout_marginTop="@dimen/_30sdp"
                 android:fontFamily="@font/heebo_black"
                 android:text="@string/sign_up"
                 android:textColor="@color/black"

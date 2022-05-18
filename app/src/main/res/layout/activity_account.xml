@@ -5,6 +5,18 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".view.bottomViewActivites.AccountActivity">
+
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/logOut"
+        android:text="Sign Out"
+        android:textAllCaps="false"
+        android:drawableRight="@drawable/loout"
+        android:drawableTint="@color/white"
+        android:backgroundTint="@color/main"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/_40sdp"
+        android:layout_centerInParent="true"/>
     <com.etebarian.meowbottomnavigation.MeowBottomNavigation
         android:id="@+id/bottomNav_account"
         app:mbn_backgroundBottomColor="@color/main_gray"

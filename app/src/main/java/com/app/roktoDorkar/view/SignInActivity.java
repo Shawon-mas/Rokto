@@ -105,13 +105,26 @@ public class SignInActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        FirebaseUser user = mAuth.getCurrentUser();
-        if (user != null) {
-            Intent intent = new Intent(this, HomeActivity.class);
-            startActivity(intent);
-            finish();
 
+
+        FirebaseUser user = mAuth.getCurrentUser();
+        if (user!=null)
+        {
+            if (user.isEmailVerified())
+            {
+                Intent intent = new Intent(this, HomeActivity.class);
+                startActivity(intent);
+                finish();
+            }else {
+                Log.d("Message:","User not verified");
+            }
+        } else {
+
+           /* user.sendEmailVerification();
+            Toast.makeText(SignInActivity.this, "Check your email/spam to verify your account",
+                    Toast.LENGTH_SHORT).show();*/
         }
+
 
     }
 }

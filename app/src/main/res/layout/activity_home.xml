@@ -6,14 +6,101 @@
     android:layout_height="match_parent"
     tools:context=".view.HomeActivity">
 
-    <GridView
+   <!-- <GridView
 
         android:id="@+id/bloodItemGrid"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_200sdp"
         android:horizontalSpacing="6dp"
         android:numColumns="4"
-        android:verticalSpacing="6dp" />
+        android:verticalSpacing="6dp" />-->
+    <LinearLayout
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:layout_marginHorizontal="@dimen/_10sdp"
+            android:layout_marginTop="@dimen/_40sdp"
+            android:fontFamily="@font/heebo_black"
+            android:text="@string/find_donor"
+            android:textColor="@color/black"
+            android:textSize="@dimen/_25ssp"
+            android:textStyle="bold" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:layout_marginHorizontal="@dimen/_10sdp"
+            android:fontFamily="@font/heebo_regular"
+            android:text="@string/search_blood"
+            android:textSize="@dimen/_12ssp"
+           />
+        <Spinner
+            android:layout_gravity="start"
+            android:layout_marginHorizontal="@dimen/_10sdp"
+            android:layout_marginTop="@dimen/_20sdp"
+            android:id="@+id/spinnerdonateBlood"
+            android:textSize="@dimen/_15ssp"
+            android:textColor="#000000"
+            android:background="@drawable/inuput_bg"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_45sdp"
+            android:entries="@array/donateBlood_type"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:layout_marginHorizontal="@dimen/_10sdp"
+            android:fontFamily="@font/heebo_regular"
+            android:text="@string/location"
+            android:textSize="@dimen/_12ssp"
+            android:layout_marginTop="@dimen/_50sdp"
+            />
+        <EditText
+            android:layout_marginHorizontal="@dimen/_10sdp"
+            android:gravity="center_vertical"
+            android:id="@+id/location"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_45ssp"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:background="@drawable/inuput_bg"
+            android:fontFamily="@font/heebo_regular"
+            android:hint="Enter Your Location(Upzilla)"
+            android:imeOptions="actionNext"
+            android:importantForAutofill="no"
+            android:inputType="textEmailAddress"
+            android:maxLines="1"
+            android:paddingStart="@dimen/_16sdp"
+            android:paddingEnd="@dimen/_16sdp"
+            android:textColor="#000"
+            android:textSize="@dimen/_13ssp" />
+
+        <com.google.android.material.progressindicator.CircularProgressIndicator
+            android:id="@+id/homeIndicator"
+            android:visibility="gone"
+            android:indeterminate="true"
+            android:layout_marginTop="@dimen/_15sdp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <com.google.android.material.button.MaterialButton
+            android:layout_marginTop="@dimen/_50sdp"
+            android:layout_marginHorizontal="@dimen/_10sdp"
+            android:id="@+id/button"
+            android:backgroundTint="@color/main"
+            app:cornerRadius="@dimen/_10sdp"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_50sdp"
+            android:text="Search Donor"
+            android:fontFamily="@font/heebo_regular"
+            android:textSize="@dimen/_14ssp"
+            android:textAllCaps="false"
+            android:layout_below="@id/spinnerdonateBlood"/>
+    </LinearLayout>
+
     <com.etebarian.meowbottomnavigation.MeowBottomNavigation
         android:id="@+id/bottomNav_home"
         app:mbn_backgroundBottomColor="@color/main_gray"

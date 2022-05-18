@@ -4,21 +4,40 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 
 import com.app.roktoDorkar.R;
 import com.app.roktoDorkar.databinding.ActivityAccountBinding;
 import com.app.roktoDorkar.databinding.ActivityHistoryBinding;
 import com.app.roktoDorkar.view.HomeActivity;
+import com.app.roktoDorkar.view.SignInActivity;
 import com.etebarian.meowbottomnavigation.MeowBottomNavigation;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class AccountActivity extends AppCompatActivity {
       private ActivityAccountBinding binding;
+    private FirebaseAuth mAuth;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityAccountBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        mAuth = FirebaseAuth.getInstance();
         bottomNav();
+        signOut();
+    }
+
+    private void signOut() {
+        binding.logOut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mAuth.signOut();
+                Intent intent = new Intent(getApplicationContext(),SignInActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+
     }
 
     private void bottomNav() {
