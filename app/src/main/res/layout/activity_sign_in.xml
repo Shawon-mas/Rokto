@@ -104,22 +104,22 @@
             />
 
     </LinearLayout>
+
     <com.google.android.material.button.MaterialButton
 
-        android:layout_marginHorizontal="@dimen/_24sdp"
-        android:layout_alignParentBottom="true"
         android:id="@+id/emergency_button"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_50sdp"
-        app:cornerRadius="@dimen/_10sdp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginHorizontal="@dimen/_24sdp"
         android:layout_marginTop="@dimen/_20sdp"
-        android:text="Emergency"
-        android:textSize="@dimen/_13ssp"
-        android:textColor="@color/main"
-        android:textStyle="bold"
-        android:fontFamily="@font/heebo_bold"
-        android:backgroundTint="#F4B4B4"
         android:layout_marginBottom="@dimen/_20sdp"
-        />
+        android:backgroundTint="#F4B4B4"
+        android:fontFamily="@font/heebo_bold"
+        android:text="Emergency"
+        android:textColor="@color/main"
+        android:textSize="@dimen/_13ssp"
+        android:textStyle="bold"
+        app:cornerRadius="@dimen/_10sdp" />
 
 </RelativeLayout>

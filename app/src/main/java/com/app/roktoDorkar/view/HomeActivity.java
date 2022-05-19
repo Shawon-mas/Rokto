@@ -1,9 +1,13 @@
 package com.app.roktoDorkar.view;
 
+import static com.app.global.SharedPref.USER_NAME;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.util.Log;
@@ -24,9 +28,12 @@ import com.app.roktoDorkar.view.bottomViewActivites.RequestActivity;
 import com.etebarian.meowbottomnavigation.MeowBottomNavigation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -53,28 +60,6 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private void gridView() {
-       /* ArrayList<BloodItem> bloodItems=new ArrayList<BloodItem>();
-        bloodItems.add(new BloodItem("A+"));
-        bloodItems.add(new BloodItem("B+"));
-        bloodItems.add(new BloodItem("C+"));
-        bloodItems.add(new BloodItem("D+"));
-        *//*bloodItems.add(new BloodItem(bloodItem[2]));
-        bloodItems.add(new BloodItem(bloodItem[3]));
-        bloodItems.add(new BloodItem(bloodItem[4]));
-        bloodItems.add(new BloodItem(bloodItem[5]));
-        bloodItems.add(new BloodItem(bloodItem[6]));
-        bloodItems.add(new BloodItem(bloodItem[7]));
-        bloodItems.add(new BloodItem(bloodItem[8]));*//*
-        BloodItemAdapter adapter=new BloodItemAdapter(this,bloodItems);
-        binding.bloodItemGrid.setAdapter(adapter);
-        binding.bloodItemGrid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Log.d("Item:",String.valueOf(position));
-                adapter.getItem(position);
-                adapter.notifyDataSetChanged();
-            }
-        });*/
       binding.button.setOnClickListener(new View.OnClickListener() {
           @Override
           public void onClick(View v) {
@@ -97,6 +82,10 @@ public class HomeActivity extends AppCompatActivity {
 
                                       Log.d("User Name:",name);
                                       Log.d("User Blood group:",bllod);
+                                      Intent intent=new Intent(getApplicationContext(),DonarsListActivity.class);
+                                      intent.putExtra("type",type);
+                                      intent.putExtra("location", binding.location.getText().toString());
+                                      startActivity(intent);
                                   }
                               }if (task.getResult().size()==0)
                               {
@@ -160,5 +149,26 @@ public class HomeActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        db.collection("UserProfile").document(FirebaseAuth.getInstance().getCurrentUser().getEmail())
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        if (documentSnapshot.exists())
+                        {
+                            String email= documentSnapshot.getString("userEmail");
+                            String name= documentSnapshot.getString("userName");
+                            SharedPreferences preferences = getApplicationContext().getSharedPreferences("MY_APP", Context.MODE_PRIVATE);
+                            preferences.edit().putString(USER_NAME,name).apply();
+                            Log.d("Email:",email);
+                            Log.d("Name:",name);
+                        }
 
+                    }
+                });
+
+    }
 }

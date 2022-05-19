@@ -16,6 +16,9 @@
         android:theme="@style/Theme.Rokto"
         tools:targetApi="31">
         <activity
+            android:name=".view.DonarsListActivity"
+            android:exported="false" />
+        <activity
             android:name=".view.bottomViewActivites.AccountActivity"
             android:exported="false" />
         <activity
@@ -33,11 +36,14 @@
         <activity
             android:name=".view.HomeActivity"
             android:exported="false">
-            <!--<intent-filter>
+
+            <!--
+            <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>-->
+            </intent-filter>
+            -->
         </activity>
         <activity
             android:name=".view.SignUpActivity"
@@ -48,7 +54,6 @@
         <activity
             android:name=".view.SplashActivity"
             android:exported="true">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

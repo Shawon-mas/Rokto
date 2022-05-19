@@ -95,6 +95,7 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/_50sdp"
             android:text="Search Donor"
+            android:textColor="@color/white"
             android:fontFamily="@font/heebo_regular"
             android:textSize="@dimen/_14ssp"
             android:textAllCaps="false"
