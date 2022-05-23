@@ -11,6 +11,7 @@ public class DonarListItem implements Serializable {
     private String uId;
 
     public DonarListItem() {
+
     }
 
     public DonarListItem(String userName, String bloodType, String upzilla, String userAge, String userEmail, String uId) {

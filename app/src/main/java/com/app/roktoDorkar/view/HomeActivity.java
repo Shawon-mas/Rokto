@@ -1,6 +1,6 @@
 package com.app.roktoDorkar.view;
 
-import static com.app.global.SharedPref.USER_NAME;
+import static com.app.roktoDorkar.global.SharedPref.USER_NAME;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -8,19 +8,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.Toast;
 
 import com.app.roktoDorkar.R;
-import com.app.roktoDorkar.adapter.BloodItemAdapter;
 import com.app.roktoDorkar.databinding.ActivityHomeBinding;
-import com.app.roktoDorkar.databinding.ActivitySignInBinding;
-import com.app.roktoDorkar.model.BloodItem;
 import com.app.roktoDorkar.view.bottomViewActivites.AccountActivity;
 import com.app.roktoDorkar.view.bottomViewActivites.BloodReqActivity;
 import com.app.roktoDorkar.view.bottomViewActivites.HistoryActivity;
@@ -30,97 +24,92 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.navigation.NavigationBarView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import java.util.ArrayList;
-
 public class HomeActivity extends AppCompatActivity {
     private ActivityHomeBinding binding;
     private String[] bloodItem;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    public static Boolean viewType = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityHomeBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        bloodItem=getResources().getStringArray(R.array.donate_blood);
+        bloodItem = getResources().getStringArray(R.array.donate_blood);
         gridView();
         bottomNavHome();
-
-
+        if (viewType) {
+            binding.button.setVisibility(View.GONE);
+        }
 
 
     }
 
     private void gridView() {
-      binding.button.setOnClickListener(new View.OnClickListener() {
-          @Override
-          public void onClick(View v) {
-              binding.homeIndicator.setVisibility(View.VISIBLE);
-            String type=  binding.spinnerdonateBlood.getSelectedItem().toString();
-           //   Toast.makeText(HomeActivity.this, type, Toast.LENGTH_SHORT).show();
-              db.collection("UserProfile").whereEqualTo("bloodType",type)
-                              .whereEqualTo("upzilla",  binding.location.getText().toString())
-                      .get()
-                      .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                          @Override
-                          public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                              if (task.isSuccessful())
-                              {
-                                  binding.homeIndicator.setVisibility(View.GONE);
-                                  for (QueryDocumentSnapshot documentSnapshot:task.getResult())
-                                  {
-                                      String name=documentSnapshot.getString("userName");
-                                      String bllod=documentSnapshot.getString("bloodType");
+        binding.button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                binding.homeIndicator.setVisibility(View.VISIBLE);
+                String type = binding.spinnerdonateBlood.getSelectedItem().toString();
+                //   Toast.makeText(HomeActivity.this, type, Toast.LENGTH_SHORT).show();
+                db.collection("UserProfile").whereEqualTo("bloodType", type)
+                        .whereEqualTo("upzilla", binding.location.getText().toString())
+                        .get()
+                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                if (task.isSuccessful()) {
+                                    binding.homeIndicator.setVisibility(View.GONE);
+                                    for (QueryDocumentSnapshot documentSnapshot : task.getResult()) {
+                                        String name = documentSnapshot.getString("userName");
+                                        String bllod = documentSnapshot.getString("bloodType");
 
-                                      Log.d("User Name:",name);
-                                      Log.d("User Blood group:",bllod);
-                                      Intent intent=new Intent(getApplicationContext(),DonarsListActivity.class);
-                                      intent.putExtra("type",type);
-                                      intent.putExtra("location", binding.location.getText().toString());
-                                      startActivity(intent);
-                                  }
-                              }if (task.getResult().size()==0)
-                              {
-                                  binding.homeIndicator.setVisibility(View.GONE);
-                                  Toast.makeText(HomeActivity.this, "There is no donor right now your location", Toast.LENGTH_SHORT).show();
-                              }
+                                        Log.d("User Name:", name);
+                                        Log.d("User Blood group:", bllod);
+                                        Intent intent = new Intent(getApplicationContext(), DonarsListActivity.class);
+                                        intent.putExtra("type", type);
+                                        intent.putExtra("location", binding.location.getText().toString());
+                                        startActivity(intent);
+                                    }
+                                }
+                                if (task.getResult().size() == 0) {
+                                    binding.homeIndicator.setVisibility(View.GONE);
+                                    Toast.makeText(HomeActivity.this, "There is no donor right now your location", Toast.LENGTH_SHORT).show();
+                                }
 
-                          }
-                      }).addOnFailureListener(new OnFailureListener() {
-                          @Override
-                          public void onFailure(@NonNull Exception e) {
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
 
-                          }
-                      });
-          }
-      });
+                            }
+                        });
+            }
+        });
 
     }
 
     private void bottomNavHome() {
-        binding.bottomNavHome.add(new MeowBottomNavigation.Model(1,R.drawable.search_donar));
-        binding.bottomNavHome.add(new MeowBottomNavigation.Model(2,R.drawable.request));
-        binding.bottomNavHome.add(new MeowBottomNavigation.Model(3,R.drawable.add));
-        binding.bottomNavHome.add(new MeowBottomNavigation.Model(4,R.drawable.history));
-        binding.bottomNavHome.add(new MeowBottomNavigation.Model(5,R.drawable.account));
+        binding.bottomNavHome.add(new MeowBottomNavigation.Model(1, R.drawable.search_donar));
+        binding.bottomNavHome.add(new MeowBottomNavigation.Model(2, R.drawable.request));
+        binding.bottomNavHome.add(new MeowBottomNavigation.Model(3, R.drawable.add));
+        binding.bottomNavHome.add(new MeowBottomNavigation.Model(4, R.drawable.history));
+        binding.bottomNavHome.add(new MeowBottomNavigation.Model(5, R.drawable.account));
         binding.bottomNavHome.setOnShowListener(new MeowBottomNavigation.ShowListener() {
             @Override
             public void onShowItem(MeowBottomNavigation.Model item) {
-                switch (item.getId())
-                {
+                switch (item.getId()) {
                     case 1:
                         overridePendingTransition(0, 0);
                         return;
                     case 2:
-                        startActivity(new Intent(getApplicationContext(),RequestActivity.class));
+                        startActivity(new Intent(getApplicationContext(), RequestActivity.class));
                         overridePendingTransition(0, 0);
                         return;
                     case 3:
@@ -140,11 +129,10 @@ public class HomeActivity extends AppCompatActivity {
 
             }
         });
-        binding.bottomNavHome.show(1,true);
+        binding.bottomNavHome.show(1, true);
         binding.bottomNavHome.setOnClickMenuListener(new MeowBottomNavigation.ClickListener() {
             @Override
-            public void onClickItem(MeowBottomNavigation.Model item)
-            {
+            public void onClickItem(MeowBottomNavigation.Model item) {
             }
         });
     }
@@ -157,14 +145,13 @@ public class HomeActivity extends AppCompatActivity {
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
-                        if (documentSnapshot.exists())
-                        {
-                            String email= documentSnapshot.getString("userEmail");
-                            String name= documentSnapshot.getString("userName");
+                        if (documentSnapshot.exists()) {
+                            String email = documentSnapshot.getString("userEmail");
+                            String name = documentSnapshot.getString("userName");
                             SharedPreferences preferences = getApplicationContext().getSharedPreferences("MY_APP", Context.MODE_PRIVATE);
-                            preferences.edit().putString(USER_NAME,name).apply();
-                            Log.d("Email:",email);
-                            Log.d("Name:",name);
+                            preferences.edit().putString(USER_NAME, name).apply();
+                            Log.d("Email:", email);
+                            Log.d("Name:", name);
                         }
 
                     }

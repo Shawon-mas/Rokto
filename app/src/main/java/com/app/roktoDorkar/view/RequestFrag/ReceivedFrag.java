@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.app.roktoDorkar.R;
 import com.app.roktoDorkar.view.RequestFrag.adapter.ReceivedListAdapter;
@@ -30,6 +31,7 @@ public class ReceivedFrag extends Fragment {
     private RecyclerView recyclerView_receivedfrag;
     private ReceivedListAdapter adapter;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private TextView textView_message;
 
 
     @Override
@@ -37,6 +39,14 @@ public class ReceivedFrag extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         ViewGroup root= (ViewGroup) inflater.inflate(R.layout.fragment_received, container, false);
+     textView_message=root.findViewById(R.id.message);
+       /* if (receviedListModelArrayList.size()==0)
+        {
+            textView_message.setVisibility(View.VISIBLE);
+            textView_message.setText("No Received Request");
+        }else {
+            textView_message.setVisibility(View.GONE);
+        }*/
         intiViews(root);
         return root;
     }
@@ -48,9 +58,19 @@ public class ReceivedFrag extends Fragment {
         receviedListModelArrayList=new ArrayList<>();
         adapter=new ReceivedListAdapter(getContext(),receviedListModelArrayList);
         recyclerView_receivedfrag.setAdapter(adapter);
+        if (receviedListModelArrayList.isEmpty())
+        {
+            textView_message.setVisibility(View.VISIBLE);
+            textView_message.setText("No Received Request");
+            recyclerView_receivedfrag.setVisibility(View.GONE);
+        }else {
+            textView_message.setVisibility(View.GONE);
+            recyclerView_receivedfrag.setVisibility(View.VISIBLE);
+
+        }
         db.collection("UserProfile").document(FirebaseAuth.getInstance().getCurrentUser().getEmail())
                 .collection("RequestPortal").document("RequestType")
-                .collection("Received Request")
+                .collection("Received_Request")
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error)

@@ -1,10 +1,11 @@
 package com.app.roktoDorkar.adapter;
 
-import static com.app.global.SharedPref.USER_NAME;
+import static android.content.Context.MODE_PRIVATE;
+import static com.app.roktoDorkar.global.SharedPref.USER_NAME;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +17,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.app.roktoDorkar.R;
 import com.app.roktoDorkar.model.DonarListItem;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.button.MaterialButton;
 import com.google.firebase.auth.FirebaseAuth;
@@ -29,10 +29,16 @@ import java.util.Map;
 public class DonarListAdapter extends RecyclerView.Adapter<DonarListAdapter.MyViewHolder> {
     Context context;
     private ArrayList<DonarListItem> donarListItems;
-   public static String bloogGroup;
-   public static String userName;
-   public static String location;
-   public static String email;
+    public static String bloogGroup;
+    public static String userName;
+    public static String location;
+    public static String userEmail;
+    public static String userUid;
+    public static String requestTpe="not_accept";
+
+
+
+    public static FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     public DonarListAdapter(Context context, ArrayList<DonarListItem> donarListItems) {
         this.context = context;
@@ -42,7 +48,7 @@ public class DonarListAdapter extends RecyclerView.Adapter<DonarListAdapter.MyVi
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view= LayoutInflater.from(context).inflate(R.layout.donar_list_item,parent,false);
+        View view = LayoutInflater.from(context).inflate(R.layout.donar_list_item, parent, false);
 
         return new MyViewHolder(view);
 
@@ -53,16 +59,79 @@ public class DonarListAdapter extends RecyclerView.Adapter<DonarListAdapter.MyVi
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        DonarListItem item=donarListItems.get(position);
-         bloogGroup=item.getBloodType();
-         userName=item.getUserName();
-         location=item.getUpzilla();
-         email=item.getUserEmail();
+    public void onBindViewHolder(@NonNull MyViewHolder holder, @SuppressLint("RecyclerView") int position) {
+        DonarListItem item = donarListItems.get(position);
+        bloogGroup = item.getBloodType();
+        userName = item.getUserName();
+        location = item.getUpzilla();
+        userEmail = item.getUserEmail();
+        userUid = item.getuId();
+
         holder.textViewBloodgroup.setText(item.getBloodType());
         holder.textViewDonarName.setText(item.getUserName());
         holder.textViewLastDonate.setText(item.getUserAge());
         holder.textViewLocation.setText(item.getUpzilla());
+        holder.materialButtonReq.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                holder.materialButtonReq.setEnabled(false);
+                if (requestTpe.equals("not_accept"))
+                {
+                    Map<String, Object> requestInfo = new HashMap<>();
+                    requestInfo.put("bloodGroup", bloogGroup);
+                    requestInfo.put("userName", userName);
+                    requestInfo.put("location", location);
+                    requestInfo.put("requestType", requestTpe);
+                    requestInfo.put("senderUid", userUid);
+                    db.collection("UserProfile").document(FirebaseAuth.getInstance().getCurrentUser().getEmail())
+                            .collection("RequestPortal").document("RequestType")
+                            .collection("Sent_Request").document(userUid)
+                            .set(requestInfo).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void unused)
+                                {
+                                    SharedPreferences preferences = context.getSharedPreferences("MY_APP", MODE_PRIVATE);
+                                    String senderName = preferences.getString(USER_NAME, null);
+                                    Map<String, Object> requestInfo2 = new HashMap<>();
+                                    requestInfo2.put("bloodGroup", bloogGroup);
+                                    requestInfo2.put("userName", senderName);
+                                    requestInfo2.put("location", location);
+                                    requestInfo2.put("requestType", requestTpe);
+                                    requestInfo2.put("receiverUid", FirebaseAuth.getInstance().getUid());
+                                    db.collection("UserProfile").document(userEmail)
+                                            .collection("RequestPortal").document("RequestType")
+                                            .collection("Received_Request").document(userUid)
+                                            .set(requestInfo2).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                @Override
+                                                public void onSuccess(Void unused)
+                                                {
+
+
+                                                    holder.materialButtonReq.setText("Pending Request");
+                                                    holder.materialButtonReq.setCompoundDrawablesWithIntrinsicBounds(R.drawable.pending, 0, 0, 0);
+
+                                                    Toast.makeText(context, "Request Sent", Toast.LENGTH_SHORT).show();
+
+                                                  //  holder.materialButtonReq.setBackgroundColor(R.color.main);
+                                               /*
+                                                buttonMyText.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ImageNameHere, 0, 0, 0);
+                                                buttonMyText.setTextColor(Color.BLACK);
+                                                */
+                                                }
+                                            });
+                                }
+                            });
+
+                }
+            }
+        });
+        if (requestTpe.equals("sent"))
+        {
+            holder.materialButtonReq.setText("Pending Request");
+            holder.materialButtonReq.setCompoundDrawablesWithIntrinsicBounds(R.drawable.pending, 0, 0, 0);
+        }
+
+
 
     }
 
@@ -71,63 +140,59 @@ public class DonarListAdapter extends RecyclerView.Adapter<DonarListAdapter.MyVi
         return donarListItems.size();
     }
 
-    public class MyViewHolder extends RecyclerView.ViewHolder{
-           TextView textViewBloodgroup,textViewDonarName,textViewLastDonate,textViewLocation;
-           MaterialButton materialButtonReq,materialButtonPen;
+    public class MyViewHolder extends RecyclerView.ViewHolder {
+        TextView textViewBloodgroup, textViewDonarName, textViewLastDonate, textViewLocation;
+        MaterialButton materialButtonReq, materialButtonPen;
         private FirebaseAuth mAuth;
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
-            textViewBloodgroup=itemView.findViewById(R.id.blood_group);
-            textViewDonarName=itemView.findViewById(R.id.donar_name);
-            textViewLastDonate=itemView.findViewById(R.id.lastDonateDate);
-            textViewLocation=itemView.findViewById(R.id.locationDonar);
-            materialButtonReq=itemView.findViewById(R.id.requestBlood);
-            materialButtonPen=itemView.findViewById(R.id.pendingrequestBlood);
-            materialButtonReq.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v)
-                {
+            textViewBloodgroup = itemView.findViewById(R.id.blood_group);
+            textViewDonarName = itemView.findViewById(R.id.donar_name);
+            textViewLastDonate = itemView.findViewById(R.id.lastDonateDate);
+            textViewLocation = itemView.findViewById(R.id.locationDonar);
+            materialButtonReq = itemView.findViewById(R.id.requestBlood);
+            materialButtonPen = itemView.findViewById(R.id.pendingrequestBlood);
 
-                    SharedPreferences preferences = context.getSharedPreferences("MY_APP", Context.MODE_PRIVATE);
-                    String name=preferences.getString(USER_NAME,null);
-                    boolean requestType=false;
-
-                    Map<String, Object> requestInfo = new HashMap<>();
-                    requestInfo.put("bloodGroup",bloogGroup);
-                    requestInfo.put("userName",name);
-                    requestInfo.put("location",location);
-                    requestInfo.put("requestType",requestType);
-
-                    db.collection("UserProfile").document(email)
-                            .collection("RequestPortal").document("RequestType")
-                            .collection("Received Request").document().set(requestInfo).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                @Override
-                                public void onSuccess(Void unused)
-                                {
-
-                                     Toast.makeText(context, "Request Sent", Toast.LENGTH_SHORT).show();
-                                     materialButtonPen.setVisibility(View.VISIBLE);
-                                     materialButtonReq.setSelected(true);
-                                     materialButtonReq.setVisibility(View.GONE);
-                                }
-                            }).addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e)
-                                {
-                                    Log.d("Error:",e.toString());
-                                }
-                            });
-                    if (!requestType)
-                    {
-                        materialButtonReq.setVisibility(View.GONE);
-                        materialButtonPen.setVisibility(View.VISIBLE);
-
-                    }
-
-
-                }
-            });
         }
     }
 }
+/*
+
+                                SharedPreferences.Editor editor = context.getSharedPreferences("Button", MODE_PRIVATE).edit();
+                                editor.putString(String.valueOf(position)+ "pressed", "yes");
+                                editor.apply();
+                                holder.materialButtonPen.setVisibility(View.VISIBLE);
+                                holder.materialButtonReq.setVisibility(View.GONE);
+
+                                assert donarListItems!=null;
+                               Integer count_key=donarListItems.size();
+                               String clickCount=String.valueOf(count_key);
+
+                               Intent my_intent=new Intent("message");
+                                my_intent.putExtra("click_count",clickCount);
+                                LocalBroadcastManager.getInstance(context).sendBroadcast(my_intent);
+                                v.setEnabled(false);
+*/
+/*
+
+                                db.collection("UserProfile").document(userEmail)
+                                        .collection("RequestPortal").document("RequestType")
+                                        .collection("Received_Request").document(FirebaseAuth.getInstance().getUid()).set(requestInfo)
+ Map<String, Object> requestInfo = new HashMap<>();
+                requestInfo.put("bloodGroup", bloogGroup);
+                requestInfo.put("userName", userName);
+                requestInfo.put("location", location);
+                requestInfo.put("requestType", requestType);
+                requestInfo.put("userUid", userUid);
+
+                 Map<String, Object> requestInfo2 = new HashMap<>();
+                                requestInfo.put("bloodGroup", bloogGroup);
+                                requestInfo.put("userName", name);
+                                requestInfo.put("location", location);
+                                requestInfo.put("requestType", requestType);
+                                requestInfo.put("userUid", FirebaseAuth.getInstance().getUid());
+                                 SharedPreferences preferences = context.getSharedPreferences("MY_APP", MODE_PRIVATE);
+                                String name = preferences.getString(USER_NAME, null);
+
+ */

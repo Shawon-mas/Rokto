@@ -79,6 +79,12 @@ public class DonarsListActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+        donarListItems.clear();
+    }
+
+    @Override
     public void onBackPressed() {
 
         super.onBackPressed();

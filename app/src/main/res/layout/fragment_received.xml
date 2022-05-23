@@ -10,5 +10,14 @@
         android:id="@+id/recyclerviewReceivedList"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
-
+     <TextView
+         android:id="@+id/message"
+         android:visibility="gone"
+         android:hint="Message"
+         android:textSize="@dimen/_16ssp"
+         android:fontFamily="@font/heebo_medium"
+         android:textColor="@color/main_black"
+         android:layout_centerInParent="true"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"/>
 </RelativeLayout>

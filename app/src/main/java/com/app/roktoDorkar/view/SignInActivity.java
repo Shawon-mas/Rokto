@@ -14,6 +14,7 @@ import com.app.roktoDorkar.MainActivity;
 import com.app.roktoDorkar.R;
 import com.app.roktoDorkar.databinding.ActivitySignInBinding;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -47,8 +48,8 @@ public class SignInActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 binding.signInIndicator.setVisibility(View.VISIBLE);
-                String email = binding.signIneditTextEmail.getText().toString();
-                String pass = binding.signIneditTextPassword.getText().toString();
+                String email = binding.signIneditTextEmail.getText().toString().trim();
+                String pass = binding.signIneditTextPassword.getText().toString().trim();
                 if (email.isEmpty()) {
                     binding.signIneditTextEmail.setError("Enter your email");
                     binding.signIneditTextEmail.requestFocus();
@@ -92,12 +93,20 @@ public class SignInActivity extends AppCompatActivity {
 
                             //  updateUI(user);
                         } else {
+                            binding.signInIndicator.setVisibility(View.GONE);
                             // If sign in fails, display a message to the user.
                             Log.w("message", "signInWithEmail:failure", task.getException());
                             Toast.makeText(SignInActivity.this, "Your account does not exist",
                                     Toast.LENGTH_SHORT).show();
                             //updateUI(null);
                         }
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d("message", e.toString());
+                        Toast.makeText(SignInActivity.this, e.toString(),
+                                Toast.LENGTH_SHORT).show();
                     }
                 });
     }
