@@ -3,4 +3,5 @@
     android:shape="rectangle">
     <solid android:color="@color/input_bg"/>
     <corners android:radius="@dimen/_10sdp"/>
+
 </shape>

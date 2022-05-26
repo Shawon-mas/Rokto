@@ -5,6 +5,50 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".view.bottomViewActivites.BloodReqActivity">
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <Spinner
+            android:layout_gravity="start"
+            android:layout_marginHorizontal="@dimen/_10sdp"
+            android:layout_marginTop="@dimen/_20sdp"
+            android:id="@+id/spinnerdonateBlood"
+            android:textSize="@dimen/_15ssp"
+            android:textColor="#000000"
+            android:background="@drawable/inuput_bg"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_45sdp"
+            android:entries="@array/donateBlood_type"/>
+        <Spinner
+            android:layout_gravity="start"
+            android:layout_marginHorizontal="@dimen/_10sdp"
+            android:layout_marginTop="@dimen/_20sdp"
+            android:id="@+id/spinner"
+            android:textSize="@dimen/_15ssp"
+            android:textColor="#000000"
+            android:background="@drawable/inuput_bg"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_45sdp"
+            android:entries="@array/blood_quantity"/>
+        <TextView
+            android:id="@+id/dateTime"
+            android:layout_marginHorizontal="@dimen/_10sdp"
+            android:drawableTint="@color/black"
+            android:drawableRight="@drawable/calender"
+            android:textSize="@dimen/_13ssp"
+            android:gravity="center_vertical"
+            android:fontFamily="@font/heebo_regular"
+            android:paddingStart="@dimen/_16sdp"
+            android:paddingEnd="@dimen/_16sdp"
+            android:background="@drawable/inuput_bg"
+            android:hint="Date &amp; time"
+            android:layout_marginTop="@dimen/_16sdp"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_46sdp"
+            />
+    </LinearLayout>
+
     <com.etebarian.meowbottomnavigation.MeowBottomNavigation
         android:id="@+id/bottomNav_bloodReq"
         app:mbn_backgroundBottomColor="@color/main_gray"

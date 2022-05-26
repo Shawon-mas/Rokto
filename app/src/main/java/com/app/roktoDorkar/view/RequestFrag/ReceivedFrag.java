@@ -58,7 +58,7 @@ public class ReceivedFrag extends Fragment {
         receviedListModelArrayList=new ArrayList<>();
         adapter=new ReceivedListAdapter(getContext(),receviedListModelArrayList);
         recyclerView_receivedfrag.setAdapter(adapter);
-        if (receviedListModelArrayList.isEmpty())
+        /*if (receviedListModelArrayList.isEmpty())
         {
             textView_message.setVisibility(View.VISIBLE);
             textView_message.setText("No Received Request");
@@ -67,7 +67,7 @@ public class ReceivedFrag extends Fragment {
             textView_message.setVisibility(View.GONE);
             recyclerView_receivedfrag.setVisibility(View.VISIBLE);
 
-        }
+        }*/
         db.collection("UserProfile").document(FirebaseAuth.getInstance().getCurrentUser().getEmail())
                 .collection("RequestPortal").document("RequestType")
                 .collection("Received_Request")

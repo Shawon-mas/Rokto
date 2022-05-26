@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.app.roktoDorkar.R;
 import com.app.roktoDorkar.model.DonarListItem;
+import com.app.roktoDorkar.view.RequestFrag.model.ReceviedListModel;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.button.MaterialButton;
 import com.google.firebase.auth.FirebaseAuth;
@@ -26,16 +27,19 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import es.dmoral.toasty.Toasty;
+
 public class DonarListAdapter extends RecyclerView.Adapter<DonarListAdapter.MyViewHolder> {
     Context context;
     private ArrayList<DonarListItem> donarListItems;
+    private ArrayList<ReceviedListModel> receviedListModels;
     public static String bloogGroup;
     public static String userName;
     public static String location;
     public static String userEmail;
     public static String userUid;
     public static String requestTpe="not_accept";
-
+    public static String currentUserId=FirebaseAuth.getInstance().getCurrentUser().getUid();
 
 
     public static FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -60,6 +64,8 @@ public class DonarListAdapter extends RecyclerView.Adapter<DonarListAdapter.MyVi
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, @SuppressLint("RecyclerView") int position) {
+
+
         DonarListItem item = donarListItems.get(position);
         bloogGroup = item.getBloodType();
         userName = item.getUserName();
@@ -71,12 +77,11 @@ public class DonarListAdapter extends RecyclerView.Adapter<DonarListAdapter.MyVi
         holder.textViewDonarName.setText(item.getUserName());
         holder.textViewLastDonate.setText(item.getUserAge());
         holder.textViewLocation.setText(item.getUpzilla());
-        holder.materialButtonReq.setOnClickListener(new View.OnClickListener() {
+       /* holder.materialButtonReq.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 holder.materialButtonReq.setEnabled(false);
-                if (requestTpe.equals("not_accept"))
-                {
+
                     Map<String, Object> requestInfo = new HashMap<>();
                     requestInfo.put("bloodGroup", bloogGroup);
                     requestInfo.put("userName", userName);
@@ -100,7 +105,7 @@ public class DonarListAdapter extends RecyclerView.Adapter<DonarListAdapter.MyVi
                                     requestInfo2.put("receiverUid", FirebaseAuth.getInstance().getUid());
                                     db.collection("UserProfile").document(userEmail)
                                             .collection("RequestPortal").document("RequestType")
-                                            .collection("Received_Request").document(userUid)
+                                            .collection("Received_Request").document(currentUserId)
                                             .set(requestInfo2).addOnSuccessListener(new OnSuccessListener<Void>() {
                                                 @Override
                                                 public void onSuccess(Void unused)
@@ -111,25 +116,25 @@ public class DonarListAdapter extends RecyclerView.Adapter<DonarListAdapter.MyVi
                                                     holder.materialButtonReq.setCompoundDrawablesWithIntrinsicBounds(R.drawable.pending, 0, 0, 0);
 
                                                     Toast.makeText(context, "Request Sent", Toast.LENGTH_SHORT).show();
+                                                    
 
                                                   //  holder.materialButtonReq.setBackgroundColor(R.color.main);
-                                               /*
+                                               *//*
                                                 buttonMyText.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ImageNameHere, 0, 0, 0);
                                                 buttonMyText.setTextColor(Color.BLACK);
-                                                */
+                                                *//*
                                                 }
-                                            });
+                                  });
                                 }
                             });
-
                 }
-            }
-        });
-        if (requestTpe.equals("sent"))
-        {
-            holder.materialButtonReq.setText("Pending Request");
-            holder.materialButtonReq.setCompoundDrawablesWithIntrinsicBounds(R.drawable.pending, 0, 0, 0);
-        }
+        });*/
+       holder.materialButtonChat.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View v) {
+               Toasty.info(context,"Coming Soon...!",Toasty.LENGTH_SHORT).show();
+           }
+       });
 
 
 
@@ -142,7 +147,7 @@ public class DonarListAdapter extends RecyclerView.Adapter<DonarListAdapter.MyVi
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         TextView textViewBloodgroup, textViewDonarName, textViewLastDonate, textViewLocation;
-        MaterialButton materialButtonReq, materialButtonPen;
+        MaterialButton materialButtonChat, materialButtonPen;
         private FirebaseAuth mAuth;
 
         public MyViewHolder(@NonNull View itemView) {
@@ -151,8 +156,8 @@ public class DonarListAdapter extends RecyclerView.Adapter<DonarListAdapter.MyVi
             textViewDonarName = itemView.findViewById(R.id.donar_name);
             textViewLastDonate = itemView.findViewById(R.id.lastDonateDate);
             textViewLocation = itemView.findViewById(R.id.locationDonar);
-            materialButtonReq = itemView.findViewById(R.id.requestBlood);
-            materialButtonPen = itemView.findViewById(R.id.pendingrequestBlood);
+            materialButtonChat = itemView.findViewById(R.id.chat);
+            
 
         }
     }

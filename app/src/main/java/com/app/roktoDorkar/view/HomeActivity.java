@@ -29,6 +29,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.squareup.picasso.Picasso;
 
 public class HomeActivity extends AppCompatActivity {
     private ActivityHomeBinding binding;
@@ -43,6 +44,7 @@ public class HomeActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
         bloodItem = getResources().getStringArray(R.array.donate_blood);
         gridView();
+       // Picasso.get().load("https://i.ibb.co/C1xfSLF/b110a1631ac9ae054007f19bd98295c0.png").into(binding.image);
         bottomNavHome();
         if (viewType) {
             binding.button.setVisibility(View.GONE);

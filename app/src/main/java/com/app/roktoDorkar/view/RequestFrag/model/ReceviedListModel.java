@@ -5,17 +5,24 @@ import java.io.Serializable;
 public class ReceviedListModel implements Serializable {
     private String bloodGroup;
     private String userName;
+    private String userEmail;
     private String location;
-    private Boolean requestType;
+    private String requestType;
+    private String senderUid;
+    private String receiverUid;
 
-    public ReceviedListModel() {
+    public ReceviedListModel()
+    {
     }
 
-    public ReceviedListModel(String bloodGroup, String userName, String location, Boolean requestType) {
+    public ReceviedListModel(String bloodGroup, String userName, String userEmail, String location, String requestType, String senderUid, String receiverUid) {
         this.bloodGroup = bloodGroup;
         this.userName = userName;
+        this.userEmail = userEmail;
         this.location = location;
         this.requestType = requestType;
+        this.senderUid = senderUid;
+        this.receiverUid = receiverUid;
     }
 
     public String getBloodGroup() {
@@ -34,6 +41,14 @@ public class ReceviedListModel implements Serializable {
         this.userName = userName;
     }
 
+    public String getUserEmail() {
+        return userEmail;
+    }
+
+    public void setUserEmail(String userEmail) {
+        this.userEmail = userEmail;
+    }
+
     public String getLocation() {
         return location;
     }
@@ -42,11 +57,27 @@ public class ReceviedListModel implements Serializable {
         this.location = location;
     }
 
-    public Boolean getRequestType() {
+    public String getRequestType() {
         return requestType;
     }
 
-    public void setRequestType(Boolean requestType) {
+    public void setRequestType(String requestType) {
         this.requestType = requestType;
+    }
+
+    public String getSenderUid() {
+        return senderUid;
+    }
+
+    public void setSenderUid(String senderUid) {
+        this.senderUid = senderUid;
+    }
+
+    public String getReceiverUid() {
+        return receiverUid;
+    }
+
+    public void setReceiverUid(String receiverUid) {
+        this.receiverUid = receiverUid;
     }
 }
