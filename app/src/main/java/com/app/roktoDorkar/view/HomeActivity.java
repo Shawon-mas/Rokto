@@ -1,6 +1,8 @@
 package com.app.roktoDorkar.view;
 
+import static com.app.roktoDorkar.global.SharedPref.USER_BLOODTYPE;
 import static com.app.roktoDorkar.global.SharedPref.USER_NAME;
+import static com.app.roktoDorkar.global.SharedPref.USER_UPAZILA;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -150,8 +152,13 @@ public class HomeActivity extends AppCompatActivity {
                         if (documentSnapshot.exists()) {
                             String email = documentSnapshot.getString("userEmail");
                             String name = documentSnapshot.getString("userName");
+                            String bloodType = documentSnapshot.getString("bloodType");
+                            String upazila = documentSnapshot.getString("upzilla");
+
                             SharedPreferences preferences = getApplicationContext().getSharedPreferences("MY_APP", Context.MODE_PRIVATE);
                             preferences.edit().putString(USER_NAME, name).apply();
+                            preferences.edit().putString(USER_BLOODTYPE, bloodType).apply();
+                            preferences.edit().putString(USER_UPAZILA, upazila).apply();
                             Log.d("Email:", email);
                             Log.d("Name:", name);
                         }

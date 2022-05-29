@@ -6,10 +6,10 @@
     tools:context=".view.RequestFrag.MyRequestFrag">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
-       android:layout_centerInParent="true"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="My Rquest Frag" />
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerviewReqSentList"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
 
 </RelativeLayout>

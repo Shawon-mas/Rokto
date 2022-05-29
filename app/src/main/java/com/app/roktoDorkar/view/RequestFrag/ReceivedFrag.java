@@ -1,5 +1,11 @@
 package com.app.roktoDorkar.view.RequestFrag;
 
+import static android.content.Context.MODE_PRIVATE;
+import static com.app.roktoDorkar.global.SharedPref.USER_BLOODTYPE;
+import static com.app.roktoDorkar.global.SharedPref.USER_NAME;
+import static com.app.roktoDorkar.global.SharedPref.USER_UPAZILA;
+
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
@@ -24,6 +30,7 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 
 public class ReceivedFrag extends Fragment {
@@ -68,9 +75,11 @@ public class ReceivedFrag extends Fragment {
             recyclerView_receivedfrag.setVisibility(View.VISIBLE);
 
         }*/
-        db.collection("UserProfile").document(FirebaseAuth.getInstance().getCurrentUser().getEmail())
-                .collection("RequestPortal").document("RequestType")
-                .collection("Received_Request")
+        SharedPreferences preferences = getContext().getSharedPreferences("MY_APP", MODE_PRIVATE);
+        String bloodType = preferences.getString(USER_BLOODTYPE, null);
+        String upazila = preferences.getString(USER_UPAZILA, null);
+        db.collection("BloodRequest").whereEqualTo("senderRequiredBlood",bloodType)
+                .whereEqualTo("senderRequestUpazila",upazila)
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error)
@@ -84,6 +93,7 @@ public class ReceivedFrag extends Fragment {
                         {
                             if (documentChange.getType()== DocumentChange.Type.ADDED)
                             {
+                                Collections.reverse(receviedListModelArrayList);
                                 receviedListModelArrayList.add(documentChange.getDocument().toObject(ReceviedListModel.class));
                             }
                             adapter.notifyDataSetChanged();
