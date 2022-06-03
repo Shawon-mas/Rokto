@@ -10,5 +10,6 @@
     <color name="main">#DE2C2C</color>
     <color name="main_black">#1a1a1a</color>
     <color name="main_gray">#767676</color>
+    <color name="main_green">#003d00</color>
     <color name="input_bg">#ECECEC</color>
 </resources>

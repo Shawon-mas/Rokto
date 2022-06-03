@@ -77,26 +77,40 @@
             android:textSize="@dimen/_12ssp" />
 
         <com.google.android.material.button.MaterialButton
-            android:visibility="visible"
-            android:drawableLeft="@drawable/done"
-            android:drawableTint="@color/white"
             android:id="@+id/accept"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/locationDonar"
             android:layout_marginHorizontal="@dimen/_10sdp"
             android:layout_toRightOf="@id/blood_group"
-            android:backgroundTint="@color/main"
+            android:backgroundTint="@color/main_green"
+            android:drawableLeft="@drawable/done"
+            android:drawableTint="@color/white"
             android:text="Accept"
             android:textAllCaps="false"
-            android:textColor="@color/white" />
+            android:textColor="@color/white"
+            android:visibility="visible" />
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/friends"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/locationDonar"
+            android:layout_marginHorizontal="@dimen/_10sdp"
+            android:layout_toRightOf="@id/blood_group"
+            android:backgroundTint="@color/main"
+            android:drawableLeft="@drawable/friends"
+            android:drawableTint="@color/white"
+            android:text="Connected"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:visibility="invisible" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/decline"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/locationDonar"
-            android:layout_marginHorizontal="@dimen/_10sdp"
+            android:layout_marginHorizontal="@dimen/_20sdp"
             android:layout_toRightOf="@id/accept"
             android:backgroundTint="#F4B4B4"
             android:drawableLeft="@drawable/decline"
@@ -111,7 +125,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/locationDonar"
             android:layout_marginHorizontal="@dimen/_10sdp"
-            android:layout_toRightOf="@id/accept"
+            android:layout_toRightOf="@id/friends"
             android:backgroundTint="#F4B4B4"
             android:drawableLeft="@drawable/chat"
             android:drawableTint="@color/main"
@@ -119,6 +133,7 @@
             android:textAllCaps="false"
             android:textColor="@color/main"
             android:visibility="invisible" />
+
 
     </RelativeLayout>
 

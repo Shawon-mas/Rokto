@@ -65,16 +65,7 @@ public class ReceivedFrag extends Fragment {
         receviedListModelArrayList=new ArrayList<>();
         adapter=new ReceivedListAdapter(getContext(),receviedListModelArrayList);
         recyclerView_receivedfrag.setAdapter(adapter);
-        /*if (receviedListModelArrayList.isEmpty())
-        {
-            textView_message.setVisibility(View.VISIBLE);
-            textView_message.setText("No Received Request");
-            recyclerView_receivedfrag.setVisibility(View.GONE);
-        }else {
-            textView_message.setVisibility(View.GONE);
-            recyclerView_receivedfrag.setVisibility(View.VISIBLE);
 
-        }*/
         SharedPreferences preferences = getContext().getSharedPreferences("MY_APP", MODE_PRIVATE);
         String bloodType = preferences.getString(USER_BLOODTYPE, null);
         String upazila = preferences.getString(USER_UPAZILA, null);
@@ -87,13 +78,14 @@ public class ReceivedFrag extends Fragment {
                         if (error!=null)
                         {
                             Log.d("Firestore error", error.getMessage());
+
                             return;
                         }
                         for (DocumentChange documentChange:value.getDocumentChanges())
                         {
                             if (documentChange.getType()== DocumentChange.Type.ADDED)
                             {
-                                Collections.reverse(receviedListModelArrayList);
+
                                 receviedListModelArrayList.add(documentChange.getDocument().toObject(ReceviedListModel.class));
                             }
                             adapter.notifyDataSetChanged();
@@ -104,6 +96,17 @@ public class ReceivedFrag extends Fragment {
 
 
 
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        adapter.notifyDataSetChanged();
+    }
+    @Override
+    public void onStop() {
+        super.onStop();
+        adapter.notifyDataSetChanged();
     }
 }
 /*

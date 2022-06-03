@@ -18,12 +18,12 @@ public class ReceviedListModel implements Serializable {
     private String senderUid;
     private String senderEmail;
     private String requestReceiverUid;
-    private String senderId;
+    private String documentId;
 
     public ReceviedListModel() {
     }
 
-    public ReceviedListModel(String requestStatus, String senderGiftAmount, String senderName, String senderPatientGender, String senderPhoneNumber, String senderRequestDetails, String senderRequestForDate, String senderRequestForTime, String senderRequestLocation, String senderRequestUpazila, String senderRequiredBlood, String senderRequiredQuantity, String senderUid, String senderEmail, String requestReceiverUid, String senderId) {
+    public ReceviedListModel(String requestStatus, String senderGiftAmount, String senderName, String senderPatientGender, String senderPhoneNumber, String senderRequestDetails, String senderRequestForDate, String senderRequestForTime, String senderRequestLocation, String senderRequestUpazila, String senderRequiredBlood, String senderRequiredQuantity, String senderUid, String senderEmail, String requestReceiverUid, String documentId) {
         this.requestStatus = requestStatus;
         this.senderGiftAmount = senderGiftAmount;
         this.senderName = senderName;
@@ -39,7 +39,7 @@ public class ReceviedListModel implements Serializable {
         this.senderUid = senderUid;
         this.senderEmail = senderEmail;
         this.requestReceiverUid = requestReceiverUid;
-        this.senderId = senderId;
+        this.documentId = documentId;
     }
 
     public String getRequestStatus() {
@@ -162,11 +162,11 @@ public class ReceviedListModel implements Serializable {
         this.requestReceiverUid = requestReceiverUid;
     }
 
-    public String getSenderId() {
-        return senderId;
+    public String getDocumentId() {
+        return documentId;
     }
 
-    public void setSenderId(String senderId) {
-        this.senderId = senderId;
+    public void setDocumentId(String documentId) {
+        this.documentId = documentId;
     }
 }
