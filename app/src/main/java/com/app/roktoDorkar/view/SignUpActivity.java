@@ -159,7 +159,7 @@ public class SignUpActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             binding.signUpIndicator.setVisibility(View.GONE);
                             // Sign in success, update UI with the signed-in user's information
-                            Log.d("Report", "createUserWithEmail:success");
+                            Log.d("Message", "createUserWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
                             updateUI(user,email);
                         } else {
@@ -248,7 +248,7 @@ public class SignUpActivity extends AppCompatActivity {
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                Toast.makeText(getApplicationContext(),"Please Select",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(),"Please Select Text",Toast.LENGTH_SHORT).show();
 
             }
         });

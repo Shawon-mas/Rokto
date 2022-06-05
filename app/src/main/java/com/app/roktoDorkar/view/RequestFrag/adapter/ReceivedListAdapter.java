@@ -121,7 +121,7 @@ public class ReceivedListAdapter extends RecyclerView.Adapter<ReceivedListAdapte
                                                 updates.put("requestStatus",updateStatus);
                                                 updates.put("requestReceiverUid",FirebaseAuth.getInstance().getCurrentUser().getUid());
                                                 updates.put("requestReceiverName",receiverName);*/
-                                                Toasty.success(context,"Request Accept Done",Toasty.LENGTH_SHORT,false).show();
+                                                Toasty.success(context,"Request Accept",Toasty.LENGTH_SHORT,false).show();
                                                 /*db.collection("UserProfile").document(userEmail)
                                                         .collection("BloodRequestPortal").document("Request_Type")
                                                         .collection("Sent_Request").document(senderUid)
