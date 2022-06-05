@@ -42,11 +42,12 @@ public class ReceivedListAdapter extends RecyclerView.Adapter<ReceivedListAdapte
     private String type;
     private String userEmail;
     private String receiverUid;
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
     DocumentReference ref = db.collection("BloodRequest").document();
 
     private String updateStatus="accept";
     private ArrayList<ReceviedListModel> receviedListModelArrayList;
-    public static FirebaseFirestore db = FirebaseFirestore.getInstance();
+
     public ReceivedListAdapter(Context context, ArrayList<ReceviedListModel> receviedListModelArrayList) {
         this.context = context;
         this.receviedListModelArrayList = receviedListModelArrayList;
@@ -120,7 +121,7 @@ public class ReceivedListAdapter extends RecyclerView.Adapter<ReceivedListAdapte
                                                 updates.put("requestStatus",updateStatus);
                                                 updates.put("requestReceiverUid",FirebaseAuth.getInstance().getCurrentUser().getUid());
                                                 updates.put("requestReceiverName",receiverName);*/
-                                                Toasty.success(context,"Request Accept",Toasty.LENGTH_SHORT,false).show();
+                                                Toasty.success(context,"Request Accept Done",Toasty.LENGTH_SHORT,false).show();
                                                 /*db.collection("UserProfile").document(userEmail)
                                                         .collection("BloodRequestPortal").document("Request_Type")
                                                         .collection("Sent_Request").document(senderUid)
