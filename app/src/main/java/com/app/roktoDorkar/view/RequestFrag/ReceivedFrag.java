@@ -83,8 +83,10 @@ public class ReceivedFrag extends Fragment {
                         }
                         for (DocumentChange documentChange:value.getDocumentChanges())
                         {
+
                             if (documentChange.getType()== DocumentChange.Type.ADDED)
                             {
+
 
                                 receviedListModelArrayList.add(documentChange.getDocument().toObject(ReceviedListModel.class));
                             }

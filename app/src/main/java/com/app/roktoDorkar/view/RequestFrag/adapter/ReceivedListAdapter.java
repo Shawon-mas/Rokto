@@ -40,7 +40,9 @@ public class ReceivedListAdapter extends RecyclerView.Adapter<ReceivedListAdapte
     private String senderUid;
      String senderId;
     private String type;
+
     private String userEmail;
+
     private String receiverUid;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     DocumentReference ref = db.collection("BloodRequest").document();
@@ -76,9 +78,16 @@ public class ReceivedListAdapter extends RecyclerView.Adapter<ReceivedListAdapte
 
             holder.materialButtonDecline.setVisibility(View.GONE);
             holder.materialButtonAccept.setVisibility(View.GONE);
+
             holder.materialButtonChat.setVisibility(View.VISIBLE);
             holder.materialButtonFriend.setVisibility(View.VISIBLE);
-        }else if (type.equals("accept"))
+
+        }
+        else if (FirebaseAuth.getInstance().getCurrentUser().getUid().equals(senderUid)){
+            holder.materialCardView_received.setVisibility(View.GONE);
+
+        }
+        else if (type.equals("accept"))
         {
            holder.materialCardView_received.setVisibility(View.GONE);
 
@@ -93,7 +102,6 @@ public class ReceivedListAdapter extends RecyclerView.Adapter<ReceivedListAdapte
             public void onClick(View v) {
                 //  holder.materialButtonAccept.setEnabled(false);
 
-                String dI=ref.getId();
                 db.collection("BloodRequest").document(senderId).collection("senderUid").
                         whereEqualTo("senderUid",senderUid)
                         .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -105,6 +113,7 @@ public class ReceivedListAdapter extends RecyclerView.Adapter<ReceivedListAdapte
                                 String receiverName = preferences.getString(USER_NAME, null);
 
                                 Map<String, Object> updatesMain = new HashMap<>();
+
                                 updatesMain.put("requestStatus",updateStatus);
                                 updatesMain.put("requestReceiverUid",FirebaseAuth.getInstance().getCurrentUser().getUid());
                                 updatesMain.put("requestReceiverName",receiverName);
@@ -115,23 +124,24 @@ public class ReceivedListAdapter extends RecyclerView.Adapter<ReceivedListAdapte
                                             @Override
                                             public void onSuccess(Void unused)
                                             {
-                                               /* SharedPreferences preferences = context.getSharedPreferences("MY_APP", MODE_PRIVATE);
-                                                String receiverName = preferences.getString(USER_NAME, null);
-                                                Map<String, Object> updates = new HashMap<>();
-                                                updates.put("requestStatus",updateStatus);
-                                                updates.put("requestReceiverUid",FirebaseAuth.getInstance().getCurrentUser().getUid());
-                                                updates.put("requestReceiverName",receiverName);*/
-                                                Toasty.success(context,"Request Accept",Toasty.LENGTH_SHORT,false).show();
-                                                /*db.collection("UserProfile").document(userEmail)
-                                                        .collection("BloodRequestPortal").document("Request_Type")
-                                                        .collection("Sent_Request").document(senderUid)
-                                                                .update(updates).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                            @Override
-                                                            public void onSuccess(Void unused)
-                                                            {
+                                                Map<String, Object> updatesSent = new HashMap<>();
 
-                                                            }
-                                                        });*/
+                                                updatesSent.put("requestStatus",updateStatus);
+                                                updatesSent.put("requestReceiverUid",FirebaseAuth.getInstance().getCurrentUser().getUid());
+                                                updatesSent.put("requestReceiverName",receiverName);
+
+                                                DocumentReference ref2 = db.collection("UserProfile").document(userEmail).collection("MyBloodRequest").document(senderId);
+                                                ref2.update(updatesSent).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                    @Override
+                                                    public void onSuccess(Void unused) {
+
+                                                        Toasty.success(context,"Request Accept",Toasty.LENGTH_SHORT,false).show();
+
+                                                    }
+                                                });
+
+
+
                                             }
                                         }).addOnFailureListener(new OnFailureListener() {
                                             @Override

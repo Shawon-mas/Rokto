@@ -87,13 +87,27 @@
             android:text="Lohagara"
             android:textColor="@color/black"
             android:textSize="@dimen/_12ssp" />
-
         <com.google.android.material.button.MaterialButton
-           android:layout_alignParentEnd="true"
+            android:id="@+id/accept"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/locationDonar"
+            android:layout_marginHorizontal="@dimen/_10sdp"
+            android:layout_toLeftOf="@id/chat"
+
+            android:backgroundTint="@color/main"
+            android:drawableLeft="@drawable/done"
+            android:drawableTint="@color/white"
+            android:text="Accept"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:visibility="visible" />
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/chat"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/locationDonar"
+            android:layout_alignParentEnd="true"
             android:layout_marginHorizontal="@dimen/_10sdp"
 
             android:backgroundTint="@color/main"

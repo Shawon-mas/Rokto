@@ -90,6 +90,7 @@
             android:textAllCaps="false"
             android:textColor="@color/white"
             android:visibility="visible" />
+
         <com.google.android.material.button.MaterialButton
             android:id="@+id/friends"
             android:layout_width="wrap_content"
@@ -115,7 +116,7 @@
             android:backgroundTint="#F4B4B4"
             android:drawableLeft="@drawable/decline"
             android:drawableTint="@color/main"
-            android:text="Decline"
+            android:text="Reject"
             android:textAllCaps="false"
             android:textColor="@color/main"
             android:visibility="visible" />
@@ -129,7 +130,22 @@
             android:backgroundTint="#F4B4B4"
             android:drawableLeft="@drawable/chat"
             android:drawableTint="@color/main"
-            android:text="Start Chat"
+            android:text="Chat"
+            android:textAllCaps="false"
+            android:textColor="@color/main"
+            android:visibility="invisible" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/pending"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/locationDonar"
+            android:layout_marginHorizontal="@dimen/_10sdp"
+            android:layout_toRightOf="@id/friends"
+            android:backgroundTint="#F4B4B4"
+            android:drawableLeft="@drawable/pending"
+            android:drawableTint="@color/main"
+            android:text="Pending"
             android:textAllCaps="false"
             android:textColor="@color/main"
             android:visibility="invisible" />

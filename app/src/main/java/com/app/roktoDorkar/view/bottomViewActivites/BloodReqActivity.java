@@ -58,6 +58,7 @@ public class BloodReqActivity extends AppCompatActivity {
     @TimeFormat private int clockFormat;
     private String request_status="not_accept";
     DocumentReference ref = db.collection("BloodRequest").document();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -154,6 +155,7 @@ public class BloodReqActivity extends AppCompatActivity {
     private void makeRequest() {
         SharedPreferences preferences = getApplicationContext().getSharedPreferences("MY_APP", MODE_PRIVATE);
         String senderName = preferences.getString(USER_NAME, null);
+
         String dI=ref.getId();
         Map<String, Object> requestInfo = new HashMap<>();
         requestInfo.put("senderName",senderName);
@@ -180,7 +182,7 @@ public class BloodReqActivity extends AppCompatActivity {
            @Override
            public void onSuccess(Void unused)
            {
-
+               saveToProfile();
            }
        });
 
@@ -188,6 +190,41 @@ public class BloodReqActivity extends AppCompatActivity {
 
 
 
+
+
+    }
+    private void showSuccessToast(String Message){
+        Toasty.success(getApplicationContext(),Message,Toasty.LENGTH_SHORT,false).show();
+    }
+    private void saveToProfile() {
+        String dI1=ref.getId();
+        Map<String, Object> myRequestInfo = new HashMap<>();
+
+        myRequestInfo.put("senderRequiredBlood",type);
+        myRequestInfo.put("senderRequiredQuantity",requiredBlood);
+        myRequestInfo.put("senderPatientGender",patientGender);
+        myRequestInfo.put("senderRequestForDate",binding.reqDate.getText().toString());
+        myRequestInfo.put("senderRequestForTime",binding.reqTime.getText().toString());
+        myRequestInfo.put("senderRequestUpazila",binding.reqUpazila.getText().toString());
+        myRequestInfo.put("senderPhoneNumber",binding.reqNumber.getText().toString());
+        myRequestInfo.put("senderRequestLocation",binding.reqLocation.getText().toString());
+        myRequestInfo.put("senderGiftAmount",binding.gift.getText().toString());
+        myRequestInfo.put("senderRequestDetails",binding.description.getText().toString());
+        myRequestInfo.put("requestStatus",request_status);
+        myRequestInfo.put("requestReceiverUid",null);
+        myRequestInfo.put("requestReceiverName",null);
+        myRequestInfo.put("documentId",dI1);
+        myRequestInfo.put("reqtime", FieldValue.serverTimestamp());
+
+        DocumentReference ref2 = db.collection("UserProfile").document(FirebaseAuth.getInstance().getCurrentUser().getEmail()).collection("MyBloodRequest").document(dI1);
+        ref2.set(myRequestInfo).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void unused)
+            {
+              showSuccessToast("Request Sent");
+
+            }
+        });
 
 
     }

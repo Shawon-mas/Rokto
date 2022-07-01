@@ -19,11 +19,13 @@ public class ReceviedListModel implements Serializable {
     private String senderEmail;
     private String requestReceiverUid;
     private String documentId;
+    private String requestReceiverName;
+    private String accept;
 
     public ReceviedListModel() {
     }
 
-    public ReceviedListModel(String requestStatus, String senderGiftAmount, String senderName, String senderPatientGender, String senderPhoneNumber, String senderRequestDetails, String senderRequestForDate, String senderRequestForTime, String senderRequestLocation, String senderRequestUpazila, String senderRequiredBlood, String senderRequiredQuantity, String senderUid, String senderEmail, String requestReceiverUid, String documentId) {
+    public ReceviedListModel(String requestStatus, String senderGiftAmount, String senderName, String senderPatientGender, String senderPhoneNumber, String senderRequestDetails, String senderRequestForDate, String senderRequestForTime, String senderRequestLocation, String senderRequestUpazila, String senderRequiredBlood, String senderRequiredQuantity, String senderUid, String senderEmail, String requestReceiverUid, String documentId, String requestReceiverName, String accept) {
         this.requestStatus = requestStatus;
         this.senderGiftAmount = senderGiftAmount;
         this.senderName = senderName;
@@ -40,6 +42,8 @@ public class ReceviedListModel implements Serializable {
         this.senderEmail = senderEmail;
         this.requestReceiverUid = requestReceiverUid;
         this.documentId = documentId;
+        this.requestReceiverName = requestReceiverName;
+        this.accept = accept;
     }
 
     public String getRequestStatus() {
@@ -168,5 +172,21 @@ public class ReceviedListModel implements Serializable {
 
     public void setDocumentId(String documentId) {
         this.documentId = documentId;
+    }
+
+    public String getRequestReceiverName() {
+        return requestReceiverName;
+    }
+
+    public void setRequestReceiverName(String requestReceiverName) {
+        this.requestReceiverName = requestReceiverName;
+    }
+
+    public String getAccept() {
+        return accept;
+    }
+
+    public void setAccept(String accept) {
+        this.accept = accept;
     }
 }
