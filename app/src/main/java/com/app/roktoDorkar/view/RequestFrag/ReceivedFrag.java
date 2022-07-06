@@ -5,6 +5,7 @@ import static com.app.roktoDorkar.global.SharedPref.USER_BLOODTYPE;
 import static com.app.roktoDorkar.global.SharedPref.USER_NAME;
 import static com.app.roktoDorkar.global.SharedPref.USER_UPAZILA;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
@@ -20,8 +21,10 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.app.roktoDorkar.R;
+import com.app.roktoDorkar.view.ChatActivity;
 import com.app.roktoDorkar.view.RequestFrag.adapter.ReceivedListAdapter;
 import com.app.roktoDorkar.view.RequestFrag.model.ReceviedListModel;
+import com.app.roktoDorkar.view.RequestFrag.model.UserLister;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.EventListener;
@@ -33,7 +36,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 
-public class ReceivedFrag extends Fragment {
+public class ReceivedFrag extends Fragment implements UserLister {
     private ArrayList<ReceviedListModel> receviedListModelArrayList;
     private RecyclerView recyclerView_receivedfrag;
     private ReceivedListAdapter adapter;
@@ -63,7 +66,7 @@ public class ReceivedFrag extends Fragment {
         recyclerView_receivedfrag.setHasFixedSize(true);
         recyclerView_receivedfrag.setLayoutManager(new LinearLayoutManager(getContext()));
         receviedListModelArrayList=new ArrayList<>();
-        adapter=new ReceivedListAdapter(getContext(),receviedListModelArrayList);
+        adapter=new ReceivedListAdapter(getContext(),receviedListModelArrayList,this);
         recyclerView_receivedfrag.setAdapter(adapter);
 
         SharedPreferences preferences = getContext().getSharedPreferences("MY_APP", MODE_PRIVATE);
@@ -109,6 +112,13 @@ public class ReceivedFrag extends Fragment {
     public void onStop() {
         super.onStop();
         adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onUserClickedListener(ReceviedListModel receviedListModel) {
+        Intent intent=new Intent(getContext(), ChatActivity.class);
+        intent.putExtra("user_name",receviedListModel.getSenderName());
+        startActivity(intent);
     }
 }
 /*

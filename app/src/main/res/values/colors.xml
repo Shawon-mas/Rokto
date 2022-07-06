@@ -12,4 +12,6 @@
     <color name="main_gray">#767676</color>
     <color name="main_green">#003d00</color>
     <color name="input_bg">#ECECEC</color>
+
+    <color name="chatPrimary_bg">#F4B4B4</color>
 </resources>
