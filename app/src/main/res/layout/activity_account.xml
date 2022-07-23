@@ -7,17 +7,206 @@
     tools:context=".view.bottomViewActivites.AccountActivity">
 
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/logOut"
-        android:text="@string/sign_out"
-        android:textAllCaps="false"
-        android:drawableRight="@drawable/loout"
-        android:textColor="@color/white"
-        android:drawableTint="@color/white"
-        android:backgroundTint="@color/main"
-        android:layout_width="wrap_content"
-        android:layout_height="@dimen/_40sdp"
-        android:layout_centerInParent="true"/>
+   <LinearLayout
+       android:orientation="vertical"
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content">
+       <RelativeLayout
+           android:background="@drawable/profile_bar"
+           android:layout_width="match_parent"
+           android:layout_height="@dimen/_100sdp">
+
+           <TextView
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:text="Profile"
+               android:textSize="@dimen/_18ssp"
+               android:layout_marginHorizontal="@dimen/_10sdp"
+               android:layout_marginVertical="@dimen/_10sdp"
+               android:textColor="@color/white"
+               android:includeFontPadding="false"
+               android:fontFamily="@font/heebo_medium"
+               android:textStyle="bold"/>
+
+       </RelativeLayout>
+       <LinearLayout
+           android:layout_marginTop="-50dp"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+          >
+           <com.google.android.material.card.MaterialCardView
+               android:layout_marginHorizontal="@dimen/_10sdp"
+               app:cardCornerRadius="@dimen/_10sdp"
+               app:cardUseCompatPadding="true"
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content">
+               <RelativeLayout
+                   android:layout_width="match_parent"
+                   android:layout_height="match_parent">
+
+                   <com.makeramen.roundedimageview.RoundedImageView
+                       android:id="@+id/imageProfile"
+                       android:layout_width="@dimen/_50sdp"
+                       android:layout_height="@dimen/_50sdp"
+                       android:layout_centerHorizontal="true"
+                       android:layout_marginTop="@dimen/_10sdp"
+                       android:background="@drawable/background_image"
+                       android:scaleType="centerCrop"
+                       android:src="@drawable/man"
+                       app:riv_oval="true" />
+
+                   <TextView
+                       android:id="@+id/nameProfile"
+                       android:layout_width="wrap_content"
+                       android:layout_height="wrap_content"
+                       android:layout_below="@id/imageProfile"
+                       android:layout_centerHorizontal="true"
+                       android:layout_marginTop="@dimen/_5sdp"
+                       android:fontFamily="@font/heebo_medium"
+                       android:hint="Mahabub Alam Shawon"
+                       android:includeFontPadding="false"
+                       android:textColor="@color/main_black"
+                       android:textSize="@dimen/_14ssp"
+                       android:textStyle="bold" />
+
+                   <TextView
+                       android:id="@+id/bloodProfile"
+                       android:layout_width="wrap_content"
+                       android:layout_height="wrap_content"
+                       android:layout_below="@id/nameProfile"
+                       android:layout_centerHorizontal="true"
+                       android:fontFamily="@font/heebo_medium"
+                       android:hint="O+ (blood)"
+                       android:includeFontPadding="false"
+                       android:textColor="@color/main_black"
+                       android:textSize="@dimen/_12ssp"
+                       android:textStyle="bold" />
+                   <TextView
+                       android:id="@+id/div"
+                       android:layout_width="match_parent"
+                       android:layout_height="wrap_content"
+                       android:layout_below="@id/bloodProfile"
+                       android:layout_marginHorizontal="@dimen/_30sdp"
+                       android:layout_centerHorizontal="true"
+                       android:fontFamily="@font/heebo_medium"
+                       android:background="@drawable/divider"
+                       android:textColor="@color/main_black"
+                       android:textSize="@dimen/_12ssp"
+                       android:textStyle="bold" />
+
+                   <TextView
+                       android:layout_marginBottom="@dimen/_5sdp"
+                       android:id="@+id/aboutProfile"
+                       android:layout_width="match_parent"
+                       android:layout_height="wrap_content"
+                       android:layout_below="@id/div"
+                       android:layout_centerHorizontal="true"
+                       android:layout_marginHorizontal="@dimen/_10sdp"
+                       android:fontFamily="@font/heebo_regular"
+                       android:gravity="center_horizontal"
+                       android:includeFontPadding="false"
+                       android:text="I would like to do programming and build software.This is very interesting."
+                       android:textColor="@color/main_gray"
+                       android:textSize="@dimen/_12ssp" />
+               </RelativeLayout>
+
+           </com.google.android.material.card.MaterialCardView>
+
+       </LinearLayout>
+       <com.google.android.material.card.MaterialCardView
+           android:layout_marginHorizontal="@dimen/_10sdp"
+           app:cardCornerRadius="@dimen/_10sdp"
+           app:cardUseCompatPadding="true"
+           android:layout_width="match_parent"
+           android:layout_height="@dimen/_100sdp">
+           <LinearLayout
+               android:gravity="center_vertical"
+               android:orientation="vertical"
+               android:layout_width="match_parent"
+               android:layout_height="match_parent">
+
+               <LinearLayout
+                   android:gravity="center_vertical"
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content">
+                   <ImageView
+                       android:id="@+id/callIcon"
+                       android:layout_marginHorizontal="@dimen/_10sdp"
+                       android:layout_width="@dimen/_30sdp"
+                       android:layout_height="@dimen/_30sdp"
+                       android:src="@drawable/call"/>
+
+
+                   <TextView
+                       android:id="@+id/profileNumber"
+                       android:layout_width="match_parent"
+                       android:layout_height="wrap_content"
+                       android:fontFamily="@font/heebo_medium"
+                       android:text="01776646603"
+                       android:includeFontPadding="false"
+                       android:textColor="@color/main_black"
+                       android:textSize="@dimen/_14ssp"
+                       android:textStyle="bold" />
+               </LinearLayout>
+               <LinearLayout
+                   android:layout_marginTop="@dimen/_5sdp"
+                   android:gravity="center_vertical"
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content">
+                   <ImageView
+
+                       android:layout_marginHorizontal="@dimen/_10sdp"
+                       android:layout_width="@dimen/_30sdp"
+                       android:layout_height="@dimen/_30sdp"
+                       android:src="@drawable/email"/>
+
+
+                   <TextView
+                       android:id="@+id/emailProfile"
+                       android:layout_width="match_parent"
+                       android:layout_height="wrap_content"
+                       android:fontFamily="@font/heebo_medium"
+                       android:hint="shawon.mas38@gmail.com"
+                       android:includeFontPadding="false"
+                       android:textColor="@color/main_black"
+                       android:textSize="@dimen/_14ssp"
+                       android:textStyle="bold" />
+               </LinearLayout>
+           </LinearLayout>
+
+       </com.google.android.material.card.MaterialCardView>
+       <com.google.android.material.button.MaterialButton
+           android:layout_marginTop="@dimen/_40sdp"
+           android:drawableEnd="@drawable/arrow"
+           android:layout_marginHorizontal="@dimen/_10sdp"
+           app:cornerRadius="@dimen/_5sdp"
+           android:text="Personal Details"
+           android:textAllCaps="false"
+           android:textColor="@color/main"
+           android:gravity="start|center_vertical"
+           android:layout_width="match_parent"
+           android:layout_height="@dimen/_45sdp"
+           android:backgroundTint="@color/chatPrimary_bg"/>
+       <com.google.android.material.button.MaterialButton
+           android:gravity="start|center_vertical"
+           android:layout_marginHorizontal="@dimen/_10sdp"
+           android:id="@+id/logOut"
+           app:cornerRadius="@dimen/_5sdp"
+           android:text="@string/sign_out"
+           android:textAllCaps="false"
+           android:drawableEnd="@drawable/arrow"
+           android:textColor="@color/main"
+           android:drawableTint="@color/black"
+           android:backgroundTint="@color/chatPrimary_bg"
+           android:layout_width="match_parent"
+           android:layout_height="@dimen/_45sdp"
+           android:layout_centerInParent="true"/>
+
+
+   </LinearLayout>
+
+
+
     <com.etebarian.meowbottomnavigation.MeowBottomNavigation
         android:id="@+id/bottomNav_account"
         app:mbn_backgroundBottomColor="@color/main_gray"

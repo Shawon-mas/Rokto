@@ -1,5 +1,8 @@
 package com.app.roktoDorkar.view;
 
+import static com.app.roktoDorkar.utilites.Constants.KEY_SENDER_ID;
+import static com.app.roktoDorkar.utilites.Constants.KEY_USER_ID;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -16,6 +19,7 @@ import android.widget.Toast;
 
 import com.app.roktoDorkar.R;
 import com.app.roktoDorkar.databinding.ActivitySignUpBinding;
+import com.app.roktoDorkar.utilites.PreferenceManager;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -35,6 +39,7 @@ import java.util.Map;
 
 public class SignUpActivity extends AppCompatActivity {
     private DatePickerDialog datePickerDialog;
+    private PreferenceManager preferenceManager;
     ActivitySignUpBinding binding;
     String DonateBloodType;
     String[] donateBlood,bloodType;
@@ -47,6 +52,7 @@ public class SignUpActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding=ActivitySignUpBinding.inflate(getLayoutInflater());
+        preferenceManager=new PreferenceManager(getApplicationContext());
         setContentView(binding.getRoot());
         mAuth = FirebaseAuth.getInstance();
         donateBlood=getResources().getStringArray(R.array.donate_blood);
@@ -204,6 +210,7 @@ public class SignUpActivity extends AppCompatActivity {
            @Override
            public void onSuccess(Void unused)
            {
+               preferenceManager.putString(KEY_USER_ID,user.getUid());
                Toast.makeText(getApplicationContext(),"Data Saved",Toast.LENGTH_SHORT).show();
                Intent intent = new Intent(getApplicationContext(),SignInActivity.class);
                startActivity(intent);

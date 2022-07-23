@@ -3,6 +3,9 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/android_project/Rokto/app/src/main/res/drawable-v24/divider.xml" value="0.3655" />
+        <entry key="..\:/android_project/Rokto/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.2585" />
+        <entry key="..\:/android_project/Rokto/app/src/main/res/drawable-v24/oval.xml" value="0.3655" />
         <entry key="..\:/android_project/Rokto/app/src/main/res/drawable-v24/tab_indicator.xml" value="0.279" />
         <entry key="..\:/android_project/Rokto/app/src/main/res/drawable/back.xml" value="0.1115" />
         <entry key="..\:/android_project/Rokto/app/src/main/res/drawable/background_chat_input.xml" value="0.1085" />
@@ -12,11 +15,22 @@
         <entry key="..\:/android_project/Rokto/app/src/main/res/drawable/background_top_content.xml" value="0.1085" />
         <entry key="..\:/android_project/Rokto/app/src/main/res/drawable/bottom_nav_color.xml" value="0.1915" />
         <entry key="..\:/android_project/Rokto/app/src/main/res/drawable/calender.xml" value="0.187" />
+        <entry key="..\:/android_project/Rokto/app/src/main/res/drawable/history.xml" value="0.2585" />
+        <entry key="..\:/android_project/Rokto/app/src/main/res/drawable/info.xml" value="0.2585" />
         <entry key="..\:/android_project/Rokto/app/src/main/res/drawable/inuput_bg.xml" value="0.18" />
+        <entry key="..\:/android_project/Rokto/app/src/main/res/drawable/pass_show.xml" value="0.2585" />
+        <entry key="..\:/android_project/Rokto/app/src/main/res/drawable/pending.xml" value="0.2585" />
+        <entry key="..\:/android_project/Rokto/app/src/main/res/drawable/profile_bar.xml" value="0.138" />
+        <entry key="..\:/android_project/Rokto/app/src/main/res/drawable/request.xml" value="0.2585" />
+        <entry key="..\:/android_project/Rokto/app/src/main/res/drawable/search_donar.xml" value="0.2585" />
+        <entry key="..\:/android_project/Rokto/app/src/main/res/drawable/send_icon.xml" value="0.2585" />
+        <entry key="..\:/android_project/Rokto/app/src/main/res/drawable/sent.xml" value="0.2585" />
+        <entry key="..\:/android_project/Rokto/app/src/main/res/drawable/status_bar.xml" value="0.2585" />
+        <entry key="..\:/android_project/Rokto/app/src/main/res/drawable/time.xml" value="0.2585" />
         <entry key="..\:/android_project/Rokto/app/src/main/res/drawable/v_dot.xml" value="0.1085" />
-        <entry key="..\:/android_project/Rokto/app/src/main/res/layout/activity_account.xml" value="0.14" />
+        <entry key="..\:/android_project/Rokto/app/src/main/res/layout/activity_account.xml" value="0.33" />
         <entry key="..\:/android_project/Rokto/app/src/main/res/layout/activity_blood_req.xml" value="0.25" />
-        <entry key="..\:/android_project/Rokto/app/src/main/res/layout/activity_chat.xml" value="0.2" />
+        <entry key="..\:/android_project/Rokto/app/src/main/res/layout/activity_chat.xml" value="0.33" />
         <entry key="..\:/android_project/Rokto/app/src/main/res/layout/activity_donars_list.xml" value="0.2" />
         <entry key="..\:/android_project/Rokto/app/src/main/res/layout/activity_donors.xml" value="0.22447916666666667" />
         <entry key="..\:/android_project/Rokto/app/src/main/res/layout/activity_history.xml" value="0.3729166666666667" />

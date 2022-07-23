@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:clipToPadding="false"
+    android:overScrollMode="never"
+    android:scrollbars="none"
     tools:context=".view.SignUpActivity">
-    <androidx.core.widget.NestedScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -15,17 +16,37 @@
             android:orientation="vertical"
             android:padding="@dimen/_20sdp">
 
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start"
                 android:layout_marginHorizontal="@dimen/_10sdp"
-                android:layout_marginTop="@dimen/_30sdp"
                 android:fontFamily="@font/heebo_black"
                 android:text="@string/sign_up"
                 android:textColor="@color/black"
                 android:textSize="@dimen/_25ssp"
                 android:textStyle="bold" />
+            <FrameLayout
+                android:layout_marginTop="@dimen/_10sdp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <com.makeramen.roundedimageview.RoundedImageView
+                    android:id="@+id/imageSignUp"
+                    android:layout_width="@dimen/_80sdp"
+                    android:layout_height="@dimen/_80sdp"
+                    android:background="@drawable/oval"
+                    android:scaleType="centerCrop"
+                    app:riv_oval="true" />
+                <TextView
+                    android:id="@+id/addImageText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Add Image"
+                    android:layout_gravity="center"
+                    android:textColor="@color/white"/>
+
+            </FrameLayout>
 
             <EditText
                 android:gravity="center_vertical"
@@ -200,6 +221,24 @@
                 android:paddingEnd="@dimen/_16sdp"
                 android:textColor="#000"
                 android:textSize="@dimen/_13ssp" />
+            <EditText
+                android:gravity="center_vertical"
+                android:id="@+id/editText_about"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_90ssp"
+                android:layout_marginTop="@dimen/_16sdp"
+                android:background="@drawable/inuput_bg"
+                android:fontFamily="@font/heebo_regular"
+                android:hint="About your self..."
+                android:imeOptions="actionNext"
+                android:importantForAutofill="no"
+                android:inputType="textEmailAddress"
+                android:maxLines="1"
+                android:paddingStart="@dimen/_16sdp"
+                android:paddingEnd="@dimen/_16sdp"
+                android:textColor="#000"
+                android:textSize="@dimen/_13ssp" />
+
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_45sdp"
@@ -231,6 +270,7 @@
                     android:padding="@dimen/_10sdp"
                     android:src="@drawable/pass_show" />
             </RelativeLayout>
+
             <com.google.android.material.progressindicator.CircularProgressIndicator
                 android:id="@+id/signUpIndicator"
                 android:visibility="gone"
@@ -262,5 +302,5 @@
                 />
 
         </LinearLayout>
-    </androidx.core.widget.NestedScrollView>
-</RelativeLayout>
+
+</ScrollView>

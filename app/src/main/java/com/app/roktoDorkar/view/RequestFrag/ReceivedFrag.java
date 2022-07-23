@@ -18,6 +18,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.app.roktoDorkar.R;
@@ -42,6 +43,7 @@ public class ReceivedFrag extends Fragment implements UserLister {
     private ReceivedListAdapter adapter;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private TextView textView_message;
+    private ProgressBar progressBar_received;
 
 
     @Override
@@ -62,6 +64,7 @@ public class ReceivedFrag extends Fragment implements UserLister {
     }
 
     private void intiViews(ViewGroup root) {
+        progressBar_received=root.findViewById(R.id.receivedProgressbar);
         recyclerView_receivedfrag=root.findViewById(R.id.recyclerviewReceivedList);
         recyclerView_receivedfrag.setHasFixedSize(true);
         recyclerView_receivedfrag.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -90,7 +93,6 @@ public class ReceivedFrag extends Fragment implements UserLister {
                             if (documentChange.getType()== DocumentChange.Type.ADDED)
                             {
 
-
                                 receviedListModelArrayList.add(documentChange.getDocument().toObject(ReceviedListModel.class));
                             }
                             adapter.notifyDataSetChanged();
@@ -118,6 +120,9 @@ public class ReceivedFrag extends Fragment implements UserLister {
     public void onUserClickedListener(ReceviedListModel receviedListModel) {
         Intent intent=new Intent(getContext(), ChatActivity.class);
         intent.putExtra("user_name",receviedListModel.getSenderName());
+        intent.putExtra("document_id",receviedListModel.getDocumentId());
+        intent.putExtra("receiver_id",receviedListModel.getSenderUid());
+        intent.putExtra("color",R.color.chatPrimary_bg);
         startActivity(intent);
     }
 }

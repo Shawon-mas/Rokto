@@ -17,7 +17,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/_10sdp"
             android:layout_marginVertical="@dimen/_10sdp"
-            android:background="@color/chatPrimary_bg"
+            android:background="@drawable/status_bar"
             android:fontFamily="@font/heebo_medium"
             android:padding="@dimen/_5sdp"
             android:text="A+"
