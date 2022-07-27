@@ -141,7 +141,8 @@ public class ChatActivity extends AppCompatActivity {
          }
          binding.chatProgressbar.setVisibility(View.GONE);
      };
-    private void loadUserDetails() {
+    private void loadUserDetails()
+    {
         String name=getIntent().getStringExtra("user_name");
         binding.textName.setText(name);
     }
@@ -152,7 +153,8 @@ public class ChatActivity extends AppCompatActivity {
         });
         binding.layoutSend.setOnClickListener(v -> {sendMessage();});
     }
-    private String getReadableDateTime(Date date){
+    private String getReadableDateTime(Date date)
+    {
            return new SimpleDateFormat("MMMM dd, yyyy - hh:mm a", Locale.getDefault()).format(date);
     }
 }
