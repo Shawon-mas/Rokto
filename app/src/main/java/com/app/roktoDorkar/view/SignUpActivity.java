@@ -1,14 +1,35 @@
 package com.app.roktoDorkar.view;
 
+import static com.app.roktoDorkar.utilites.Constants.KEY_ABOUT;
+import static com.app.roktoDorkar.utilites.Constants.KEY_AGE;
+import static com.app.roktoDorkar.utilites.Constants.KEY_BLOODTYPE;
+import static com.app.roktoDorkar.utilites.Constants.KEY_COLLECTION_USERS;
+import static com.app.roktoDorkar.utilites.Constants.KEY_DISTRICT;
+import static com.app.roktoDorkar.utilites.Constants.KEY_DIVISION;
+import static com.app.roktoDorkar.utilites.Constants.KEY_DOB;
+
+import static com.app.roktoDorkar.utilites.Constants.KEY_EMAIL;
+import static com.app.roktoDorkar.utilites.Constants.KEY_IMAGE_URI;
+import static com.app.roktoDorkar.utilites.Constants.KEY_NAME;
+import static com.app.roktoDorkar.utilites.Constants.KEY_NUMBER;
 import static com.app.roktoDorkar.utilites.Constants.KEY_SENDER_ID;
+import static com.app.roktoDorkar.utilites.Constants.KEY_UID;
+import static com.app.roktoDorkar.utilites.Constants.KEY_UPZILA;
 import static com.app.roktoDorkar.utilites.Constants.KEY_USER_ID;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.util.Base64;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
@@ -31,22 +52,28 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import es.dmoral.toasty.Toasty;
+
 public class SignUpActivity extends AppCompatActivity {
     private DatePickerDialog datePickerDialog;
     private PreferenceManager preferenceManager;
     ActivitySignUpBinding binding;
     String DonateBloodType;
+    private String encodedImage;
     String[] donateBlood,bloodType;
     public static String val;
     private FirebaseAuth mAuth;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private CollectionReference mRef = db.collection("UserProfile");
+
   //  private DocumentReference userRef = db.collection("UserProfile").document(mAuth.getCurrentUser().getEmail());
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,12 +90,19 @@ public class SignUpActivity extends AppCompatActivity {
         bloodTypeSpinner();
 
     }
-
+   private void showErrorToast(String message)
+   {
+       Toasty.error(getApplicationContext(),message,Toasty.LENGTH_SHORT).show();
+   }
+    private void showSuccessToast(String message)
+    {
+        Toasty.success(getApplicationContext(),message,Toasty.LENGTH_SHORT).show();
+    }
     private void bloodTypeSpinner() {
         binding.signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                binding.signUpIndicator.setVisibility(View.VISIBLE);
+                
                 String name=binding.editTextName.getText().toString();
                 String email=binding.editTextEmail.getText().toString();
                 String number=binding.editTextNumber.getText().toString();
@@ -77,6 +111,13 @@ public class SignUpActivity extends AppCompatActivity {
                 String div=binding.editTextDiv.getText().toString();
                 String dis=binding.editTextDis.getText().toString();
                 String upz=binding.editTextUp.getText().toString();
+                String about=binding.editTextAbout.getText().toString();
+
+                if (encodedImage==null)
+                {
+                    showErrorToast("Select profile image");
+                    return;
+                }
 
                 if (name.isEmpty())
                 {
@@ -139,6 +180,11 @@ public class SignUpActivity extends AppCompatActivity {
                     binding.editTextPassword.requestFocus();
                     return;
                 }
+                if (about.isEmpty())
+                {
+                    binding.editTextAbout.setError("Write your self in short");
+                    binding.editTextAbout.requestFocus();
+                }
                 createAccount(email,pass);
 
 
@@ -182,36 +228,31 @@ public class SignUpActivity extends AppCompatActivity {
 
     private void updateUI(FirebaseUser user, String email) {
 
-       /* //String email=binding.editTextEmail.getText().toString();
-       // String number=binding.editTextNumber.getText().toString();
-        String dob=binding.birthDate.getText().toString();
-        String pass=binding.editTextPassword.getText().toString();
-        String div=binding.editTextDiv.getText().toString();
-        String dis=binding.editTextDis.getText().toString();
-        String upz=binding.editTextUp.getText().toString();*/
         String bloodType= binding.bloodtypeSpinner.getSelectedItem().toString();
         Map<String, Object> usersInfo = new HashMap<>();
-        usersInfo.put("userName",binding.editTextName.getText().toString());
-        usersInfo.put("userEmail", email);
-        usersInfo.put("userNumber",binding.editTextNumber.getText().toString());
-        usersInfo.put("userDob", binding.birthDate.getText().toString());
-        usersInfo.put("userAge", binding.age.getText().toString());
+        usersInfo.put(KEY_IMAGE_URI, encodedImage);
+        usersInfo.put(KEY_NAME,binding.editTextName.getText().toString());
+        usersInfo.put(KEY_EMAIL, email);
+        usersInfo.put(KEY_NUMBER,binding.editTextNumber.getText().toString());
+        usersInfo.put(KEY_DOB, binding.birthDate.getText().toString());
+        usersInfo.put(KEY_AGE, binding.age.getText().toString());
         if (bloodType.isEmpty())
         {
             usersInfo.put("bloodType","Not Selected");
         }else {
-            usersInfo.put("bloodType",bloodType);
+            usersInfo.put(KEY_BLOODTYPE,bloodType);
         }
-        usersInfo.put("uId", user.getUid());
-        usersInfo.put("division", binding.editTextDiv.getText().toString());
-        usersInfo.put("district", binding.editTextDis.getText().toString());
-        usersInfo.put("upzilla", binding.editTextUp.getText().toString());
-        db.collection("UserProfile").document(email).set(usersInfo).addOnSuccessListener(new OnSuccessListener<Void>() {
+        usersInfo.put(KEY_UID, user.getUid());
+        usersInfo.put(KEY_DIVISION, binding.editTextDiv.getText().toString());
+        usersInfo.put( KEY_DISTRICT, binding.editTextDis.getText().toString());
+        usersInfo.put(KEY_UPZILA, binding.editTextUp.getText().toString());
+        usersInfo.put(KEY_ABOUT,binding.editTextAbout.getText().toString());
+        db.collection(KEY_COLLECTION_USERS).document(email).set(usersInfo).addOnSuccessListener(new OnSuccessListener<Void>() {
            @Override
            public void onSuccess(Void unused)
            {
-               preferenceManager.putString(KEY_USER_ID,user.getUid());
-               Toast.makeText(getApplicationContext(),"Data Saved",Toast.LENGTH_SHORT).show();
+
+               showSuccessToast("Registration Completed");
                Intent intent = new Intent(getApplicationContext(),SignInActivity.class);
                startActivity(intent);
                finish();
@@ -245,8 +286,6 @@ public class SignUpActivity extends AppCompatActivity {
 
                         break;
                     case 2:
-                        //Toast.makeText(getApplicationContext(),"Type: "+donateBlood[2],Toast.LENGTH_SHORT).show();
-
                         binding.bloodtypeSpinner.setVisibility(View.GONE);
 
                         break;
@@ -306,8 +345,46 @@ public class SignUpActivity extends AppCompatActivity {
             }
         });
     }
+    private String encodeImage(Bitmap bitmap)
+    {
+        int previewWidth=150;
+        int previewHeight=bitmap.getHeight()*previewWidth/bitmap.getWidth();
+        Bitmap previewBitmap=Bitmap.createScaledBitmap(bitmap,previewWidth,previewHeight,false);
+        ByteArrayOutputStream byteArrayOutputStream=new ByteArrayOutputStream();
+        previewBitmap.compress(Bitmap.CompressFormat.JPEG,50,byteArrayOutputStream);
+        byte[] bytes=byteArrayOutputStream.toByteArray();
+        return Base64.encodeToString(bytes,Base64.DEFAULT);
+
+    }
+    private final ActivityResultLauncher<Intent> pickImage=registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode()==RESULT_OK)
+                {
+                    if (result.getData()!=null)
+                    {
+                        Uri imageUri=result.getData().getData();
+                        try {
+                            InputStream inputStream=getContentResolver().openInputStream(imageUri);
+                            Bitmap bitmap= BitmapFactory.decodeStream(inputStream);
+                            binding.imageSignUp.setImageBitmap(bitmap);
+                            binding.addImageText.setVisibility(View.GONE);
+                            encodedImage=encodeImage(bitmap);
+                        } catch (FileNotFoundException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                }
+            }
+    );
 
     private void clickListeners() {
+        binding.layoutImage.setOnClickListener(v -> {
+            Intent intent=new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            pickImage.launch(intent);
+        });
 
     }
     @Override

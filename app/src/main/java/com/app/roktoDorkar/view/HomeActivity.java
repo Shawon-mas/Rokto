@@ -3,6 +3,10 @@ package com.app.roktoDorkar.view;
 import static com.app.roktoDorkar.global.SharedPref.USER_BLOODTYPE;
 import static com.app.roktoDorkar.global.SharedPref.USER_NAME;
 import static com.app.roktoDorkar.global.SharedPref.USER_UPAZILA;
+import static com.app.roktoDorkar.utilites.Constants.KEY_COLLECTION_USERS;
+import static com.app.roktoDorkar.utilites.Constants.KEY_EMAIL;
+import static com.app.roktoDorkar.utilites.Constants.KEY_FCM_TOKEN;
+import static com.app.roktoDorkar.utilites.Constants.KEY_NAME;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,6 +21,7 @@ import android.widget.Toast;
 
 import com.app.roktoDorkar.R;
 import com.app.roktoDorkar.databinding.ActivityHomeBinding;
+import com.app.roktoDorkar.utilites.PreferenceManager;
 import com.app.roktoDorkar.view.bottomViewActivites.AccountActivity;
 import com.app.roktoDorkar.view.bottomViewActivites.BloodReqActivity;
 import com.app.roktoDorkar.view.bottomViewActivites.HistoryActivity;
@@ -27,34 +32,62 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.squareup.picasso.Picasso;
+
+import es.dmoral.toasty.Toasty;
 
 public class HomeActivity extends AppCompatActivity {
     private ActivityHomeBinding binding;
     private String[] bloodItem;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     public static Boolean viewType = false;
+    private PreferenceManager preferenceManager;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityHomeBinding.inflate(getLayoutInflater());
+        preferenceManager=new PreferenceManager(getApplicationContext());
+
         setContentView(binding.getRoot());
         bloodItem = getResources().getStringArray(R.array.donate_blood);
         gridView();
        // Picasso.get().load("https://i.ibb.co/C1xfSLF/b110a1631ac9ae054007f19bd98295c0.png").into(binding.image);
         bottomNavHome();
-        if (viewType) {
-            binding.button.setVisibility(View.GONE);
-        }
+        getToken();
+
 
 
     }
+    private void getToken(){
 
+        FirebaseMessaging.getInstance().getToken().addOnSuccessListener(this::updateToken);
+    }
+   private void updateToken(String token){
+       FirebaseFirestore database=FirebaseFirestore.getInstance();
+       DocumentReference documentReference=database.collection(KEY_COLLECTION_USERS).document(preferenceManager.getString(KEY_EMAIL));
+       documentReference.update(KEY_FCM_TOKEN,token)
+               .addOnSuccessListener(unused -> showToast("Token Updated"))
+               .addOnFailureListener(e -> errorToast("Unable to update token"));
+
+
+
+   }
+    private void errorToast(String message)
+    {
+        Toasty.error(getApplicationContext(),message,Toasty.LENGTH_SHORT,false).show();
+    }
+    private void showToast(String message)
+    {
+        Toasty.success(getApplicationContext(),message,Toasty.LENGTH_SHORT,false).show();
+    }
     private void gridView() {
         binding.button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -144,27 +177,7 @@ public class HomeActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        db.collection("UserProfile").document(FirebaseAuth.getInstance().getCurrentUser().getEmail())
-                .get()
-                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                    @Override
-                    public void onSuccess(DocumentSnapshot documentSnapshot) {
-                        if (documentSnapshot.exists()) {
-                            String email = documentSnapshot.getString("userEmail");
-                            String name = documentSnapshot.getString("userName");
-                            String bloodType = documentSnapshot.getString("bloodType");
-                            String upazila = documentSnapshot.getString("upzilla");
 
-                            SharedPreferences preferences = getApplicationContext().getSharedPreferences("MY_APP", Context.MODE_PRIVATE);
-                            preferences.edit().putString(USER_NAME, name).apply();
-                            preferences.edit().putString(USER_BLOODTYPE, bloodType).apply();
-                            preferences.edit().putString(USER_UPAZILA, upazila).apply();
-                            Log.d("Email:", email);
-                            Log.d("Name:", name);
-                        }
-
-                    }
-                });
 
     }
 }

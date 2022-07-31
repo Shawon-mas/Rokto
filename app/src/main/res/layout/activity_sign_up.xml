@@ -28,6 +28,7 @@
                 android:textSize="@dimen/_25ssp"
                 android:textStyle="bold" />
             <FrameLayout
+                android:id="@+id/layoutImage"
                 android:layout_marginTop="@dimen/_10sdp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
@@ -83,6 +84,7 @@
                 android:textColor="#000"
                 android:textSize="@dimen/_13ssp" />
             <EditText
+                android:maxLength="11"
                 android:gravity="center_vertical"
                 android:id="@+id/editText_number"
                 android:layout_width="match_parent"
@@ -91,7 +93,6 @@
                 android:background="@drawable/inuput_bg"
                 android:fontFamily="@font/heebo_regular"
                 android:hint="Mobile Number"
-
                 android:imeOptions="actionNext"
                 android:importantForAutofill="no"
                 android:inputType="number"
@@ -274,6 +275,7 @@
             <com.google.android.material.progressindicator.CircularProgressIndicator
                 android:id="@+id/signUpIndicator"
                 android:visibility="gone"
+                app:indicatorColor="@color/main"
                 android:indeterminate="true"
                 android:layout_marginTop="@dimen/_10sdp"
                 android:layout_width="wrap_content"

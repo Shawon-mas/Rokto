@@ -1,5 +1,19 @@
 package com.app.roktoDorkar.view;
 
+import static com.app.roktoDorkar.utilites.Constants.KEY_ABOUT;
+import static com.app.roktoDorkar.utilites.Constants.KEY_AGE;
+import static com.app.roktoDorkar.utilites.Constants.KEY_BLOODTYPE;
+import static com.app.roktoDorkar.utilites.Constants.KEY_COLLECTION_USERS;
+import static com.app.roktoDorkar.utilites.Constants.KEY_DISTRICT;
+import static com.app.roktoDorkar.utilites.Constants.KEY_DIVISION;
+import static com.app.roktoDorkar.utilites.Constants.KEY_DOB;
+import static com.app.roktoDorkar.utilites.Constants.KEY_EMAIL;
+import static com.app.roktoDorkar.utilites.Constants.KEY_IMAGE_URI;
+import static com.app.roktoDorkar.utilites.Constants.KEY_NAME;
+import static com.app.roktoDorkar.utilites.Constants.KEY_NUMBER;
+import static com.app.roktoDorkar.utilites.Constants.KEY_UID;
+import static com.app.roktoDorkar.utilites.Constants.KEY_UPZILA;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -10,25 +24,30 @@ import android.util.Patterns;
 import android.view.View;
 import android.widget.Toast;
 
-import com.app.roktoDorkar.MainActivity;
-import com.app.roktoDorkar.R;
 import com.app.roktoDorkar.databinding.ActivitySignInBinding;
+import com.app.roktoDorkar.utilites.PreferenceManager;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class SignInActivity extends AppCompatActivity {
     ActivitySignInBinding binding;
     private FirebaseAuth mAuth;
+    private PreferenceManager preferenceManager;
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
+
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivitySignInBinding.inflate(getLayoutInflater());
+        preferenceManager=new PreferenceManager(getApplicationContext());
         setContentView(binding.getRoot());
         mAuth = FirebaseAuth.getInstance();
         setListeners();
@@ -71,44 +90,75 @@ public class SignInActivity extends AppCompatActivity {
     }
 
     private void userSignIn(String email, String pass) {
-        mAuth.signInWithEmailAndPassword(email, pass)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
+        db.collection(KEY_COLLECTION_USERS).whereEqualTo(KEY_EMAIL,binding.signIneditTextEmail.getText().toString())
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful() && task.getResult() !=null
+                            && task.getResult().getDocuments().size()>0 )
+                    {
+                        DocumentSnapshot documentSnapshot=task.getResult().getDocuments().get(0);
+                        preferenceManager.putString(KEY_UID,documentSnapshot.getString(KEY_UID));
+                        preferenceManager.putString(KEY_NAME,documentSnapshot.getString(KEY_NAME));
+                        preferenceManager.putString(KEY_NUMBER,documentSnapshot.getString(KEY_NUMBER));
+                        preferenceManager.putString(KEY_EMAIL,documentSnapshot.getString(KEY_EMAIL));
+                        preferenceManager.putString(KEY_DOB,documentSnapshot.getString(KEY_DOB));
+                        preferenceManager.putString(KEY_AGE,documentSnapshot.getString(KEY_AGE));
+                        preferenceManager.putString(KEY_DIVISION,documentSnapshot.getString(KEY_DIVISION));
+                        preferenceManager.putString(KEY_DISTRICT,documentSnapshot.getString(KEY_DISTRICT));
+                        preferenceManager.putString(KEY_UPZILA,documentSnapshot.getString(KEY_UPZILA));
+                        preferenceManager.putString(KEY_BLOODTYPE,documentSnapshot.getString(KEY_BLOODTYPE));
+                        preferenceManager.putString(KEY_ABOUT,documentSnapshot.getString(KEY_ABOUT));
+                        preferenceManager.putString(KEY_IMAGE_URI,documentSnapshot.getString(KEY_IMAGE_URI));
+                        mAuth.signInWithEmailAndPassword(email, pass)
+                                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<AuthResult> task) {
+                                        if (task.isSuccessful()) {
 
-                            // Sign in success, update UI with the signed-in user's information
-                            Log.d("message", "signInWithEmail:success");
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            if (user.isEmailVerified())
-                            {
-                                binding.signInIndicator.setVisibility(View.GONE);
-                                startActivity(new Intent(getApplicationContext(), HomeActivity.class));
-                            }else {
-                                binding.signInIndicator.setVisibility(View.GONE);
-                                user.sendEmailVerification();
-                                Toast.makeText(SignInActivity.this, "Check your email/spam to verify your account",
-                                        Toast.LENGTH_SHORT).show();
-                            }
+                                            // Sign in success, update UI with the signed-in user's information
+                                            Log.d("message", "signInWithEmail:success");
+                                            FirebaseUser user = mAuth.getCurrentUser();
+                                            if (user.isEmailVerified())
+                                            {
+                                                binding.signInIndicator.setVisibility(View.GONE);
+                                                startActivity(new Intent(getApplicationContext(), HomeActivity.class));
+                                                getUserInfo();
+                                            }else {
+                                                binding.signInIndicator.setVisibility(View.GONE);
+                                                user.sendEmailVerification();
+                                                Toast.makeText(SignInActivity.this, "Check your email/spam to verify your account",
+                                                        Toast.LENGTH_SHORT).show();
+                                            }
 
-                            //  updateUI(user);
-                        } else {
-                            binding.signInIndicator.setVisibility(View.GONE);
-                            // If sign in fails, display a message to the user.
-                            Log.w("message", "signInWithEmail:failure", task.getException());
-                            Toast.makeText(SignInActivity.this, "Your account does not exist",
-                                    Toast.LENGTH_SHORT).show();
-                            //updateUI(null);
-                        }
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.d("message", e.toString());
-                        Toast.makeText(SignInActivity.this, e.toString(),
-                                Toast.LENGTH_SHORT).show();
+                                            //  updateUI(user);
+                                        } else {
+                                            binding.signInIndicator.setVisibility(View.GONE);
+                                            // If sign in fails, display a message to the user.
+                                            Log.w("message", "signInWithEmail:failure", task.getException());
+                                            Toast.makeText(SignInActivity.this, "Your account does not exist",
+                                                    Toast.LENGTH_SHORT).show();
+                                            //updateUI(null);
+                                        }
+                                    }
+                                }).addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        binding.signInIndicator.setVisibility(View.GONE);
+                                        Log.d("message", e.toString());
+                                        Toast.makeText(SignInActivity.this, e.toString(),
+                                                Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+
+
+
                     }
                 });
+
+    }
+
+    private void getUserInfo() {
+
     }
 
     @Override
@@ -129,9 +179,6 @@ public class SignInActivity extends AppCompatActivity {
             }
         } else {
 
-           /* user.sendEmailVerification();
-            Toast.makeText(SignInActivity.this, "Check your email/spam to verify your account",
-                    Toast.LENGTH_SHORT).show();*/
         }
 
 

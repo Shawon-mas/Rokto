@@ -8,6 +8,7 @@
     android:background="@color/chatPrimary_bg"
     tools:context=".view.ChatActivity">
 
+
     <View
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -24,7 +25,6 @@
         android:background="@color/chatPrimary_bg"
         app:layout_constraintBottom_toTopOf="@id/viewSupporter"
         app:layout_constraintTop_toTopOf="parent"/>
-
     <TextView
         android:id="@+id/textName"
         android:layout_width="0dp"
@@ -48,7 +48,6 @@
         android:layout_height="1dp"
         android:layout_marginTop="@dimen/_12sdp"
         app:layout_constraintTop_toBottomOf="@id/imageBack"/>
-
     <androidx.recyclerview.widget.RecyclerView
 
         app:stackFromEnd="true"
@@ -98,7 +97,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         />
-
     <FrameLayout
         android:layout_width="@dimen/_40sdp"
         android:layout_height="@dimen/_40sdp"
