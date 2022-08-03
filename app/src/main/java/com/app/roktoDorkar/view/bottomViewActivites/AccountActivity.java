@@ -135,6 +135,13 @@ public class AccountActivity extends AppCompatActivity {
             @Override
             public void onClickItem(MeowBottomNavigation.Model item)
             {
+                return;
+            }
+        });
+        binding.bottomNavAccount.setOnReselectListener(new MeowBottomNavigation.ReselectListener() {
+            @Override
+            public void onReselectItem(MeowBottomNavigation.Model item) {
+                return;
             }
         });
     }
@@ -142,6 +149,8 @@ public class AccountActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         binding.bottomNavAccount.show(1,true);
+        finish();
         super.onBackPressed();
+
     }
 }

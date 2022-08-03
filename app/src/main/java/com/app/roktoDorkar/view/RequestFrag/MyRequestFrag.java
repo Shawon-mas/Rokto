@@ -1,5 +1,9 @@
 package com.app.roktoDorkar.view.RequestFrag;
 
+import static com.app.roktoDorkar.utilites.Constants.KEY_COLLECTION_USERS;
+import static com.app.roktoDorkar.utilites.Constants.KEY_EMAIL;
+
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
@@ -13,8 +17,11 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.app.roktoDorkar.R;
+import com.app.roktoDorkar.utilites.PreferenceManager;
+import com.app.roktoDorkar.view.ChatActivity;
 import com.app.roktoDorkar.view.RequestFrag.adapter.SentRequestAdapter;
 import com.app.roktoDorkar.view.RequestFrag.model.ReceviedListModel;
+import com.app.roktoDorkar.view.RequestFrag.model.UserLister;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.EventListener;
@@ -25,11 +32,13 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 
 
-public class MyRequestFrag extends Fragment {
+public class MyRequestFrag extends Fragment implements UserLister {
     private ArrayList<ReceviedListModel> receviedListModelArrayList;
     private RecyclerView recyclerView_receivedfrag;
     private SentRequestAdapter adapter;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private PreferenceManager preferenceManager;
+
 
 
     @Override
@@ -37,6 +46,7 @@ public class MyRequestFrag extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         ViewGroup root= (ViewGroup) inflater.inflate(R.layout.fragment_my_request, container, false);
+        preferenceManager=new PreferenceManager(getContext());
         intiViews(root);
         return root;
     }
@@ -46,9 +56,9 @@ public class MyRequestFrag extends Fragment {
         recyclerView_receivedfrag.setHasFixedSize(true);
         recyclerView_receivedfrag.setLayoutManager(new LinearLayoutManager(getContext()));
         receviedListModelArrayList=new ArrayList<>();
-          adapter=new SentRequestAdapter(getContext(),receviedListModelArrayList);
+          adapter=new SentRequestAdapter(getContext(),receviedListModelArrayList,this);
           recyclerView_receivedfrag.setAdapter(adapter);
-          db.collection("UserProfile").document(FirebaseAuth.getInstance().getCurrentUser().getEmail()).collection("MyBloodRequest")
+          db.collection(KEY_COLLECTION_USERS).document(preferenceManager.getString(KEY_EMAIL)).collection("MyBloodRequest")
                   .addSnapshotListener(new EventListener<QuerySnapshot>() {
                       @Override
                       public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
@@ -79,5 +89,16 @@ public class MyRequestFrag extends Fragment {
     public void onStop() {
         super.onStop();
         adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onUserClickedListener(ReceviedListModel receviedListModel) {
+        Intent intent=new Intent(getContext(), ChatActivity.class);
+        intent.putExtra("user_name",receviedListModel.getRequestReceiverName());
+        intent.putExtra("document_id",receviedListModel.getDocumentId());
+        intent.putExtra("receiver_id",receviedListModel.getRequestReceiverUid());
+        intent.putExtra("color",R.color.chatPrimary_bg);
+        startActivity(intent);
+
     }
 }

@@ -525,6 +525,12 @@ public class BloodReqActivity extends AppCompatActivity implements UpItemClick {
             {
             }
         });
+        binding.bottomNavBloodReq.setOnReselectListener(new MeowBottomNavigation.ReselectListener() {
+            @Override
+            public void onReselectItem(MeowBottomNavigation.Model item) {
+                return;
+            }
+        });
     }
     @Override
     public void onBackPressed() {
@@ -538,45 +544,3 @@ public class BloodReqActivity extends AppCompatActivity implements UpItemClick {
         dialog.dismiss();
     }
 }
-/*
-
- Map<String, Object> requestMainInfo = new HashMap<>();
-                        requestMainInfo.put("senderUid",FirebaseAuth.getInstance().getCurrentUser().getUid());
-
-db.collection("BloodRequest").document().collection("SenderUid")
-                                .add(requestMainInfo).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                                    @Override
-                                    public void onSuccess(DocumentReference documentReference) {
-
-                                    }
-                                });
-
- Map<String, Object> myRequestInfo = new HashMap<>();
-                                        myRequestInfo.put("senderName",senderName);
-                                        myRequestInfo.put("senderUid", FirebaseAuth.getInstance().getCurrentUser().getUid());
-                                        myRequestInfo.put("senderRequiredBlood",type);
-                                        myRequestInfo.put("senderRequiredQuantity",requiredBlood);
-                                        myRequestInfo.put("senderPatientGender",patientGender);
-                                        myRequestInfo.put("senderRequestForDate",binding.reqDate.getText().toString());
-                                        myRequestInfo.put("senderRequestForTime",binding.reqTime.getText().toString());
-                                        myRequestInfo.put("senderRequestUpazila",binding.reqUpazila.getText().toString());
-                                        myRequestInfo.put("senderPhoneNumber",binding.reqNumber.getText().toString());
-                                        myRequestInfo.put("senderRequestLocation",binding.reqLocation.getText().toString());
-                                        myRequestInfo.put("senderGiftAmount",binding.gift.getText().toString());
-                                        myRequestInfo.put("senderRequestDetails",binding.description.getText().toString());
-                                        myRequestInfo.put("requestStatus",request_status);
-                                        myRequestInfo.put("requestReceiverUid",null);
-                                        myRequestInfo.put("requestReceiverName",null);
-
-                                        db.collection("UserProfile").document(FirebaseAuth.getInstance().getCurrentUser().getEmail())
-                                                .collection("BloodRequestPortal").document("Request_Type")
-                                                .collection("Sent_Request").document(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                                                .set(myRequestInfo).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                    @Override
-                                                    public void onSuccess(Void unused)
-                                                    {
-                                                        Toasty.success(getApplicationContext(),"Request Sent",Toasty.LENGTH_SHORT,false).show();
-
-                                                    }
-                                                });
- */

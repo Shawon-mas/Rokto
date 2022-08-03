@@ -11,6 +11,7 @@ import static com.app.roktoDorkar.utilites.Constants.KEY_NAME;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -172,12 +173,31 @@ public class HomeActivity extends AppCompatActivity {
             public void onClickItem(MeowBottomNavigation.Model item) {
             }
         });
+        binding.bottomNavHome.setOnReselectListener(new MeowBottomNavigation.ReselectListener() {
+            @Override
+            public void onReselectItem(MeowBottomNavigation.Model item) {
+                return;
+            }
+        });
     }
 
     @Override
     protected void onStart() {
         super.onStart();
+    }
 
-
+    @Override
+    public void onBackPressed() {
+        AlertDialog alertDialog = new AlertDialog.Builder(HomeActivity.this).create();
+        alertDialog.setTitle("Wait !");
+        alertDialog.setMessage("Do you want to close the application?");
+        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Yes",
+                (dialog, which) -> {
+                    dialog.dismiss();
+                    finishAndRemoveTask();
+                });
+        alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "No",
+                (dialog, which) -> dialog.dismiss());
+        alertDialog.show();
     }
 }

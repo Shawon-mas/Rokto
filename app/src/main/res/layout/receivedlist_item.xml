@@ -5,7 +5,7 @@
     app:cardUseCompatPadding="true"
     android:id="@+id/receivedCard"
     app:cardCornerRadius="@dimen/_10sdp"
-    android:layout_height="@dimen/_150sdp">
+    android:layout_height="wrap_content">
     <RelativeLayout
         android:layout_gravity="center_horizontal"
         android:layout_width="match_parent"
@@ -16,7 +16,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/_10sdp"
-            android:layout_marginVertical="@dimen/_10sdp"
+            android:layout_marginTop="@dimen/_10sdp"
             android:background="@drawable/status_bar"
             android:fontFamily="@font/heebo_medium"
             android:padding="@dimen/_5sdp"
@@ -26,72 +26,170 @@
             android:textSize="@dimen/_14ssp" />
 
         <TextView
+
+            android:paddingEnd="@dimen/_8sdp"
             android:id="@+id/donar_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/_10sdp"
-            android:layout_marginVertical="@dimen/_10sdp"
+            android:layout_marginTop="@dimen/_10sdp"
             android:layout_toRightOf="@id/blood_group"
             android:fontFamily="@font/heebo_medium"
-            android:padding="@dimen/_5sdp"
             android:text="David Liam"
             android:textColor="@color/black"
-            android:textSize="@dimen/_16ssp" />
+            android:textSize="@dimen/_14ssp" />
 
-        <ImageView
-            android:id="@+id/donor_info"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_marginHorizontal="@dimen/_10sdp"
-            android:layout_marginVertical="@dimen/_10sdp"
-            android:layout_marginStart="-169dp"
-            android:padding="@dimen/_5sdp"
-            android:src="@drawable/info" />
+
 
         <TextView
-            android:layout_marginHorizontal="@dimen/_10sdp"
+           android:layout_marginTop="@dimen/_5sdp"
             android:id="@+id/locationText"
             android:layout_toRightOf="@id/blood_group"
             android:layout_below="@id/donar_name"
-            android:padding="@dimen/_5sdp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Location"
             android:textColor="@color/black"
             android:textSize="@dimen/_12ssp"
             android:fontFamily="@font/heebo_regular"
+            android:layout_alignStart="@id/donar_name"
             />
 
         <TextView
-
+            android:layout_marginHorizontal="@dimen/_10sdp"
             android:id="@+id/locationDonar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/donar_name"
             android:layout_toRightOf="@id/locationText"
             android:fontFamily="@font/heebo_regular"
-            android:padding="@dimen/_5sdp"
-            android:text="Lohagara"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:hint="Lohagara"
+            android:textColor="@color/black"
+            android:textSize="@dimen/_12ssp" />
+
+        <TextView
+            android:id="@+id/dateNtime"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/locationDonar"
+            android:layout_alignStart="@id/donar_name"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:layout_toRightOf="@id/blood_group"
+            android:fontFamily="@font/heebo_regular"
+            android:text="12-05-22022"
+            android:textColor="@color/main_black"
+            android:textSize="@dimen/_12ssp" />
+
+        <TextView
+            android:id="@+id/gift"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/dateNtime"
+            android:layout_alignStart="@id/donar_name"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:layout_toRightOf="@id/blood_group"
+            android:background="@drawable/tab_indicator"
+            android:fontFamily="@font/heebo_regular"
+            android:paddingStart="@dimen/_8sdp"
+            android:paddingEnd="@dimen/_8sdp"
+            android:text="Gift Amount 500tk"
+            android:textColor="@color/white"
+            android:textSize="@dimen/_12ssp" />
+
+        <TextView
+            android:id="@+id/description_type"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/gift"
+            android:layout_marginHorizontal="@dimen/_10sdp"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:fontFamily="@font/heebo_regular"
+            android:text="Gift Amount 500tk "
             android:textColor="@color/black"
             android:textSize="@dimen/_12ssp" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/accept"
-            android:layout_width="wrap_content"
+            android:layout_width="@dimen/_100sdp"
             android:layout_height="wrap_content"
-            android:layout_below="@id/locationDonar"
+            android:layout_below="@id/description_type"
             android:layout_marginHorizontal="@dimen/_10sdp"
             android:layout_toRightOf="@id/blood_group"
-            android:backgroundTint="@color/main_green"
+            android:backgroundTint="@color/main"
             android:drawableLeft="@drawable/done"
             android:drawableTint="@color/white"
             android:text="Accept"
             android:textAllCaps="false"
             android:textColor="@color/white"
             android:visibility="visible" />
-
         <com.google.android.material.button.MaterialButton
+            android:id="@+id/friends"
+            android:paddingStart="@dimen/_5sdp"
+            android:paddingEnd="@dimen/_5sdp"
+            android:layout_width="@dimen/_100sdp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/description_type"
+            android:layout_marginHorizontal="@dimen/_10sdp"
+            android:layout_toRightOf="@id/blood_group"
+            android:backgroundTint="@color/main"
+            android:drawableLeft="@drawable/friends"
+            android:drawableTint="@color/white"
+            android:text="Connected"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:visibility="invisible" />
+        <com.google.android.material.button.MaterialButton
+            android:paddingStart="@dimen/_5sdp"
+            android:paddingEnd="@dimen/_5sdp"
+            android:id="@+id/decline"
+            android:layout_width="@dimen/_100sdp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/description_type"
+            android:layout_marginHorizontal="@dimen/_15sdp"
+            android:layout_toRightOf="@id/accept"
+            android:backgroundTint="#F4B4B4"
+            android:drawableLeft="@drawable/decline"
+            android:drawableTint="@color/main"
+            android:text="Reject"
+            android:textAllCaps="false"
+            android:textColor="@color/main"
+            android:visibility="visible" />
+        <com.google.android.material.button.MaterialButton
+            android:paddingStart="@dimen/_8sdp"
+            android:paddingEnd="@dimen/_8sdp"
+            android:id="@+id/reqToChat"
+            android:layout_width="@dimen/_100sdp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/description_type"
+            android:layout_marginHorizontal="@dimen/_15sdp"
+            android:layout_toRightOf="@id/friends"
+            android:backgroundTint="#F4B4B4"
+            android:drawableLeft="@drawable/chat"
+            android:drawableTint="@color/main"
+            android:text="Chat"
+            android:textAllCaps="false"
+            android:textColor="@color/main"
+            android:visibility="invisible" />
+        <com.google.android.material.button.MaterialButton
+            android:layout_toRightOf="@id/blood_group"
+            android:layout_marginHorizontal="@dimen/_10sdp"
+            android:id="@+id/pending"
+            android:layout_width="@dimen/_100sdp"
+            android:paddingStart="@dimen/_8sdp"
+            android:paddingEnd="@dimen/_8sdp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/description_type"
+            android:backgroundTint="#F4B4B4"
+            android:drawableLeft="@drawable/pending"
+            android:drawableTint="@color/main"
+            android:text="Pending"
+            android:textAllCaps="false"
+            android:textColor="@color/main"
+            android:visibility="gone" />
+
+
+    <!--    <com.google.android.material.button.MaterialButton
             android:id="@+id/friends"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -110,7 +208,7 @@
             android:id="@+id/decline"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/locationDonar"
+            android:layout_below="@id/dateNtime"
             android:layout_marginHorizontal="@dimen/_20sdp"
             android:layout_toRightOf="@id/accept"
             android:backgroundTint="#F4B4B4"
@@ -124,7 +222,7 @@
             android:id="@+id/reqToChat"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/locationDonar"
+            android:layout_below="@id/dateNtime"
             android:layout_marginHorizontal="@dimen/_10sdp"
             android:layout_toRightOf="@id/friends"
             android:backgroundTint="#F4B4B4"
@@ -148,7 +246,7 @@
             android:text="Pending"
             android:textAllCaps="false"
             android:textColor="@color/main"
-            android:visibility="invisible" />
+            android:visibility="invisible" />-->
 
 
     </RelativeLayout>

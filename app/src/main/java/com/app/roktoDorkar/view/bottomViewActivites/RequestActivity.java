@@ -108,6 +108,12 @@ private ActivityRequestBinding binding;
             {
             }
         });
+        binding.bottomNavRequest.setOnReselectListener(new MeowBottomNavigation.ReselectListener() {
+            @Override
+            public void onReselectItem(MeowBottomNavigation.Model item) {
+                return;
+            }
+        });
     }
     @Override
     public void onBackPressed() {

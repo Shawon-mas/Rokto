@@ -2,6 +2,8 @@ package com.app.roktoDorkar.view.RequestFrag.adapter;
 
 import static android.content.Context.MODE_PRIVATE;
 import static com.app.roktoDorkar.global.SharedPref.USER_NAME;
+import static com.app.roktoDorkar.utilites.Constants.KEY_COLLECTION_USERS;
+import static com.app.roktoDorkar.utilites.Constants.KEY_NAME;
 
 import android.content.Context;
 import android.content.Intent;
@@ -18,6 +20,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.app.roktoDorkar.R;
+import com.app.roktoDorkar.utilites.PreferenceManager;
 import com.app.roktoDorkar.view.ChatActivity;
 import com.app.roktoDorkar.view.RequestFrag.model.ReceviedListModel;
 import com.app.roktoDorkar.view.RequestFrag.model.UserLister;
@@ -50,7 +53,7 @@ public class ReceivedListAdapter extends RecyclerView.Adapter<ReceivedListAdapte
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     DocumentReference ref = db.collection("BloodRequest").document();
 
-    private String updateStatus="accept";
+     String updateStatus="accept";
     private ArrayList<ReceviedListModel> receviedListModelArrayList;
     private final UserLister userLister;
     public ReceivedListAdapter(Context context, ArrayList<ReceviedListModel> receviedListModelArrayList,UserLister userLister) {
@@ -100,6 +103,9 @@ public class ReceivedListAdapter extends RecyclerView.Adapter<ReceivedListAdapte
         holder.textViewBloodgroup.setText(receviedListModel.getSenderRequiredBlood());
         holder.textViewDonarName.setText(receviedListModel.getSenderName());
         holder.textViewLocation.setText(receviedListModel.getSenderRequestUpazila());
+        holder.textViewDateNTime.setText(receviedListModel.getSenderRequestForDate());
+        holder.textViewGiftAmount.setText("Gift Amount: "+receviedListModel.getSenderGiftAmount()+"tk");
+        holder.textViewDesType.setText(receviedListModel.getSenderRequestDetails());
 
         holder.materialButtonAccept.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -113,14 +119,12 @@ public class ReceivedListAdapter extends RecyclerView.Adapter<ReceivedListAdapte
                             public void onComplete(@NonNull Task<QuerySnapshot> task)
                             {
 
-                                SharedPreferences preferences = context.getSharedPreferences("MY_APP", MODE_PRIVATE);
-                                String receiverName = preferences.getString(USER_NAME, null);
-
+                                PreferenceManager preferenceManager=new PreferenceManager(v.getContext());
                                 Map<String, Object> updatesMain = new HashMap<>();
 
                                 updatesMain.put("requestStatus",updateStatus);
                                 updatesMain.put("requestReceiverUid",FirebaseAuth.getInstance().getCurrentUser().getUid());
-                                updatesMain.put("requestReceiverName",receiverName);
+                                updatesMain.put("requestReceiverName",preferenceManager.getString(KEY_NAME));
 
                                 db.collection("BloodRequest").document(receviedListModel.getDocumentId())
                                         .update(updatesMain)
@@ -128,13 +132,19 @@ public class ReceivedListAdapter extends RecyclerView.Adapter<ReceivedListAdapte
                                             @Override
                                             public void onSuccess(Void unused)
                                             {
+                                                holder.materialButtonDecline.setVisibility(View.GONE);
+                                                holder.materialButtonAccept.setVisibility(View.GONE);
+
+                                                holder.materialButtonChat.setVisibility(View.VISIBLE);
+                                                holder.materialButtonFriend.setVisibility(View.VISIBLE);
+
                                                 Map<String, Object> updatesSent = new HashMap<>();
 
                                                 updatesSent.put("requestStatus",updateStatus);
                                                 updatesSent.put("requestReceiverUid",FirebaseAuth.getInstance().getCurrentUser().getUid());
-                                                updatesSent.put("requestReceiverName",receiverName);
+                                                updatesSent.put("requestReceiverName",preferenceManager.getString(KEY_NAME));
 
-                                                DocumentReference ref2 = db.collection("UserProfile").document(receviedListModel.getSenderEmail()).collection("MyBloodRequest").document(receviedListModel.getDocumentId());
+                                                DocumentReference ref2 = db.collection(KEY_COLLECTION_USERS).document(receviedListModel.getSenderEmail()).collection("MyBloodRequest").document(receviedListModel.getDocumentId());
                                                 ref2.update(updatesSent).addOnSuccessListener(new OnSuccessListener<Void>() {
                                                     @Override
                                                     public void onSuccess(Void unused) {
@@ -168,19 +178,11 @@ public class ReceivedListAdapter extends RecyclerView.Adapter<ReceivedListAdapte
             }
         });
         holder.materialButtonChat.setOnClickListener(v -> {
-            /*Toasty.info(context,receviedListModel.getSenderName(),Toasty.LENGTH_SHORT,false).show();
-            Intent intent=new Intent(context, ChatActivity.class);
-            intent.putExtra("sender_name",receviedListModel.getSenderName());*/
             userLister.onUserClickedListener(receviedListModel);
 
 
         });
-        holder.imageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toasty.info(context,receviedListModel.getDocumentId(),Toasty.LENGTH_SHORT,false).show();
-            }
-        });
+
 
     }
 
@@ -190,7 +192,7 @@ public class ReceivedListAdapter extends RecyclerView.Adapter<ReceivedListAdapte
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder{
-        TextView textViewBloodgroup,textViewDonarName,textViewLocation;
+        TextView textViewBloodgroup,textViewDonarName,textViewLocation,textViewDateNTime,textViewGiftAmount,textViewDesType;
         MaterialButton materialButtonAccept,materialButtonDecline,materialButtonChat,materialButtonFriend;
         MaterialCardView materialCardView_received;
         ImageView imageView;
@@ -200,12 +202,15 @@ public class ReceivedListAdapter extends RecyclerView.Adapter<ReceivedListAdapte
             textViewBloodgroup=itemView.findViewById(R.id.blood_group);
             textViewDonarName=itemView.findViewById(R.id.donar_name);
             textViewLocation=itemView.findViewById(R.id.locationDonar);
+            textViewDateNTime=itemView.findViewById(R.id.dateNtime);
+            textViewGiftAmount=itemView.findViewById(R.id.gift);
+            textViewDesType=itemView.findViewById(R.id.description_type);
             materialButtonAccept=itemView.findViewById(R.id.accept);
             materialButtonDecline=itemView.findViewById(R.id.decline);
             materialButtonChat=itemView.findViewById(R.id.reqToChat);
             materialCardView_received=itemView.findViewById(R.id.receivedCard);
             materialButtonFriend=itemView.findViewById(R.id.friends);
-            imageView=itemView.findViewById(R.id.donor_info);
+
 
         }
     }

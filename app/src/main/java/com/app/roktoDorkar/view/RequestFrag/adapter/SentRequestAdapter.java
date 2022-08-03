@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.app.roktoDorkar.R;
 import com.app.roktoDorkar.view.RequestFrag.model.ReceviedListModel;
+import com.app.roktoDorkar.view.RequestFrag.model.UserLister;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
 
@@ -20,12 +21,15 @@ import java.util.ArrayList;
 public class SentRequestAdapter extends RecyclerView.Adapter<SentRequestAdapter.sMyViewHolder>{
     private Context context;
     private ArrayList<ReceviedListModel> receviedListModelArrayList;
+    private final UserLister userLister;
     private String type;
 
 
-    public SentRequestAdapter(Context context, ArrayList<ReceviedListModel> receviedListModelArrayList) {
+
+    public SentRequestAdapter(Context context, ArrayList<ReceviedListModel> receviedListModelArrayList,UserLister userLister) {
         this.context = context;
         this.receviedListModelArrayList = receviedListModelArrayList;
+        this.userLister=userLister;
     }
 
     @NonNull
@@ -41,26 +45,35 @@ public class SentRequestAdapter extends RecyclerView.Adapter<SentRequestAdapter.
         ReceviedListModel receviedListModel=receviedListModelArrayList.get(position);
         type= receviedListModel.getRequestStatus();
 
+
+
         if (type.equals("accept"))
         {
             holder.materialButtonDecline.setVisibility(View.GONE);
             holder.materialButtonAccept.setVisibility(View.GONE);
+
             holder.materialButtonChat.setVisibility(View.VISIBLE);
             holder.materialButtonFriend.setVisibility(View.VISIBLE);
 
             holder.textViewBloodgroup.setText(receviedListModel.getSenderRequiredBlood());
-            holder.textViewDonarName.setText("received by "+receviedListModel.getRequestReceiverName());
+            holder.textViewDonarName.setText("Accepted by "+receviedListModel.getRequestReceiverName());
             holder.textViewLocation.setText(receviedListModel.getSenderRequestUpazila());
 
 
         }else if (type.equals("not_accept")){
             holder.materialButtonp.setVisibility(View.VISIBLE);
+
             holder.materialButtonDecline.setVisibility(View.GONE);
             holder.materialButtonAccept.setVisibility(View.GONE);
             holder.materialButtonChat.setVisibility(View.GONE);
             holder.materialButtonFriend.setVisibility(View.GONE);
             holder.textViewDonarName.setText("Not accepted");
         }
+        holder.textViewGiftAmount.setVisibility(View.GONE);
+        holder.textViewDesType.setVisibility(View.GONE);
+        holder.materialButtonChat.setOnClickListener(v -> {
+            userLister.onUserClickedListener(receviedListModel);
+        });
 
 
     }
@@ -71,7 +84,7 @@ public class SentRequestAdapter extends RecyclerView.Adapter<SentRequestAdapter.
     }
 
     public class sMyViewHolder extends RecyclerView.ViewHolder{
-        TextView textViewBloodgroup,textViewDonarName,textViewLocation;
+        TextView textViewBloodgroup,textViewDonarName,textViewLocation,textViewGiftAmount,textViewDesType;
         MaterialButton materialButtonAccept,materialButtonDecline,materialButtonChat,materialButtonFriend,materialButtonp;
         MaterialCardView materialCardView_received;
         ImageView imageView;
@@ -84,6 +97,8 @@ public class SentRequestAdapter extends RecyclerView.Adapter<SentRequestAdapter.
             materialButtonAccept=itemView.findViewById(R.id.accept);
             materialButtonDecline=itemView.findViewById(R.id.decline);
             materialButtonChat=itemView.findViewById(R.id.reqToChat);
+            textViewGiftAmount=itemView.findViewById(R.id.gift);
+            textViewDesType=itemView.findViewById(R.id.description_type);
             materialButtonp=itemView.findViewById(R.id.pending);
             materialCardView_received=itemView.findViewById(R.id.receivedCard);
             materialButtonFriend=itemView.findViewById(R.id.friends);
