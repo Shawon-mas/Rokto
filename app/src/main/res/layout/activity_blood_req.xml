@@ -24,28 +24,49 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 />
-            <Spinner
-                android:layout_gravity="start"
-                android:layout_marginHorizontal="@dimen/_10sdp"
-                android:layout_marginTop="@dimen/_20sdp"
-                android:id="@+id/reqBloodType"
-                android:textSize="@dimen/_15ssp"
-                android:textColor="#000000"
-                android:background="@drawable/inuput_bg"
+            <com.google.android.material.textfield.TextInputLayout
+
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/_45sdp"
-                android:entries="@array/donateBlood_type"/>
-            <Spinner
-                android:layout_gravity="start"
+                android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/_10sdp"
-                android:layout_marginTop="@dimen/_20sdp"
-                android:id="@+id/reqBloodBag"
-                android:textSize="@dimen/_15ssp"
-                android:textColor="#000000"
-                android:background="@drawable/inuput_bg"
+                android:hint="Select Blood Group"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
+                android:layout_marginTop="@dimen/_10sdp"
+
+                >
+
+                <AutoCompleteTextView
+                    android:fontFamily="@font/heebo_regular"
+                    android:textColor="@color/black"
+                    android:editable="false"
+                    android:inputType="none"
+                    android:id="@+id/reqBloodGroup"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                </AutoCompleteTextView>
+
+            </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/_45sdp"
-                android:entries="@array/blood_quantity"/>
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/_10sdp"
+                android:hint="Select Required Blood Amount"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
+                android:layout_marginTop="@dimen/_10sdp"
+                >
+
+                <AutoCompleteTextView
+                    android:fontFamily="@font/heebo_regular"
+                    android:textColor="@color/black"
+                    android:editable="false"
+                    android:inputType="none"
+                    android:id="@+id/reqBloodAmount"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                </AutoCompleteTextView>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
             <LinearLayout
                 android:layout_marginHorizontal="@dimen/_10sdp"
                 android:weightSum="2"
@@ -88,7 +109,8 @@
                     android:layout_height="@dimen/_46sdp"
                     />
             </LinearLayout>
-            <EditText
+            <TextView
+                android:drawableEnd="@drawable/drop_down"
                 android:layout_marginHorizontal="@dimen/_10sdp"
                 android:gravity="center_vertical"
                 android:id="@+id/req_upazila"
@@ -97,10 +119,7 @@
                 android:layout_marginTop="@dimen/_20sdp"
                 android:background="@drawable/inuput_bg"
                 android:fontFamily="@font/heebo_regular"
-                android:hint="Which Upazila needs blood ?"
-                android:imeOptions="actionNext"
-                android:importantForAutofill="no"
-                android:inputType="textEmailAddress"
+                android:hint="@string/upazila_needs"
                 android:maxLines="1"
                 android:paddingStart="@dimen/_16sdp"
                 android:paddingEnd="@dimen/_16sdp"
@@ -133,7 +152,7 @@
                 android:layout_marginTop="@dimen/_20sdp"
                 android:background="@drawable/inuput_bg"
                 android:fontFamily="@font/heebo_regular"
-                android:hint="Enter your current location"
+                android:hint="Which hospital need blood ?"
                 android:imeOptions="actionNext"
                 android:importantForAutofill="no"
                 android:inputType="textEmailAddress"
@@ -142,28 +161,51 @@
                 android:paddingEnd="@dimen/_16sdp"
                 android:textColor="#000"
                 android:textSize="@dimen/_13ssp" />
-            <Spinner
-                android:layout_gravity="start"
-                android:layout_marginHorizontal="@dimen/_10sdp"
-                android:layout_marginTop="@dimen/_20sdp"
-                android:id="@+id/bloodneeds_gender"
-                android:textSize="@dimen/_15ssp"
-                android:textColor="#000000"
-                android:background="@drawable/inuput_bg"
+            <com.google.android.material.textfield.TextInputLayout
+
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/_45sdp"
-                android:entries="@array/blood_gender"/>
-            <Spinner
-                android:layout_gravity="start"
+                android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/_10sdp"
-                android:layout_marginTop="@dimen/_20sdp"
-                android:id="@+id/patient_type"
-                android:textSize="@dimen/_15ssp"
-                android:textColor="#000000"
-                android:background="@drawable/inuput_bg"
+                android:hint="Select Patient Gender"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
+                android:layout_marginTop="@dimen/_10sdp"
+
+                >
+
+                <AutoCompleteTextView
+                    android:fontFamily="@font/heebo_regular"
+                    android:textColor="@color/black"
+                    android:editable="false"
+                    android:inputType="none"
+                    android:id="@+id/reqBloodGender"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                </AutoCompleteTextView>
+
+            </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputLayout
+
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/_45sdp"
-                android:entries="@array/patient"/>
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/_10sdp"
+                android:hint="Select Patient Type"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
+                android:layout_marginTop="@dimen/_10sdp"
+
+                >
+
+                <AutoCompleteTextView
+                    android:fontFamily="@font/heebo_regular"
+                    android:textColor="@color/black"
+                    android:editable="false"
+                    android:inputType="none"
+                    android:id="@+id/reqBloodPatientType"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                </AutoCompleteTextView>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
             <EditText
                 android:layout_marginHorizontal="@dimen/_10sdp"
                 android:gravity="center_vertical"

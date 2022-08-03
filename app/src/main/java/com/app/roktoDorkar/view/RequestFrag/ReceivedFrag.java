@@ -4,6 +4,8 @@ import static android.content.Context.MODE_PRIVATE;
 import static com.app.roktoDorkar.global.SharedPref.USER_BLOODTYPE;
 import static com.app.roktoDorkar.global.SharedPref.USER_NAME;
 import static com.app.roktoDorkar.global.SharedPref.USER_UPAZILA;
+import static com.app.roktoDorkar.utilites.Constants.KEY_BLOODTYPE;
+import static com.app.roktoDorkar.utilites.Constants.KEY_UPZILA;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -22,6 +24,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.app.roktoDorkar.R;
+import com.app.roktoDorkar.utilites.PreferenceManager;
 import com.app.roktoDorkar.view.ChatActivity;
 import com.app.roktoDorkar.view.RequestFrag.adapter.ReceivedListAdapter;
 import com.app.roktoDorkar.view.RequestFrag.model.ReceviedListModel;
@@ -44,6 +47,8 @@ public class ReceivedFrag extends Fragment implements UserLister {
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private TextView textView_message;
     private ProgressBar progressBar_received;
+    private PreferenceManager preferenceManager;
+
 
 
     @Override
@@ -59,6 +64,7 @@ public class ReceivedFrag extends Fragment implements UserLister {
         }else {
             textView_message.setVisibility(View.GONE);
         }*/
+        preferenceManager=new PreferenceManager(getContext());
         intiViews(root);
         return root;
     }
@@ -72,11 +78,9 @@ public class ReceivedFrag extends Fragment implements UserLister {
         adapter=new ReceivedListAdapter(getContext(),receviedListModelArrayList,this);
         recyclerView_receivedfrag.setAdapter(adapter);
 
-        SharedPreferences preferences = getContext().getSharedPreferences("MY_APP", MODE_PRIVATE);
-        String bloodType = preferences.getString(USER_BLOODTYPE, null);
-        String upazila = preferences.getString(USER_UPAZILA, null);
-        db.collection("BloodRequest").whereEqualTo("senderRequiredBlood",bloodType)
-                .whereEqualTo("senderRequestUpazila",upazila)
+
+        db.collection("BloodRequest").whereEqualTo("senderRequiredBlood",preferenceManager.getString(KEY_BLOODTYPE))
+                .whereEqualTo("senderRequestUpazila",preferenceManager.getString(KEY_UPZILA))
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error)

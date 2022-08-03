@@ -23,14 +23,14 @@
     </string-array>
     <string-array name="donateBlood_type">
         <item>Select Blood Group</item>
-        <item>(A+)</item>
-        <item>(A-)</item>
-        <item>(B+)</item>
-        <item>(B-)</item>
-        <item>(O+)</item>
-        <item>(O-)</item>
-        <item>(AB+)</item>
-        <item>(AB-)</item>
+        <item>A+</item>
+        <item>A-</item>
+        <item>B+</item>
+        <item>B-</item>
+        <item>O+</item>
+        <item>O-</item>
+        <item>AB+</item>
+        <item>AB-</item>
     </string-array>
     <string-array name="blood_quantity">
         <item>Select Required Blood Amount</item>
@@ -67,4 +67,8 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="sign_out">Sign Out</string>
     <string name="type_a_message">Type a message</string>
+    <string name="select_Upazila">Select Upazila</string>
+    <string name="search_upazila">Search Upazila...</string>
+    <string name="select_upazila">Select Upazila</string>
+    <string name="upazila_needs">Which Upazila needs blood ?</string>
 </resources>

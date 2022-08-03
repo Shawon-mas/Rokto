@@ -55,7 +55,7 @@
                 android:hint="Password"
                 android:imeOptions="actionNext"
                 android:importantForAutofill="no"
-                android:inputType="textEmailAddress"
+                android:inputType="textPassword"
                 android:maxLines="1"
                 android:paddingStart="@dimen/_16sdp"
                 android:paddingEnd="@dimen/_16sdp"
@@ -63,7 +63,7 @@
                 android:textSize="@dimen/_13ssp" />
 
             <ImageView
-                android:id="@+id/passIcon"
+                android:id="@+id/passIconSignIn"
                 android:layout_width="@dimen/_40sdp"
                 android:layout_height="@dimen/_40sdp"
                 android:layout_alignParentEnd="true"

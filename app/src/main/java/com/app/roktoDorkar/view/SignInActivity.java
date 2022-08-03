@@ -16,14 +16,17 @@ import static com.app.roktoDorkar.utilites.Constants.KEY_UPZILA;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.InputType;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Toast;
 
+import com.app.roktoDorkar.R;
 import com.app.roktoDorkar.databinding.ActivitySignInBinding;
 import com.app.roktoDorkar.utilites.PreferenceManager;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -40,6 +43,8 @@ public class SignInActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private PreferenceManager preferenceManager;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private boolean passwordShowing = false;
+
 
 
 
@@ -54,7 +59,19 @@ public class SignInActivity extends AppCompatActivity {
     }
 
     private void setListeners() {
+         binding.passIconSignIn.setOnClickListener(v -> {
+             if (passwordShowing) {
+                 passwordShowing = false;
+                 binding.signIneditTextPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                 binding.passIconSignIn.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.pass_show));
+             } else {
 
+                 passwordShowing = true;
+                 binding.signIneditTextPassword.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+                 binding.passIconSignIn.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.pass_hide));
+             }
+             binding.signIneditTextPassword.setSelection(binding.signIneditTextPassword.length());
+         });
         binding.createAccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -21,14 +21,23 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.text.Editable;
+import android.text.InputType;
+import android.text.TextWatcher;
 import android.util.Base64;
 import android.util.Log;
 import android.util.Patterns;
@@ -36,9 +45,17 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.app.roktoDorkar.R;
+import com.app.roktoDorkar.api.upazilaApi.ApiInstance;
+import com.app.roktoDorkar.api.upazilaApi.DisDivModel;
+import com.app.roktoDorkar.api.upazilaApi.UpItemClick;
+import com.app.roktoDorkar.api.upazilaApi.UpazilaAdapter;
+import com.app.roktoDorkar.api.upazilaApi.UpzilaModel;
 import com.app.roktoDorkar.databinding.ActivitySignUpBinding;
 import com.app.roktoDorkar.utilites.PreferenceManager;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -56,14 +73,18 @@ import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
 import es.dmoral.toasty.Toasty;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
-public class SignUpActivity extends AppCompatActivity {
+public class SignUpActivity extends AppCompatActivity implements UpItemClick {
     private DatePickerDialog datePickerDialog;
     private PreferenceManager preferenceManager;
     ActivitySignUpBinding binding;
@@ -73,8 +94,13 @@ public class SignUpActivity extends AppCompatActivity {
     public static String val;
     private FirebaseAuth mAuth;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private Dialog dialog;
+    private ArrayList<UpzilaModel.Upazila> upzilaModelArrayList;
+    private ArrayList<UpzilaModel.Upazila> filterUpList;
+    private ArrayList<DisDivModel.DisDiv> disDivModelArrayList;
+    private UpazilaAdapter adapter;
+    private boolean passwordShowing = false;
 
-  //  private DocumentReference userRef = db.collection("UserProfile").document(mAuth.getCurrentUser().getEmail());
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -92,7 +118,7 @@ public class SignUpActivity extends AppCompatActivity {
     }
    private void showErrorToast(String message)
    {
-       Toasty.error(getApplicationContext(),message,Toasty.LENGTH_SHORT).show();
+       Toasty.error(getApplicationContext(),message,Toasty.LENGTH_LONG).show();
    }
     private void showSuccessToast(String message)
     {
@@ -385,8 +411,102 @@ public class SignUpActivity extends AppCompatActivity {
             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             pickImage.launch(intent);
         });
+        binding.editTextUp.setOnClickListener(v -> {
+            getUpazila();
+        });
+        binding.passIcon.setOnClickListener(v -> {
+            if (passwordShowing) {
+                passwordShowing = false;
+                binding.editTextPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                binding.passIcon.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.pass_show));
+            } else {
+
+                passwordShowing = true;
+                binding.editTextPassword.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+                binding.passIcon.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.pass_hide));
+            }
+            binding.editTextPassword.setSelection(binding.editTextPassword.length());
+        });
 
     }
+
+    private void getUpazila() {
+        dialog = new Dialog(this);
+        dialog.setContentView(R.layout.upzila_list);
+        dialog.getWindow().setLayout(800, 1500);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.show();
+        RecyclerView recyclerView = dialog.findViewById(R.id.upzila_listview);
+        ProgressBar progressBar= dialog.findViewById(R.id.progressbar_upzilla);
+        EditText editText=dialog.findViewById(R.id.up_search);
+        editText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                filter(s.toString());
+
+            }
+        });
+        progressBar.setVisibility(View.VISIBLE);
+        ImageView imageView=dialog.findViewById(R.id.up_close);
+        imageView.setOnClickListener(v -> {
+            dialog.cancel();
+        });
+        Call<UpzilaModel> call= ApiInstance.getUpazilaApiEndpoint().getUpazila();
+        call.enqueue(new Callback<UpzilaModel>() {
+            @Override
+            public void onResponse(Call<UpzilaModel> call, Response<UpzilaModel> response) {
+                if (response.isSuccessful()){
+                    upzilaModelArrayList=new ArrayList<>();
+                    upzilaModelArrayList=response.body().getUpazila();
+                    filterUpList=upzilaModelArrayList;
+                    for (UpzilaModel.Upazila upazila:upzilaModelArrayList)
+                    {
+                        recyclerView.setHasFixedSize(true);
+                        recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+                        adapter=new UpazilaAdapter(getApplicationContext(),upzilaModelArrayList);
+                        recyclerView.setAdapter(adapter);
+                        adapter.notifyDataSetChanged();
+                        adapter.setOnItemClckListener(SignUpActivity.this);
+                        progressBar.setVisibility(View.GONE);
+
+
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<UpzilaModel> call, Throwable t) {
+                showErrorToast("Something Went Wrong");
+                dialog.cancel();
+
+            }
+        });
+
+    }
+
+    private void filter(String toString) {
+        filterUpList=new ArrayList<>();
+        for (UpzilaModel.Upazila upazila:upzilaModelArrayList)
+        {
+            String search=upazila.getUpazila();
+            if (search.toLowerCase().contains(toString.toLowerCase()))
+            {
+                filterUpList.add(upazila);
+            }
+        }
+        adapter.filterListUp(filterUpList);
+    }
+
     @Override
     public void onStart() {
         super.onStart();
@@ -395,5 +515,50 @@ public class SignUpActivity extends AppCompatActivity {
         if(currentUser != null){
            // reload();
         }
+    }
+
+    @Override
+    public void onUPItemClick(int position) {
+        binding.editTextUp.setText(filterUpList.get(position).getUpazila());
+        Integer up_id=filterUpList.get(position).getId();
+        setDivDis(up_id);
+        dialog.cancel();
+    }
+
+    private void setDivDis(Integer up_id) {
+        binding.editTextDis.setTextColor(getResources().getColor(R.color.main));
+        binding.editTextDiv.setTextColor(getResources().getColor(R.color.main));
+        binding.editTextDis.setText("Loading...Please Wait");
+        binding.editTextDiv.setText("Loading...Please Wait");
+        Call<DisDivModel> call=ApiInstance.getUpazilaApiEndpoint().getDisDiv(up_id);
+        call.enqueue(new Callback<DisDivModel>() {
+            @Override
+            public void onResponse(Call<DisDivModel> call, Response<DisDivModel> response) {
+                if (response.isSuccessful())
+                {
+                    disDivModelArrayList=new ArrayList<>();
+                    disDivModelArrayList=response.body().getDisDiv();
+
+                    for (DisDivModel.DisDiv data:disDivModelArrayList)
+                    {
+
+                        binding.editTextDiv.setText(data.getDivision());
+                        binding.editTextDis.setText(data.getDistrict());
+                        binding.editTextDis.setTextColor(getResources().getColor(R.color.black));
+                        binding.editTextDiv.setTextColor(getResources().getColor(R.color.black));
+
+                    }
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<DisDivModel> call, Throwable t)
+            {
+                showErrorToast("Something Went Wrong");
+
+            }
+        });
+
     }
 }

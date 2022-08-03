@@ -48,6 +48,7 @@ public class AccountActivity extends AppCompatActivity {
         bottomNav();
         signOut();
         initViews();
+
     }
 
     private void initViews() {

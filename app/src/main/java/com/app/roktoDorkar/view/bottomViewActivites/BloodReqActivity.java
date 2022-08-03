@@ -2,26 +2,49 @@ package com.app.roktoDorkar.view.bottomViewActivites;
 
 import static android.content.ContentValues.TAG;
 import static com.app.roktoDorkar.global.SharedPref.USER_NAME;
+import static com.app.roktoDorkar.utilites.Constants.KEY_COLLECTION_USERS;
+import static com.app.roktoDorkar.utilites.Constants.KEY_NAME;
+import static com.app.roktoDorkar.utilites.Constants.KEY_NUMBER;
 import static com.app.roktoDorkar.view.DonarsListActivity.type;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.app.roktoDorkar.R;
+import com.app.roktoDorkar.api.upazilaApi.ApiInstance;
+import com.app.roktoDorkar.api.upazilaApi.DisDivModel;
+import com.app.roktoDorkar.api.upazilaApi.UpItemClick;
+import com.app.roktoDorkar.api.upazilaApi.UpazilaAdapter;
+import com.app.roktoDorkar.api.upazilaApi.UpzilaModel;
 import com.app.roktoDorkar.databinding.ActivityBloodReqBinding;
 import com.app.roktoDorkar.databinding.ActivityRequestBinding;
 import com.app.roktoDorkar.model.DateValidatorWeekdays;
+import com.app.roktoDorkar.utilites.PreferenceManager;
 import com.app.roktoDorkar.view.DonarsListActivity;
 import com.app.roktoDorkar.view.HomeActivity;
+import com.app.roktoDorkar.view.SignUpActivity;
 import com.etebarian.meowbottomnavigation.MeowBottomNavigation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -40,15 +63,21 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.text.DateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
 
 import es.dmoral.toasty.Toasty;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
-public class BloodReqActivity extends AppCompatActivity {
+public class BloodReqActivity extends AppCompatActivity implements UpItemClick {
+    private PreferenceManager preferenceManager;
     private ActivityBloodReqBinding binding;
     private MaterialDatePicker materialDatePicker;
     private MaterialTimePicker materialTimePicker;
@@ -58,12 +87,22 @@ public class BloodReqActivity extends AppCompatActivity {
     @TimeFormat private int clockFormat;
     private String request_status="not_accept";
     DocumentReference ref = db.collection("BloodRequest").document();
+    Dialog dialog;
+    private ArrayList<UpzilaModel.Upazila> upzilaModelArrayList;
+    private ArrayList<UpzilaModel.Upazila> filterUpList;
+    private ArrayList<DisDivModel.DisDiv> disDivModelArrayList;
+    private UpazilaAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityBloodReqBinding.inflate(getLayoutInflater());
+        preferenceManager=new PreferenceManager(getApplicationContext());
         setContentView(binding.getRoot());
+        getBloodType();
+        getBloodAmount();
+        getPatientGender();
+        getPatientType();
         initViews();
         bottomNav();
         clickListener();
@@ -74,70 +113,85 @@ public class BloodReqActivity extends AppCompatActivity {
         binding.requestMakeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                chckeValidator();
+               if (checkValidator())
+               {
+                   submitRequest();
+               }
             }
         });
-
+         binding.reqNumber.setText(preferenceManager.getString(KEY_NUMBER));
 
     }
+    private void showErrorToast(String message)
+    {
+        Toasty.error(getApplicationContext(),message,Toasty.LENGTH_LONG).show();
+    }
 
-    private void chckeValidator() {
-        if (binding.reqDate.getText().toString().isEmpty())
+    private Boolean checkValidator() {
+        if (binding.reqBloodGroup.getText().toString().isEmpty())
         {
-            binding.reqDate.setError("Select Date");
-            binding.reqDate.requestFocus();
+            showErrorToast("Select blood group");
+            return false;
+        }else if (binding.reqBloodAmount.getText().toString().isEmpty()){
+            showErrorToast("Select  blood amount");
+            return false;
+        }else if (binding.reqDate.getText().toString().isEmpty()) {
+            showErrorToast("Select  Date");
+            return false;
+        }else if (binding.reqTime.getText().toString().isEmpty()) {
+            showErrorToast("Select  Time");
+            return false;
+        }else if (binding.reqUpazila.getText().toString().isEmpty()) {
+            showErrorToast("Select  Upazila");
+            return false;
+        }else if (binding.reqNumber.getText().toString().isEmpty()) {
+            showErrorToast("Enter phone number");
+            return false;
+        }else if (binding.reqLocation.getText().toString().isEmpty()) {
+            showErrorToast("Enter hospital name");
+            return false;
+        }else if (binding.reqBloodGender.getText().toString().isEmpty()) {
+            showErrorToast("Select patient gender");
+            return false;
+        }else if (binding.reqBloodPatientType.getText().toString().isEmpty()) {
+            showErrorToast("Select patient type");
+            return false;
         }
-        if (binding.reqTime.getText().toString().isEmpty())
-        {
-            binding.reqTime.setError("Select time");
-            binding.reqTime.requestFocus();
-        }
-        if (binding.reqUpazila.getText().toString().isEmpty())
-        {
-            binding.reqUpazila.setError("Enter Upazila");
-            binding.reqUpazila.requestFocus();
-        }
-        if (binding.reqNumber.getText().toString().isEmpty())
-        {
-            binding.reqNumber.setError("Enter Your Number");
-            binding.reqNumber.requestFocus();
-        }
-        if (binding.reqLocation.getText().toString().isEmpty())
-        {
-            binding.reqLocation.setError("Enter Your Current Location");
-            binding.reqLocation.requestFocus();
+
+        else if (binding.description.getText().toString().isEmpty()) {
+            showErrorToast("Write some details");
+            return false;
+        }else {
+            return true;
         }
 
 
-        if (binding.description.getText().toString().isEmpty())
-        {
-            binding.description.setError("Write Description");
-            binding.description.requestFocus();
-        }
-        submitRequest();
+
+
     }
 
     private void submitRequest()
     {
-        type = binding.reqBloodType.getSelectedItem().toString();
-        requiredBlood = binding.reqBloodBag.getSelectedItem().toString();
-        patientGender = binding.bloodneedsGender.getSelectedItem().toString();
-        patientType = binding.patientType.getSelectedItem().toString();
-        db.collection("UserProfile")
+        //type = binding.reqBloodType.getSelectedItem().toString();
+
+        db.collection(KEY_COLLECTION_USERS)
                 .whereEqualTo("bloodType",type )
-                .whereEqualTo("upzilla", binding.reqUpazila.getText().toString())
+                .whereEqualTo("upazila", binding.reqUpazila.getText().toString())
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful())
                         {
-                          makeRequest();
-                        }
-                        if (task.getResult().size() == 0) {
+                            if (task.getResult().size() == 0) {
 
-                            Toast.makeText(BloodReqActivity.this, "There is no donor right now your location", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(BloodReqActivity.this, "There is no donor right now your location", Toast.LENGTH_SHORT).show();
+                            }else {
+                                makeRequest();
+                            }
+
                         }
+
 
                     }
                 }).addOnFailureListener(new OnFailureListener() {
@@ -153,17 +207,17 @@ public class BloodReqActivity extends AppCompatActivity {
     }
 
     private void makeRequest() {
-        SharedPreferences preferences = getApplicationContext().getSharedPreferences("MY_APP", MODE_PRIVATE);
-        String senderName = preferences.getString(USER_NAME, null);
+
 
         String dI=ref.getId();
         Map<String, Object> requestInfo = new HashMap<>();
-        requestInfo.put("senderName",senderName);
+        requestInfo.put("senderName",preferenceManager.getString(KEY_NAME));
         requestInfo.put("senderEmail",FirebaseAuth.getInstance().getCurrentUser().getEmail());
         requestInfo.put("senderUid", FirebaseAuth.getInstance().getCurrentUser().getUid());
         requestInfo.put("senderRequiredBlood",type);
         requestInfo.put("senderRequiredQuantity",requiredBlood);
         requestInfo.put("senderPatientGender",patientGender);
+        requestInfo.put("senderPatientType",patientType);
         requestInfo.put("senderRequestForDate",binding.reqDate.getText().toString());
         requestInfo.put("senderRequestForTime",binding.reqTime.getText().toString());
         requestInfo.put("senderRequestUpazila",binding.reqUpazila.getText().toString());
@@ -185,17 +239,8 @@ public class BloodReqActivity extends AppCompatActivity {
                saveToProfile();
            }
        });
-
-
-
-
-
-
-
     }
-    private void showSuccessToast(String Message){
-        Toasty.success(getApplicationContext(),Message,Toasty.LENGTH_SHORT,false).show();
-    }
+
     private void saveToProfile() {
         String dI1=ref.getId();
         Map<String, Object> myRequestInfo = new HashMap<>();
@@ -203,6 +248,7 @@ public class BloodReqActivity extends AppCompatActivity {
         myRequestInfo.put("senderRequiredBlood",type);
         myRequestInfo.put("senderRequiredQuantity",requiredBlood);
         myRequestInfo.put("senderPatientGender",patientGender);
+        myRequestInfo.put("senderPatientType",patientType);
         myRequestInfo.put("senderRequestForDate",binding.reqDate.getText().toString());
         myRequestInfo.put("senderRequestForTime",binding.reqTime.getText().toString());
         myRequestInfo.put("senderRequestUpazila",binding.reqUpazila.getText().toString());
@@ -216,7 +262,7 @@ public class BloodReqActivity extends AppCompatActivity {
         myRequestInfo.put("documentId",dI1);
         myRequestInfo.put("reqtime", FieldValue.serverTimestamp());
 
-        DocumentReference ref2 = db.collection("UserProfile").document(FirebaseAuth.getInstance().getCurrentUser().getEmail()).collection("MyBloodRequest").document(dI1);
+        DocumentReference ref2 = db.collection(KEY_COLLECTION_USERS).document(FirebaseAuth.getInstance().getCurrentUser().getEmail()).collection("MyBloodRequest").document(dI1);
         ref2.set(myRequestInfo).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void unused)
@@ -237,8 +283,150 @@ public class BloodReqActivity extends AppCompatActivity {
                 selectTime();
             }
         });
+      binding.reqUpazila.setOnClickListener(v -> {
+          getUpzilla();
+      });
+
+    }
+
+    private void getUpzilla() {
+        dialog = new Dialog(this);
+        dialog.setContentView(R.layout.upzila_list);
+        dialog.getWindow().setLayout(800, 1500);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.show();
+        RecyclerView recyclerView = dialog.findViewById(R.id.upzila_listview);
+        ProgressBar progressBar= dialog.findViewById(R.id.progressbar_upzilla);
+        EditText editText=dialog.findViewById(R.id.up_search);
+        editText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                filter(s.toString());
+
+            }
+        });
+        progressBar.setVisibility(View.VISIBLE);
+        ImageView imageView=dialog.findViewById(R.id.up_close);
+        imageView.setOnClickListener(v -> {
+            dialog.cancel();
+        });
+        Call<UpzilaModel> call= ApiInstance.getUpazilaApiEndpoint().getUpazila();
+        call.enqueue(new Callback<UpzilaModel>() {
+            @Override
+            public void onResponse(Call<UpzilaModel> call, Response<UpzilaModel> response) {
+                if (response.isSuccessful()){
+                    upzilaModelArrayList=new ArrayList<>();
+                    upzilaModelArrayList=response.body().getUpazila();
+                    filterUpList=upzilaModelArrayList;
+                    for (UpzilaModel.Upazila upazila:upzilaModelArrayList)
+                    {
+                        recyclerView.setHasFixedSize(true);
+                        recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+                        adapter=new UpazilaAdapter(getApplicationContext(),upzilaModelArrayList);
+                        recyclerView.setAdapter(adapter);
+                        adapter.notifyDataSetChanged();
+                        adapter.setOnItemClckListener(BloodReqActivity.this);
+                        progressBar.setVisibility(View.GONE);
 
 
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<UpzilaModel> call, Throwable t) {
+
+                dialog.cancel();
+
+            }
+        });
+
+
+    }
+
+    private void filter(String toString) {
+        filterUpList=new ArrayList<>();
+        for (UpzilaModel.Upazila upazila:upzilaModelArrayList)
+        {
+            String search=upazila.getUpazila();
+            if (search.toLowerCase().contains(toString.toLowerCase()))
+            {
+                filterUpList.add(upazila);
+            }
+        }
+        adapter.filterListUp(filterUpList);
+    }
+    private void getBloodType()
+    {
+        String[] bloodGroup=new String[] {"A+","A-","B+","B-","O+","O-","AB+","AB-"};
+        ArrayAdapter<String> arrayAdapter=new ArrayAdapter<>(
+                this,
+                R.layout.drorp_down_item,
+                bloodGroup
+        );
+        binding.reqBloodGroup.setAdapter(arrayAdapter);
+        binding.reqBloodGroup.setOnItemClickListener((parent, view, position, id) -> {
+            type=binding.reqBloodGroup.getText().toString();
+            //Toast.makeText(getApplicationContext(),binding.filledExposed.getText().toString(),Toast.LENGTH_SHORT).show();
+        });
+    }
+    private void getBloodAmount()
+    {
+        String[] bloodAmount=new String[]
+                {"1 bag","2 bag","3 bag","4 bag","5 bag","6 bag","7 bag","8 bag","9 bag","10 bag"};
+        ArrayAdapter<String> arrayAdapter=new ArrayAdapter<>(
+                this,
+                R.layout.drorp_down_item,
+                bloodAmount
+        );
+        binding.reqBloodAmount.setAdapter(arrayAdapter);
+        binding.reqBloodAmount.setOnItemClickListener((parent, view, position, id) -> {
+            requiredBlood=binding.reqBloodAmount.getText().toString();
+            //Toast.makeText(getApplicationContext(),binding.filledExposed.getText().toString(),Toast.LENGTH_SHORT).show();
+        });
+    }
+    private void getPatientGender()
+    {
+        String[] gender=new String[]
+                {"Kids","Male","Female","Others",};
+        ArrayAdapter<String> arrayAdapter=new ArrayAdapter<>(
+                this,
+                R.layout.drorp_down_item,
+                gender
+        );
+        binding.reqBloodGender.setAdapter(arrayAdapter);
+        binding.reqBloodGender.setOnItemClickListener((parent, view, position, id) -> {
+            patientGender=binding.reqBloodGender.getText().toString();
+            //Toast.makeText(getApplicationContext(),binding.filledExposed.getText().toString(),Toast.LENGTH_SHORT).show();
+        });
+    }
+    private void getPatientType()
+    {
+        String[] pType=new String[]
+                {"Normal","Accident","Baby Delivery","Emergency","Others"};
+        ArrayAdapter<String> arrayAdapter=new ArrayAdapter<>(
+                this,
+                R.layout.drorp_down_item,
+                pType
+        );
+        binding.reqBloodPatientType.setAdapter(arrayAdapter);
+        binding.reqBloodPatientType.setOnItemClickListener((parent, view, position, id) -> {
+            patientType=binding.reqBloodPatientType.getText().toString();
+            //Toast.makeText(getApplicationContext(),binding.filledExposed.getText().toString(),Toast.LENGTH_SHORT).show();
+        });
+    }
+    private void showSuccessToast(String Message){
+        Toasty.success(getApplicationContext(),Message,Toasty.LENGTH_SHORT,false).show();
     }
 
     private void selectTime() {
@@ -342,6 +530,12 @@ public class BloodReqActivity extends AppCompatActivity {
     public void onBackPressed() {
         binding.bottomNavBloodReq.show(1,true);
         super.onBackPressed();
+    }
+
+    @Override
+    public void onUPItemClick(int position) {
+        binding.reqUpazila.setText(filterUpList.get(position).getUpazila());
+        dialog.dismiss();
     }
 }
 /*
