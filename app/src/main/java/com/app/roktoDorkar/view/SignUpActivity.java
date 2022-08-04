@@ -124,6 +124,15 @@ public class SignUpActivity extends AppCompatActivity implements UpItemClick {
     {
         Toasty.success(getApplicationContext(),message,Toasty.LENGTH_SHORT).show();
     }
+    private void loading(Boolean isLoading) {
+        if (isLoading) {
+            binding.signUpButton.setVisibility(View.INVISIBLE);
+            binding.signUpProgressbar.setVisibility(View.VISIBLE);
+        } else {
+            binding.signUpButton.setVisibility(View.VISIBLE);
+            binding.signUpProgressbar.setVisibility(View.INVISIBLE);
+        }
+    }
     private void bloodTypeSpinner() {
         binding.signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -210,8 +219,11 @@ public class SignUpActivity extends AppCompatActivity implements UpItemClick {
                 {
                     binding.editTextAbout.setError("Write your self in short");
                     binding.editTextAbout.requestFocus();
+                    return;
+                }else {
+                    createAccount(email,pass);
                 }
-                createAccount(email,pass);
+
 
 
                // checkFieldValid(name,email,number);
@@ -230,23 +242,23 @@ public class SignUpActivity extends AppCompatActivity implements UpItemClick {
     }
 
     private void createAccount(String email, String pass) {
+        loading(true);
         mAuth.createUserWithEmailAndPassword(email, pass)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            binding.signUpIndicator.setVisibility(View.GONE);
+
                             // Sign in success, update UI with the signed-in user's information
                             Log.d("Message", "createUserWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
                             updateUI(user,email);
                         } else {
-                            binding.signUpIndicator.setVisibility(View.GONE);
-                            // If sign in fails, display a message to the user.
-                            Log.w("Report", "createUserWithEmail:failure", task.getException());
-                            /*Toast.makeText(EmailPasswordActivity.this, "Authentication failed.",
-                                    Toast.LENGTH_SHORT).show();*/
-                           // updateUI(null);
+
+                            loading(false);
+                            showErrorToast(task.getException().toString());
+                            //Log.w("Report", "createUserWithEmail:failure", task.getException());
+
                         }
                     }
                 });

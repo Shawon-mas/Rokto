@@ -22,6 +22,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.app.roktoDorkar.R;
 import com.app.roktoDorkar.utilites.PreferenceManager;
@@ -56,7 +57,7 @@ public class ReceivedFrag extends Fragment implements UserLister {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         ViewGroup root= (ViewGroup) inflater.inflate(R.layout.fragment_received, container, false);
-     textView_message=root.findViewById(R.id.message);
+
        /* if (receviedListModelArrayList.size()==0)
         {
             textView_message.setVisibility(View.VISIBLE);
@@ -70,11 +71,17 @@ public class ReceivedFrag extends Fragment implements UserLister {
     }
 
     private void intiViews(ViewGroup root) {
+
+
+
+
         progressBar_received=root.findViewById(R.id.receivedProgressbar);
         recyclerView_receivedfrag=root.findViewById(R.id.recyclerviewReceivedList);
         recyclerView_receivedfrag.setHasFixedSize(true);
         recyclerView_receivedfrag.setLayoutManager(new LinearLayoutManager(getContext()));
         receviedListModelArrayList=new ArrayList<>();
+
+
         adapter=new ReceivedListAdapter(getContext(),receviedListModelArrayList,this);
         recyclerView_receivedfrag.setAdapter(adapter);
 
@@ -91,22 +98,42 @@ public class ReceivedFrag extends Fragment implements UserLister {
 
                             return;
                         }
-                        for (DocumentChange documentChange:value.getDocumentChanges())
+                        if (value!=null)
                         {
-
-                            if (documentChange.getType()== DocumentChange.Type.ADDED)
+                            int count=receviedListModelArrayList.size();
+                            for (DocumentChange documentChange:value.getDocumentChanges())
                             {
 
-                                receviedListModelArrayList.add(documentChange.getDocument().toObject(ReceviedListModel.class));
+                                if (documentChange.getType()== DocumentChange.Type.ADDED)
+                                {
+
+                                    receviedListModelArrayList.add(documentChange.getDocument().toObject(ReceviedListModel.class));
+                                }
                             }
-                            adapter.notifyDataSetChanged();
+
+                                adapter.notifyDataSetChanged();
                         }
+
+
                     }
                 });
 
 
 
+/*
+        int count=receviedListModelArrayList.size();
+        if (count==0)
+        {
+            recyclerView_receivedfrag.setVisibility(View.VISIBLE);
+            textView_message.setVisibility(View.GONE);
 
+        }else {
+
+            textView_message.setVisibility(View.VISIBLE);
+            textView_message.setText("No request Found");
+            recyclerView_receivedfrag.setVisibility(View.GONE);
+
+        }*/
     }
 
     @Override

@@ -57,6 +57,15 @@ public class SignInActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         setListeners();
     }
+    private void loading(Boolean isLoading) {
+        if (isLoading) {
+            binding.signInButton.setVisibility(View.INVISIBLE);
+            binding.signInProgressbar.setVisibility(View.VISIBLE);
+        } else {
+            binding.signInButton.setVisibility(View.VISIBLE);
+            binding.signInProgressbar.setVisibility(View.INVISIBLE);
+        }
+    }
 
     private void setListeners() {
          binding.passIconSignIn.setOnClickListener(v -> {
@@ -83,7 +92,6 @@ public class SignInActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-                binding.signInIndicator.setVisibility(View.VISIBLE);
                 String email = binding.signIneditTextEmail.getText().toString().trim();
                 String pass = binding.signIneditTextPassword.getText().toString().trim();
                 if (email.isEmpty()) {
@@ -100,8 +108,11 @@ public class SignInActivity extends AppCompatActivity {
                     binding.signIneditTextPassword.setError("Enter your email");
                     binding.signIneditTextPassword.requestFocus();
                     return;
+                }else {
+                    userSignIn(email, pass);
+                    loading(true);
                 }
-                userSignIn(email, pass);
+
             }
         });
     }
@@ -137,32 +148,32 @@ public class SignInActivity extends AppCompatActivity {
                                             FirebaseUser user = mAuth.getCurrentUser();
                                             if (user.isEmailVerified())
                                             {
-                                                binding.signInIndicator.setVisibility(View.GONE);
+
                                                 startActivity(new Intent(getApplicationContext(), HomeActivity.class));
                                                 getUserInfo();
                                             }else {
-                                                binding.signInIndicator.setVisibility(View.GONE);
+                                                loading(false);
                                                 user.sendEmailVerification();
                                                 Toast.makeText(SignInActivity.this, "Check your email/spam to verify your account",
                                                         Toast.LENGTH_SHORT).show();
                                             }
 
-                                            //  updateUI(user);
-                                        } else {
-                                            binding.signInIndicator.setVisibility(View.GONE);
-                                            // If sign in fails, display a message to the user.
+
+                                        }
+                                        else {
+                                            loading(false);
+
                                             Log.w("message", "signInWithEmail:failure", task.getException());
-                                            Toast.makeText(SignInActivity.this, "Your account does not exist",
+                                            Toast.makeText(SignInActivity.this, "Wrong credentials",
                                                     Toast.LENGTH_SHORT).show();
-                                            //updateUI(null);
+
                                         }
                                     }
                                 }).addOnFailureListener(new OnFailureListener() {
                                     @Override
                                     public void onFailure(@NonNull Exception e) {
-                                        binding.signInIndicator.setVisibility(View.GONE);
-                                        Log.d("message", e.toString());
-                                        Toast.makeText(SignInActivity.this, e.toString(),
+                                        loading(false);
+                                        Toast.makeText(SignInActivity.this, "Wrong ",
                                                 Toast.LENGTH_SHORT).show();
                                     }
                                 });
