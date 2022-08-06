@@ -75,7 +75,6 @@ public class HomeActivity extends AppCompatActivity {
        FirebaseFirestore database=FirebaseFirestore.getInstance();
        DocumentReference documentReference=database.collection(KEY_COLLECTION_USERS).document(preferenceManager.getString(KEY_EMAIL));
        documentReference.update(KEY_FCM_TOKEN,token)
-               .addOnSuccessListener(unused -> showToast("Token Updated"))
                .addOnFailureListener(e -> errorToast("Unable to update token"));
 
 
@@ -93,6 +92,7 @@ public class HomeActivity extends AppCompatActivity {
         binding.button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 binding.homeIndicator.setVisibility(View.VISIBLE);
                 String type = binding.spinnerdonateBlood.getSelectedItem().toString();
                 //   Toast.makeText(HomeActivity.this, type, Toast.LENGTH_SHORT).show();

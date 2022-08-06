@@ -50,6 +50,7 @@ public class DonarsListActivity extends AppCompatActivity {
     }
 
     private void recylerView() {
+
         binding.donarListRecyclerView.setHasFixedSize(true);
         binding.donarListRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         donarListItems = new ArrayList<>();
