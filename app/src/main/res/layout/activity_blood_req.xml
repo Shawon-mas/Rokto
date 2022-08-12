@@ -70,7 +70,7 @@
             <LinearLayout
                 android:layout_marginHorizontal="@dimen/_10sdp"
                 android:weightSum="2"
-
+                android:gravity="center_vertical"
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -270,4 +270,5 @@
         android:layout_alignParentBottom="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
+
 </RelativeLayout>

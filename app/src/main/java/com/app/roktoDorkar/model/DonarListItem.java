@@ -3,32 +3,33 @@ package com.app.roktoDorkar.model;
 import java.io.Serializable;
 
 public class DonarListItem implements Serializable {
-    private String userName;
+    private String name;
     private String bloodType;
-    private String upzilla;
-    private String userAge;
-    private String userEmail;
+    private String upazila;
+    private String age;
+    private String email;
     private String uId;
+    private String imageUri;
 
     public DonarListItem() {
-
     }
 
-    public DonarListItem(String userName, String bloodType, String upzilla, String userAge, String userEmail, String uId) {
-        this.userName = userName;
+    public DonarListItem(String name, String bloodType, String upazila, String age, String email, String uId, String imageUri) {
+        this.name = name;
         this.bloodType = bloodType;
-        this.upzilla = upzilla;
-        this.userAge = userAge;
-        this.userEmail = userEmail;
+        this.upazila = upazila;
+        this.age = age;
+        this.email = email;
         this.uId = uId;
+        this.imageUri = imageUri;
     }
 
-    public String getUserName() {
-        return userName;
+    public String getName() {
+        return name;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getBloodType() {
@@ -39,28 +40,28 @@ public class DonarListItem implements Serializable {
         this.bloodType = bloodType;
     }
 
-    public String getUpzilla() {
-        return upzilla;
+    public String getUpazila() {
+        return upazila;
     }
 
-    public void setUpzilla(String upzilla) {
-        this.upzilla = upzilla;
+    public void setUpazila(String upazila) {
+        this.upazila = upazila;
     }
 
-    public String getUserAge() {
-        return userAge;
+    public String getAge() {
+        return age;
     }
 
-    public void setUserAge(String userAge) {
-        this.userAge = userAge;
+    public void setAge(String age) {
+        this.age = age;
     }
 
-    public String getUserEmail() {
-        return userEmail;
+    public String getEmail() {
+        return email;
     }
 
-    public void setUserEmail(String userEmail) {
-        this.userEmail = userEmail;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getuId() {
@@ -69,5 +70,13 @@ public class DonarListItem implements Serializable {
 
     public void setuId(String uId) {
         this.uId = uId;
+    }
+
+    public String getImageUri() {
+        return imageUri;
+    }
+
+    public void setImageUri(String imageUri) {
+        this.imageUri = imageUri;
     }
 }

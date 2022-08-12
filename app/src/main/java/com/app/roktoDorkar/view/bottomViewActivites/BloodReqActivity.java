@@ -3,6 +3,7 @@ package com.app.roktoDorkar.view.bottomViewActivites;
 import static android.content.ContentValues.TAG;
 import static com.app.roktoDorkar.global.SharedPref.USER_NAME;
 import static com.app.roktoDorkar.utilites.Constants.KEY_COLLECTION_USERS;
+import static com.app.roktoDorkar.utilites.Constants.KEY_IMAGE_URI;
 import static com.app.roktoDorkar.utilites.Constants.KEY_NAME;
 import static com.app.roktoDorkar.utilites.Constants.KEY_NUMBER;
 import static com.app.roktoDorkar.view.DonarsListActivity.type;
@@ -230,6 +231,7 @@ public class BloodReqActivity extends AppCompatActivity implements UpItemClick {
         requestInfo.put("requestReceiverName",null);
         requestInfo.put("documentId",dI);
         requestInfo.put("reqtime", FieldValue.serverTimestamp());
+        requestInfo.put("zSenderImage",preferenceManager.getString(KEY_IMAGE_URI));
 
 
        ref.set(requestInfo).addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -284,12 +286,12 @@ public class BloodReqActivity extends AppCompatActivity implements UpItemClick {
             }
         });
       binding.reqUpazila.setOnClickListener(v -> {
-          getUpzilla();
+          getUpazila();
       });
 
     }
 
-    private void getUpzilla() {
+    private void getUpazila() {
         dialog = new Dialog(this);
         dialog.setContentView(R.layout.upzila_list);
         dialog.getWindow().setLayout(800, 1500);

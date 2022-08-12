@@ -1,5 +1,9 @@
 package com.app.roktoDorkar.view;
 
+import static com.app.roktoDorkar.utilites.Constants.KEY_BLOODTYPE;
+import static com.app.roktoDorkar.utilites.Constants.KEY_COLLECTION_USERS;
+import static com.app.roktoDorkar.utilites.Constants.KEY_UPZILA;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -58,9 +62,9 @@ public class DonarsListActivity extends AppCompatActivity {
         binding.donarListRecyclerView.setAdapter(adapter);
         type=getIntent().getStringExtra("type");
         location=getIntent().getStringExtra("location");
-        db.collection("UserProfile")
-                .whereEqualTo("bloodType",type)
-                .whereEqualTo("upzilla",  location)
+        db.collection(KEY_COLLECTION_USERS)
+                .whereEqualTo(KEY_BLOODTYPE,type)
+                .whereEqualTo(KEY_UPZILA,  location)
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {

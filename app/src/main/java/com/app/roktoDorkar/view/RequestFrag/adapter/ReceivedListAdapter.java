@@ -3,6 +3,7 @@ package com.app.roktoDorkar.view.RequestFrag.adapter;
 import static android.content.Context.MODE_PRIVATE;
 import static com.app.roktoDorkar.global.SharedPref.USER_NAME;
 import static com.app.roktoDorkar.utilites.Constants.KEY_COLLECTION_USERS;
+import static com.app.roktoDorkar.utilites.Constants.KEY_IMAGE_URI;
 import static com.app.roktoDorkar.utilites.Constants.KEY_NAME;
 
 import android.content.Context;
@@ -125,6 +126,7 @@ public class ReceivedListAdapter extends RecyclerView.Adapter<ReceivedListAdapte
                                 updatesMain.put("requestStatus",updateStatus);
                                 updatesMain.put("requestReceiverUid",FirebaseAuth.getInstance().getCurrentUser().getUid());
                                 updatesMain.put("requestReceiverName",preferenceManager.getString(KEY_NAME));
+                                updatesMain.put("zReceiverImage",preferenceManager.getString(KEY_IMAGE_URI));
 
                                 db.collection("BloodRequest").document(receviedListModel.getDocumentId())
                                         .update(updatesMain)
@@ -143,6 +145,8 @@ public class ReceivedListAdapter extends RecyclerView.Adapter<ReceivedListAdapte
                                                 updatesSent.put("requestStatus",updateStatus);
                                                 updatesSent.put("requestReceiverUid",FirebaseAuth.getInstance().getCurrentUser().getUid());
                                                 updatesSent.put("requestReceiverName",preferenceManager.getString(KEY_NAME));
+                                                updatesSent.put("zReceiverImage",preferenceManager.getString(KEY_IMAGE_URI));
+
 
                                                 DocumentReference ref2 = db.collection(KEY_COLLECTION_USERS).document(receviedListModel.getSenderEmail()).collection("MyBloodRequest").document(receviedListModel.getDocumentId());
                                                 ref2.update(updatesSent).addOnSuccessListener(new OnSuccessListener<Void>() {

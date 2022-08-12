@@ -21,11 +21,13 @@ public class ReceviedListModel implements Serializable {
     private String documentId;
     private String requestReceiverName;
     private String accept;
+    private String zReceiverImage;
+    private String zSenderImage;
 
     public ReceviedListModel() {
     }
 
-    public ReceviedListModel(String requestStatus, String senderGiftAmount, String senderName, String senderPatientGender, String senderPhoneNumber, String senderRequestDetails, String senderRequestForDate, String senderRequestForTime, String senderRequestLocation, String senderRequestUpazila, String senderRequiredBlood, String senderRequiredQuantity, String senderUid, String senderEmail, String requestReceiverUid, String documentId, String requestReceiverName, String accept) {
+    public ReceviedListModel(String requestStatus, String senderGiftAmount, String senderName, String senderPatientGender, String senderPhoneNumber, String senderRequestDetails, String senderRequestForDate, String senderRequestForTime, String senderRequestLocation, String senderRequestUpazila, String senderRequiredBlood, String senderRequiredQuantity, String senderUid, String senderEmail, String requestReceiverUid, String documentId, String requestReceiverName, String accept, String zReceiverImage, String zSenderImage) {
         this.requestStatus = requestStatus;
         this.senderGiftAmount = senderGiftAmount;
         this.senderName = senderName;
@@ -44,6 +46,8 @@ public class ReceviedListModel implements Serializable {
         this.documentId = documentId;
         this.requestReceiverName = requestReceiverName;
         this.accept = accept;
+        this.zReceiverImage = zReceiverImage;
+        this.zSenderImage = zSenderImage;
     }
 
     public String getRequestStatus() {
@@ -188,5 +192,21 @@ public class ReceviedListModel implements Serializable {
 
     public void setAccept(String accept) {
         this.accept = accept;
+    }
+
+    public String getzReceiverImage() {
+        return zReceiverImage;
+    }
+
+    public void setzReceiverImage(String zReceiverImage) {
+        this.zReceiverImage = zReceiverImage;
+    }
+
+    public String getzSenderImage() {
+        return zSenderImage;
+    }
+
+    public void setzSenderImage(String zSenderImage) {
+        this.zSenderImage = zSenderImage;
     }
 }

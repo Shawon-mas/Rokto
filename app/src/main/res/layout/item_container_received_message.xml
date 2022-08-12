@@ -7,7 +7,7 @@
     android:padding="@dimen/_4sdp">
 
   <com.makeramen.roundedimageview.RoundedImageView
-      android:id="@+id/imageProfile"
+      android:id="@+id/imageReceiver"
       android:layout_width="@dimen/_25sdp"
       android:layout_height="@dimen/_25sdp"
       android:background="@drawable/background_image"
@@ -33,7 +33,7 @@
       android:textColor="@color/white"
       android:textSize="@dimen/_13ssp"
       app:layout_constraintTop_toTopOf="parent"
-      app:layout_constraintStart_toEndOf="@id/imageProfile"
+      app:layout_constraintStart_toEndOf="@id/imageReceiver"
       app:layout_constraintWidth_percent="0.75"/>
     <TextView
         android:id="@+id/textDateTime"

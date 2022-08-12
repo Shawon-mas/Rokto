@@ -6,6 +6,7 @@
         <entry key="..\:/android_project/Rokto/app/src/main/res/drawable-v24/divider.xml" value="0.3655" />
         <entry key="..\:/android_project/Rokto/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.2585" />
         <entry key="..\:/android_project/Rokto/app/src/main/res/drawable-v24/oval.xml" value="0.3655" />
+        <entry key="..\:/android_project/Rokto/app/src/main/res/drawable-v24/oval_chat.xml" value="0.239" />
         <entry key="..\:/android_project/Rokto/app/src/main/res/drawable-v24/tab_indicator.xml" value="0.279" />
         <entry key="..\:/android_project/Rokto/app/src/main/res/drawable/back.xml" value="0.1115" />
         <entry key="..\:/android_project/Rokto/app/src/main/res/drawable/background_chat_input.xml" value="0.1085" />
@@ -34,13 +35,14 @@
         <entry key="..\:/android_project/Rokto/app/src/main/res/layout/activity_donars_list.xml" value="0.2" />
         <entry key="..\:/android_project/Rokto/app/src/main/res/layout/activity_donors.xml" value="0.22447916666666667" />
         <entry key="..\:/android_project/Rokto/app/src/main/res/layout/activity_history.xml" value="0.3729166666666667" />
-        <entry key="..\:/android_project/Rokto/app/src/main/res/layout/activity_home.xml" value="0.16" />
+        <entry key="..\:/android_project/Rokto/app/src/main/res/layout/activity_home.xml" value="0.25" />
         <entry key="..\:/android_project/Rokto/app/src/main/res/layout/activity_main.xml" value="0.38697916666666665" />
         <entry key="..\:/android_project/Rokto/app/src/main/res/layout/activity_request.xml" value="0.2" />
         <entry key="..\:/android_project/Rokto/app/src/main/res/layout/activity_sign_in.xml" value="0.22" />
         <entry key="..\:/android_project/Rokto/app/src/main/res/layout/activity_sign_up.xml" value="0.25" />
         <entry key="..\:/android_project/Rokto/app/src/main/res/layout/activity_splash.xml" value="0.22083333333333333" />
-        <entry key="..\:/android_project/Rokto/app/src/main/res/layout/donar_list_item.xml" value="0.22" />
+        <entry key="..\:/android_project/Rokto/app/src/main/res/layout/activity_test.xml" value="0.3729166666666667" />
+        <entry key="..\:/android_project/Rokto/app/src/main/res/layout/donar_list_item.xml" value="0.33" />
         <entry key="..\:/android_project/Rokto/app/src/main/res/layout/drorp_down_item.xml" value="0.18819655521783182" />
         <entry key="..\:/android_project/Rokto/app/src/main/res/layout/fragment_my_request.xml" value="0.22" />
         <entry key="..\:/android_project/Rokto/app/src/main/res/layout/fragment_received.xml" value="0.25" />

@@ -6,6 +6,9 @@ import static com.app.roktoDorkar.global.SharedPref.USER_NAME;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +25,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.button.MaterialButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.makeramen.roundedimageview.RoundedImageView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -67,16 +71,13 @@ public class DonarListAdapter extends RecyclerView.Adapter<DonarListAdapter.MyVi
 
 
         DonarListItem item = donarListItems.get(position);
-        bloogGroup = item.getBloodType();
-        userName = item.getUserName();
-        location = item.getUpzilla();
-        userEmail = item.getUserEmail();
-        userUid = item.getuId();
 
+
+
+        holder.textViewDonarName.setText(item.getName());
         holder.textViewBloodgroup.setText(item.getBloodType());
-        holder.textViewDonarName.setText(item.getUserName());
-        holder.textViewLastDonate.setText(item.getUserAge());
-        holder.textViewLocation.setText(item.getUpzilla());
+        holder.imageView.setImageBitmap(getUserImage(item.getImageUri()));
+
        /* holder.materialButtonReq.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -129,15 +130,19 @@ public class DonarListAdapter extends RecyclerView.Adapter<DonarListAdapter.MyVi
                             });
                 }
         });*/
-       holder.materialButtonChat.setOnClickListener(new View.OnClickListener() {
+     /*  holder.materialButtonChat.setOnClickListener(new View.OnClickListener() {
            @Override
            public void onClick(View v) {
                Toasty.info(context,"Coming Soon...!",Toasty.LENGTH_SHORT).show();
            }
-       });
+       });*/
 
 
 
+    }
+    private Bitmap getUserImage(String encodedImage){
+        byte[] bytes= Base64.decode(encodedImage,Base64.DEFAULT);
+        return BitmapFactory.decodeByteArray(bytes,0,bytes.length);
     }
 
     @Override
@@ -148,15 +153,15 @@ public class DonarListAdapter extends RecyclerView.Adapter<DonarListAdapter.MyVi
     public class MyViewHolder extends RecyclerView.ViewHolder {
         TextView textViewBloodgroup, textViewDonarName, textViewLastDonate, textViewLocation;
         MaterialButton materialButtonChat, materialButtonPen;
+        RoundedImageView imageView;
         private FirebaseAuth mAuth;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             textViewBloodgroup = itemView.findViewById(R.id.blood_group);
             textViewDonarName = itemView.findViewById(R.id.donar_name);
-            textViewLastDonate = itemView.findViewById(R.id.lastDonateDate);
-            textViewLocation = itemView.findViewById(R.id.locationDonar);
-            materialButtonChat = itemView.findViewById(R.id.chat);
+            imageView=itemView.findViewById(R.id.donarImage);
+
             
 
         }

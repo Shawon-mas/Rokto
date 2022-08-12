@@ -153,6 +153,7 @@ public class ReceivedFrag extends Fragment implements UserLister {
         intent.putExtra("user_name",receviedListModel.getSenderName());
         intent.putExtra("document_id",receviedListModel.getDocumentId());
         intent.putExtra("receiver_id",receviedListModel.getSenderUid());
+        intent.putExtra("receiver_image",receviedListModel.getzSenderImage());
         intent.putExtra("color",R.color.chatPrimary_bg);
         startActivity(intent);
     }
