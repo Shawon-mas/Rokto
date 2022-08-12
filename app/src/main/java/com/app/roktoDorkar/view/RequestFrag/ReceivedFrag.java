@@ -1,14 +1,11 @@
 package com.app.roktoDorkar.view.RequestFrag;
 
-import static android.content.Context.MODE_PRIVATE;
-import static com.app.roktoDorkar.global.SharedPref.USER_BLOODTYPE;
-import static com.app.roktoDorkar.global.SharedPref.USER_NAME;
-import static com.app.roktoDorkar.global.SharedPref.USER_UPAZILA;
+
 import static com.app.roktoDorkar.utilites.Constants.KEY_BLOODTYPE;
 import static com.app.roktoDorkar.utilites.Constants.KEY_UPZILA;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
+
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
@@ -22,23 +19,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import com.app.roktoDorkar.R;
 import com.app.roktoDorkar.utilites.PreferenceManager;
 import com.app.roktoDorkar.view.ChatActivity;
 import com.app.roktoDorkar.view.RequestFrag.adapter.ReceivedListAdapter;
 import com.app.roktoDorkar.view.RequestFrag.model.ReceviedListModel;
 import com.app.roktoDorkar.view.RequestFrag.model.UserLister;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
-
 import java.util.ArrayList;
-import java.util.Collections;
+
 
 
 public class ReceivedFrag extends Fragment implements UserLister {
@@ -55,16 +48,8 @@ public class ReceivedFrag extends Fragment implements UserLister {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        ViewGroup root= (ViewGroup) inflater.inflate(R.layout.fragment_received, container, false);
 
-       /* if (receviedListModelArrayList.size()==0)
-        {
-            textView_message.setVisibility(View.VISIBLE);
-            textView_message.setText("No Received Request");
-        }else {
-            textView_message.setVisibility(View.GONE);
-        }*/
+        ViewGroup root= (ViewGroup) inflater.inflate(R.layout.fragment_received, container, false);
         preferenceManager=new PreferenceManager(getContext());
         intiViews(root);
         return root;

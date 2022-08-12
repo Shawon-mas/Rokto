@@ -1,5 +1,6 @@
 package com.app.roktoDorkar.view;
 
+import static com.app.roktoDorkar.utilites.Constants.KEY_AVAILABILITY;
 import static com.app.roktoDorkar.utilites.Constants.KEY_BLOODTYPE;
 import static com.app.roktoDorkar.utilites.Constants.KEY_COLLECTION_CHAT;
 import static com.app.roktoDorkar.utilites.Constants.KEY_COLLECTION_USERS;
@@ -50,10 +51,11 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 import es.dmoral.toasty.Toasty;
 
-public class ChatActivity extends AppCompatActivity {
+public class ChatActivity extends BaseActivity {
     private ActivityChatBinding binding;
     private  List<ChatMessage> chatMessages;
     private ChatAdapter adapter;
@@ -64,6 +66,7 @@ public class ChatActivity extends AppCompatActivity {
     private DonarListItem donarListItem;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private String receiverImage;
+    private Boolean isReceiverAvailable=false;
 
 
 
@@ -130,6 +133,32 @@ public class ChatActivity extends AppCompatActivity {
     private Bitmap getUserImage(String encodedImage){
         byte[] bytes= Base64.decode(encodedImage,Base64.DEFAULT);
         return BitmapFactory.decodeByteArray(bytes,0,bytes.length);
+    }
+    private void listenAvailabilityOfReceiver(){
+        db.collection(KEY_COLLECTION_USERS)
+                .document(FirebaseAuth.getInstance().getCurrentUser().getEmail())
+                .addSnapshotListener(ChatActivity.this,(value, error) -> {
+                  if(error !=null)
+                  {
+                      return;
+                  }
+                  if (value!=null)
+                  {
+                      if (value.getLong(KEY_AVAILABILITY)!=null)
+                      {
+                          int availability= Objects.requireNonNull(value.getLong(KEY_AVAILABILITY)
+                          ).intValue();
+                          isReceiverAvailable=availability==1;
+                      }
+                  }
+                  if (isReceiverAvailable)
+                  {
+                      binding.textAvailability.setVisibility(View.VISIBLE);
+                  }else {
+                      binding.textAvailability.setVisibility(View.GONE);
+
+                  }
+                });
     }
      private void sendMessage(){
          FirebaseUser user = mAuth.getCurrentUser();
@@ -220,5 +249,11 @@ public class ChatActivity extends AppCompatActivity {
     private String getReadableDateTime(Date date)
     {
            return new SimpleDateFormat("MMMM dd, yyyy - hh:mm a", Locale.getDefault()).format(date);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
     }
 }

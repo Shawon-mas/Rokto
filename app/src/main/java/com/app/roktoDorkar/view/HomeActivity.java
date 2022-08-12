@@ -1,38 +1,28 @@
 package com.app.roktoDorkar.view;
 
-import static com.app.roktoDorkar.global.SharedPref.USER_BLOODTYPE;
-import static com.app.roktoDorkar.global.SharedPref.USER_NAME;
-import static com.app.roktoDorkar.global.SharedPref.USER_UPAZILA;
+
 import static com.app.roktoDorkar.utilites.Constants.KEY_BLOODTYPE;
 import static com.app.roktoDorkar.utilites.Constants.KEY_COLLECTION_USERS;
 import static com.app.roktoDorkar.utilites.Constants.KEY_EMAIL;
 import static com.app.roktoDorkar.utilites.Constants.KEY_FCM_TOKEN;
-import static com.app.roktoDorkar.utilites.Constants.KEY_NAME;
 import static com.app.roktoDorkar.utilites.Constants.KEY_UPZILA;
-
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
-
 import com.app.roktoDorkar.R;
 import com.app.roktoDorkar.api.upazilaApi.ApiInstance;
 import com.app.roktoDorkar.api.upazilaApi.UpItemClick;
@@ -47,25 +37,19 @@ import com.app.roktoDorkar.view.bottomViewActivites.RequestActivity;
 import com.etebarian.meowbottomnavigation.MeowBottomNavigation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.messaging.FirebaseMessaging;
-import com.squareup.picasso.Picasso;
-
 import java.util.ArrayList;
-
 import es.dmoral.toasty.Toasty;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class HomeActivity extends AppCompatActivity implements UpItemClick {
+public class HomeActivity extends BaseActivity implements UpItemClick {
     private ActivityHomeBinding binding;
     private String[] bloodItem;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -85,15 +69,10 @@ public class HomeActivity extends AppCompatActivity implements UpItemClick {
         preferenceManager=new PreferenceManager(getApplicationContext());
         setContentView(binding.getRoot());
         bloodItem = getResources().getStringArray(R.array.donate_blood);
-
-       // Picasso.get().load("https://i.ibb.co/C1xfSLF/b110a1631ac9ae054007f19bd98295c0.png").into(binding.image);
         bottomNavHome();
         getToken();
         initViews();
         getBloodType();
-
-
-
     }
 
     private void getBloodType() {

@@ -1,22 +1,16 @@
 
 package com.app.roktoDorkar.view.bottomViewActivites;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.viewpager2.widget.ViewPager2;
-
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.MenuItem;
-import android.widget.Toast;
-
 import com.app.roktoDorkar.R;
 import com.app.roktoDorkar.databinding.ActivityRequestBinding;
 import com.app.roktoDorkar.view.HomeActivity;
 import com.app.roktoDorkar.view.RequestFrag.adapter.MyFragmentAdapter;
 import com.etebarian.meowbottomnavigation.MeowBottomNavigation;
-import com.google.android.material.navigation.NavigationBarView;
 import com.google.android.material.tabs.TabLayout;
 
 public class RequestActivity extends AppCompatActivity {
