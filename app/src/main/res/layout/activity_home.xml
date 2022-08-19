@@ -64,9 +64,9 @@
             android:textSize="@dimen/_12ssp"
             android:layout_marginTop="@dimen/_10sdp"
             />
-        <EditText
+        <TextView
             android:drawableEnd="@drawable/drop_down"
-            android:editable="false"
+
             android:layout_marginHorizontal="@dimen/_10sdp"
             android:gravity="center_vertical"
             android:id="@+id/location"
@@ -75,8 +75,7 @@
             android:layout_marginTop="@dimen/_10sdp"
             android:background="@drawable/inuput_bg"
             android:fontFamily="@font/heebo_regular"
-            android:hint="Select Your Upazila"
-            android:imeOptions="actionNext"
+            android:hint="@string/your_upazila"
             android:importantForAutofill="no"
             android:inputType="none"
             android:maxLines="1"
@@ -106,6 +105,7 @@
             android:textSize="@dimen/_14ssp"
             android:textAllCaps="false"
             android:layout_below="@id/spinnerdonateBlood"/>
+
 
     </LinearLayout>
 

@@ -5,6 +5,7 @@ import static com.app.roktoDorkar.utilites.Constants.KEY_BLOODTYPE;
 import static com.app.roktoDorkar.utilites.Constants.KEY_COLLECTION_USERS;
 import static com.app.roktoDorkar.utilites.Constants.KEY_EMAIL;
 import static com.app.roktoDorkar.utilites.Constants.KEY_FCM_TOKEN;
+import static com.app.roktoDorkar.utilites.Constants.KEY_SERVER_KEY;
 import static com.app.roktoDorkar.utilites.Constants.KEY_UPZILA;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -34,6 +35,7 @@ import com.app.roktoDorkar.view.bottomViewActivites.AccountActivity;
 import com.app.roktoDorkar.view.bottomViewActivites.BloodReqActivity;
 import com.app.roktoDorkar.view.bottomViewActivites.HistoryActivity;
 import com.app.roktoDorkar.view.bottomViewActivites.RequestActivity;
+import com.deeplabstudio.fcmsend.FCMSend;
 import com.etebarian.meowbottomnavigation.MeowBottomNavigation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -73,6 +75,8 @@ public class HomeActivity extends BaseActivity implements UpItemClick {
         getToken();
         initViews();
         getBloodType();
+        FCMSend.SetServerKey(KEY_SERVER_KEY);
+
     }
 
     private void getBloodType() {
@@ -90,6 +94,7 @@ public class HomeActivity extends BaseActivity implements UpItemClick {
     }
 
     private void initViews() {
+
         binding.location.setOnClickListener(v -> {
             getUpazila();
         });
@@ -184,6 +189,7 @@ public class HomeActivity extends BaseActivity implements UpItemClick {
         FirebaseMessaging.getInstance().getToken().addOnSuccessListener(this::updateToken);
     }
    private void updateToken(String token){
+        preferenceManager.putString(KEY_FCM_TOKEN,token);
        FirebaseFirestore database=FirebaseFirestore.getInstance();
        DocumentReference documentReference=database.collection(KEY_COLLECTION_USERS).document(preferenceManager.getString(KEY_EMAIL));
        documentReference.update(KEY_FCM_TOKEN,token)
@@ -228,11 +234,7 @@ public class HomeActivity extends BaseActivity implements UpItemClick {
                                 if (task.isSuccessful()) {
                                     binding.homeIndicator.setVisibility(View.GONE);
                                     for (QueryDocumentSnapshot documentSnapshot : task.getResult()) {
-                                        /*String name = documentSnapshot.getString("userName");
-                                        String bllod = documentSnapshot.getString("bloodType");
 
-                                        Log.d("User Name:", name);
-                                        Log.d("User Blood group:", bllod);*/
                                         Intent intent = new Intent(getApplicationContext(), DonarsListActivity.class);
                                         intent.putExtra("type", type);
                                         intent.putExtra("location", binding.location.getText().toString());

@@ -32,6 +32,7 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 
+import es.dmoral.toasty.Toasty;
 
 
 public class ReceivedFrag extends Fragment implements UserLister {
@@ -61,6 +62,7 @@ public class ReceivedFrag extends Fragment implements UserLister {
 
 
         progressBar_received=root.findViewById(R.id.receivedProgressbar);
+        textView_message=root.findViewById(R.id.dataTextReceived);
         recyclerView_receivedfrag=root.findViewById(R.id.recyclerviewReceivedList);
         recyclerView_receivedfrag.setHasFixedSize(true);
         recyclerView_receivedfrag.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -83,6 +85,10 @@ public class ReceivedFrag extends Fragment implements UserLister {
 
                             return;
                         }
+                        if (value.isEmpty())
+                        {
+                            textView_message.setVisibility(View.VISIBLE);
+                        }
                         if (value!=null)
                         {
                             int count=receviedListModelArrayList.size();
@@ -93,6 +99,8 @@ public class ReceivedFrag extends Fragment implements UserLister {
                                 {
 
                                     receviedListModelArrayList.add(documentChange.getDocument().toObject(ReceviedListModel.class));
+                                    textView_message.setVisibility(View.GONE);
+
                                 }
                             }
 
@@ -139,6 +147,7 @@ public class ReceivedFrag extends Fragment implements UserLister {
         intent.putExtra("document_id",receviedListModel.getDocumentId());
         intent.putExtra("receiver_id",receviedListModel.getSenderUid());
         intent.putExtra("receiver_image",receviedListModel.getzSenderImage());
+
         intent.putExtra("color",R.color.chatPrimary_bg);
         startActivity(intent);
     }

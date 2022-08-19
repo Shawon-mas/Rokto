@@ -1,5 +1,7 @@
 package com.app.roktoDorkar.utilites;
 
+import java.util.HashMap;
+
 public class Constants {
     public static final String KEY_COLLECTION_USERS="users";
     public static final String KEY_NAME="name";
@@ -26,6 +28,28 @@ public class Constants {
     public static final String KEY_MESSAGE="message";
     public static final String KEY_TIMESTAMP="timestamp";
     public static final String KEY_AVAILABILITY="availability";
+    public static final String KEY_SERVER_KEY="AAAA_d-ovxo:APA91bH9bJ5DdSa7baKIIYerLr5Zj3n0xy9Oqv9vMoVHtyqeHgAGEKn1zvdZlvHrGqd_lAFzbj12nb9a-I8ENnN7Sl_qafdU38qP3xTb-y7KLuD3fDFO7DK-sQGwOwIIfRW4Cu1_hoep";
+    public static final String REMOTE_MESSAGE_AUTHORIZATION="Authorization";
+    public static final String REMOTE_MESSAGE_CONTENT_TYPE="Content-Type";
+    public static final String REMOTE_MESSAGE_DATA="data";
+    public static final String REMOTE_MESSAGE_REGISTRATION_IDS="registration_ids";
+
+    public static HashMap<String,String> remoteMsgHeaders=null;
+    public static HashMap<String,String> getRemoteMsgHeaders()
+        {
+        if (remoteMsgHeaders==null){
+            remoteMsgHeaders=new HashMap<>();
+            remoteMsgHeaders.put(
+                    REMOTE_MESSAGE_AUTHORIZATION,
+                    "key=AAAA_d-ovxo:APA91bH9bJ5DdSa7baKIIYerLr5Zj3n0xy9Oqv9vMoVHtyqeHgAGEKn1zvdZlvHrGqd_lAFzbj12nb9a-I8ENnN7Sl_qafdU38qP3xTb-y7KLuD3fDFO7DK-sQGwOwIIfRW4Cu1_hoep"
+            );
+            remoteMsgHeaders.put(
+                    REMOTE_MESSAGE_CONTENT_TYPE,
+                    "application/json"
+            );
+        }
+        return remoteMsgHeaders;
+    }
 
 
 }

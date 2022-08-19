@@ -108,6 +108,15 @@ public class BloodReqActivity extends AppCompatActivity implements UpItemClick {
         bottomNav();
         clickListener();
     }
+    private void loading(Boolean isLoading) {
+        if (isLoading) {
+            binding.requestMakeButton.setVisibility(View.INVISIBLE);
+            binding.reqProgressbar.setVisibility(View.VISIBLE);
+        } else {
+            binding.requestMakeButton.setVisibility(View.VISIBLE);
+            binding.reqProgressbar.setVisibility(View.INVISIBLE);
+        }
+    }
 
     private void initViews() {
         clockFormat = TimeFormat.CLOCK_12H;
@@ -117,6 +126,7 @@ public class BloodReqActivity extends AppCompatActivity implements UpItemClick {
                if (checkValidator())
                {
                    submitRequest();
+                   loading(true);
                }
             }
         });
@@ -185,6 +195,7 @@ public class BloodReqActivity extends AppCompatActivity implements UpItemClick {
                         if (task.isSuccessful())
                         {
                             if (task.getResult().size() == 0) {
+                                loading(false);
 
                                 Toast.makeText(BloodReqActivity.this, "There is no donor right now your location", Toast.LENGTH_SHORT).show();
                             }else {
@@ -198,7 +209,8 @@ public class BloodReqActivity extends AppCompatActivity implements UpItemClick {
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-
+                        showErrorToast("Something went wrong");
+                        loading(false);
                     }
                 });
 
@@ -270,6 +282,7 @@ public class BloodReqActivity extends AppCompatActivity implements UpItemClick {
             public void onSuccess(Void unused)
             {
               showSuccessToast("Request Sent");
+              binding.bottomNavBloodReq.show(2,true);
 
             }
         });

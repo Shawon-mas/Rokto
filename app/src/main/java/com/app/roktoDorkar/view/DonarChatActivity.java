@@ -1,27 +1,17 @@
 package com.app.roktoDorkar.view;
 
 import static com.app.roktoDorkar.utilites.Constants.KEY_AVAILABILITY;
-import static com.app.roktoDorkar.utilites.Constants.KEY_BLOODTYPE;
 import static com.app.roktoDorkar.utilites.Constants.KEY_COLLECTION_CHAT;
 import static com.app.roktoDorkar.utilites.Constants.KEY_COLLECTION_USERS;
 import static com.app.roktoDorkar.utilites.Constants.KEY_EMAIL;
 import static com.app.roktoDorkar.utilites.Constants.KEY_FCM_TOKEN;
-import static com.app.roktoDorkar.utilites.Constants.KEY_IMAGE_URI;
 import static com.app.roktoDorkar.utilites.Constants.KEY_MESSAGE;
 import static com.app.roktoDorkar.utilites.Constants.KEY_NAME;
 import static com.app.roktoDorkar.utilites.Constants.KEY_RECEIVER_ID;
 import static com.app.roktoDorkar.utilites.Constants.KEY_SENDER_ID;
 import static com.app.roktoDorkar.utilites.Constants.KEY_TIMESTAMP;
-import static com.app.roktoDorkar.utilites.Constants.KEY_UID;
-import static com.app.roktoDorkar.utilites.Constants.KEY_UPZILA;
-import static com.app.roktoDorkar.utilites.Constants.REMOTE_MESSAGE_DATA;
-import static com.app.roktoDorkar.utilites.Constants.REMOTE_MESSAGE_REGISTRATION_IDS;
 import static com.app.roktoDorkar.utilites.Constants.getRemoteMsgHeaders;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
@@ -32,7 +22,8 @@ import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Toast;
+
+import androidx.annotation.NonNull;
 
 import com.app.roktoDorkar.R;
 import com.app.roktoDorkar.databinding.ActivityChatBinding;
@@ -45,7 +36,6 @@ import com.app.roktoDorkar.view.RequestFrag.adapter.ChatAdapter;
 import com.app.roktoDorkar.view.RequestFrag.model.ChatMessage;
 import com.deeplabstudio.fcmsend.FCMSend;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -53,7 +43,6 @@ import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import org.json.JSONArray;
@@ -67,14 +56,13 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Objects;
 
 import es.dmoral.toasty.Toasty;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ChatActivity extends BaseActivity {
+public class DonarChatActivity extends BaseActivity {
     private ActivityChatBinding binding;
     private  List<ChatMessage> chatMessages;
     private ChatAdapter adapter;
@@ -108,7 +96,7 @@ public class ChatActivity extends BaseActivity {
         clickListeners();
     }
 
-    private void setStatusBarGradiant(ChatActivity chatActivity) {
+    private void setStatusBarGradiant(DonarChatActivity chatActivity) {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = chatActivity.getWindow();
@@ -126,7 +114,7 @@ public class ChatActivity extends BaseActivity {
 
          FirebaseUser user = mAuth.getCurrentUser();
          chatMessages=new ArrayList<>();
-        adapter=new ChatAdapter(chatMessages,user.getUid(), getUserImage(getIntent().getStringExtra("receiver_image")));
+        adapter=new ChatAdapter(chatMessages,user.getUid(), getUserImage(getIntent().getStringExtra("donar_image")));
         binding.chatRecyclerView.setAdapter(adapter);
         database=FirebaseFirestore.getInstance();
      }
@@ -134,79 +122,21 @@ public class ChatActivity extends BaseActivity {
         byte[] bytes= Base64.decode(encodedImage,Base64.DEFAULT);
         return BitmapFactory.decodeByteArray(bytes,0,bytes.length);
     }
-    private void sendNotification(String messageBody){
-        ApiClient.getClient().create(ApiService.class).sendMessage(
-                getRemoteMsgHeaders(),
-                messageBody
-        ).enqueue(new Callback<String>() {
-            @Override
-            public void onResponse(@NonNull Call<String> call,@NonNull Response<String> response) {
-                if (response.isSuccessful()) {
-                    try {
-                        if (response.body() !=null){
-                            JSONObject responseJson=new JSONObject(response.body());
-                            JSONArray results=responseJson.getJSONArray("results");
-                            if (responseJson.getInt("failure")==1){
-                                JSONObject error= (JSONObject) results.get(0);
-                                errorToast(error.getString("error"));
-                                return;
-                            }
-                        }
 
-                    }catch (JSONException e){
-                        e.printStackTrace();
-                    }
-                    showToast("Notification Sent");
-                }else {
-                    Log.d("chat_token",String.valueOf(response.code()));
-
-                    errorToast("Error: "+response.code());
-                }
-
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<String> call,@NonNull Throwable t) {
-                     errorToast(t.getMessage());
-            }
-        });
-    }
-
-    private void listenAvailabilityOfReceiver(){
-        db.collection(KEY_COLLECTION_USERS)
-                .document("fhbrabby@gmail.com")
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        if (task.isSuccessful())
-                        {
-                            DocumentSnapshot documentSnapshot=task.getResult();
-                            if (documentSnapshot.exists())
-                            {
-                                available=documentSnapshot.getLong(KEY_AVAILABILITY).intValue();
-                                if (available==1)
-                                {
-                                    binding.textavailable.setVisibility(View.VISIBLE);
-                                    token=preferenceManager.getString(KEY_FCM_TOKEN);
-                                }else {
-                                    binding.textavailable.setVisibility(View.VISIBLE);
-                                    binding.textavailable.setText("offline");
-                                }
-                            }
-                        }
-
-                    }
-                });
-    }
      private void sendMessage(){
          FirebaseUser user = mAuth.getCurrentUser();
          HashMap<String,Object> message=new HashMap<>();
          message.put(KEY_SENDER_ID,user.getUid());
-         message.put(KEY_RECEIVER_ID,getIntent().getStringExtra("receiver_id"));
+         message.put(KEY_RECEIVER_ID,getIntent().getStringExtra("donar_uid"));
          message.put(KEY_MESSAGE,binding.inputMessage.getText().toString());
          message.put(KEY_TIMESTAMP,new Date());
          database.collection(KEY_COLLECTION_CHAT).add(message);
+
+         FCMSend.Builder builder=new FCMSend.Builder(getIntent().getStringExtra("donar_token"))
+                 .setTitle("Message from: "+ preferenceManager.getString(KEY_NAME))
+                 .setBody(binding.inputMessage.getText().toString())
+                 .setClickAction(".view.ChatActivity");
+         builder.send();
          binding.inputMessage.setText(null);
 
      }
@@ -215,11 +145,11 @@ public class ChatActivity extends BaseActivity {
          FirebaseUser user = mAuth.getCurrentUser();
          database.collection(KEY_COLLECTION_CHAT)
                  .whereEqualTo(KEY_SENDER_ID,user.getUid())
-                 .whereEqualTo(KEY_RECEIVER_ID,getIntent().getStringExtra("receiver_id"))
+                 .whereEqualTo(KEY_RECEIVER_ID,getIntent().getStringExtra("donar_uid"))
                  .addSnapshotListener(eventListener);
 
          database.collection(KEY_COLLECTION_CHAT)
-                 .whereEqualTo(KEY_SENDER_ID,getIntent().getStringExtra("receiver_id"))
+                 .whereEqualTo(KEY_SENDER_ID,getIntent().getStringExtra("donar_uid"))
                  .whereEqualTo(KEY_RECEIVER_ID,user.getUid())
                  .addSnapshotListener(eventListener);
 
@@ -261,7 +191,7 @@ public class ChatActivity extends BaseActivity {
      };
     private void loadUserDetails()
     {
-        String name=getIntent().getStringExtra("user_name");
+        String name=getIntent().getStringExtra("donar_name");
         binding.textName.setText(name);
     }
     private void clickListeners()

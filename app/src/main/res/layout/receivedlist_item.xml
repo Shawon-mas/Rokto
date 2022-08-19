@@ -111,7 +111,8 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/accept"
-            android:layout_width="@dimen/_100sdp"
+            android:padding="@dimen/_5sdp"
+            android:layout_width="@dimen/_90sdp"
             android:layout_height="wrap_content"
             android:layout_below="@id/description_type"
             android:layout_marginHorizontal="@dimen/_10sdp"
@@ -125,9 +126,8 @@
             android:visibility="visible" />
         <com.google.android.material.button.MaterialButton
             android:id="@+id/friends"
-            android:paddingStart="@dimen/_5sdp"
-            android:paddingEnd="@dimen/_5sdp"
-            android:layout_width="@dimen/_100sdp"
+           android:padding="@dimen/_5sdp"
+            android:layout_width="@dimen/_90sdp"
             android:layout_height="wrap_content"
             android:layout_below="@id/description_type"
             android:layout_marginHorizontal="@dimen/_10sdp"
@@ -135,15 +135,14 @@
             android:backgroundTint="@color/main"
             android:drawableLeft="@drawable/friends"
             android:drawableTint="@color/white"
-            android:text="Connected"
+            android:text="Accepted"
             android:textAllCaps="false"
             android:textColor="@color/white"
             android:visibility="invisible" />
         <com.google.android.material.button.MaterialButton
-            android:paddingStart="@dimen/_5sdp"
-            android:paddingEnd="@dimen/_5sdp"
+            android:padding="@dimen/_5sdp"
             android:id="@+id/decline"
-            android:layout_width="@dimen/_100sdp"
+            android:layout_width="@dimen/_90sdp"
             android:layout_height="wrap_content"
             android:layout_below="@id/description_type"
             android:layout_marginHorizontal="@dimen/_15sdp"
@@ -155,14 +154,15 @@
             android:textAllCaps="false"
             android:textColor="@color/main"
             android:visibility="visible" />
+
         <com.google.android.material.button.MaterialButton
-            android:paddingStart="@dimen/_8sdp"
-            android:paddingEnd="@dimen/_8sdp"
+            android:padding="@dimen/_5sdp"
+            android:textAlignment="center"
             android:id="@+id/reqToChat"
-            android:layout_width="@dimen/_100sdp"
+            android:layout_width="@dimen/_90sdp"
             android:layout_height="wrap_content"
             android:layout_below="@id/description_type"
-            android:layout_marginHorizontal="@dimen/_15sdp"
+            android:layout_marginHorizontal="@dimen/_10sdp"
             android:layout_toRightOf="@id/friends"
             android:backgroundTint="#F4B4B4"
             android:drawableLeft="@drawable/chat"
@@ -170,7 +170,7 @@
             android:text="Chat"
             android:textAllCaps="false"
             android:textColor="@color/main"
-            android:visibility="invisible" />
+            android:visibility="visible" />
         <com.google.android.material.button.MaterialButton
             android:layout_toRightOf="@id/blood_group"
             android:layout_marginHorizontal="@dimen/_10sdp"
@@ -189,64 +189,7 @@
             android:visibility="gone" />
 
 
-    <!--    <com.google.android.material.button.MaterialButton
-            android:id="@+id/friends"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/locationDonar"
-            android:layout_marginHorizontal="@dimen/_10sdp"
-            android:layout_toRightOf="@id/blood_group"
-            android:backgroundTint="@color/main"
-            android:drawableLeft="@drawable/friends"
-            android:drawableTint="@color/white"
-            android:text="Connected"
-            android:textAllCaps="false"
-            android:textColor="@color/white"
-            android:visibility="invisible" />
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/decline"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/dateNtime"
-            android:layout_marginHorizontal="@dimen/_20sdp"
-            android:layout_toRightOf="@id/accept"
-            android:backgroundTint="#F4B4B4"
-            android:drawableLeft="@drawable/decline"
-            android:drawableTint="@color/main"
-            android:text="Reject"
-            android:textAllCaps="false"
-            android:textColor="@color/main"
-            android:visibility="visible" />
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/reqToChat"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/dateNtime"
-            android:layout_marginHorizontal="@dimen/_10sdp"
-            android:layout_toRightOf="@id/friends"
-            android:backgroundTint="#F4B4B4"
-            android:drawableLeft="@drawable/chat"
-            android:drawableTint="@color/main"
-            android:text="Chat"
-            android:textAllCaps="false"
-            android:textColor="@color/main"
-            android:visibility="invisible" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/pending"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/locationDonar"
-            android:layout_marginHorizontal="@dimen/_10sdp"
-            android:layout_toRightOf="@id/friends"
-            android:backgroundTint="#F4B4B4"
-            android:drawableLeft="@drawable/pending"
-            android:drawableTint="@color/main"
-            android:text="Pending"
-            android:textAllCaps="false"
-            android:textColor="@color/main"
-            android:visibility="invisible" />-->
 
 
     </RelativeLayout>

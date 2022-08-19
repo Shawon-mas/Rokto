@@ -71,4 +71,5 @@
     <string name="search_upazila">Search Upazila...</string>
     <string name="select_upazila">Select Upazila</string>
     <string name="upazila_needs">Which Upazila needs blood ?</string>
+    <string name="your_upazila">Select Your Upazila</string>
 </resources>

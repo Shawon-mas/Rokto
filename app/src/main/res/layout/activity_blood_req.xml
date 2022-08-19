@@ -126,6 +126,7 @@
                 android:textColor="#000"
                 android:textSize="@dimen/_13ssp" />
             <EditText
+                android:maxLength="11"
                 android:layout_marginHorizontal="@dimen/_10sdp"
                 android:gravity="center_vertical"
                 android:id="@+id/req_number"
@@ -239,19 +240,36 @@
                 android:paddingEnd="@dimen/_16sdp"
                 android:textColor="#000"
                 android:textSize="@dimen/_13ssp" />
-            <com.google.android.material.button.MaterialButton
-                android:layout_marginBottom="@dimen/_50sdp"
-                android:layout_marginHorizontal="@dimen/_10sdp"
-                android:id="@+id/requestMake_button"
+
+            <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/_50sdp"
-                android:layout_marginTop="@dimen/_20sdp"
-                android:backgroundTint="@color/main"
-                android:text="Make Request"
-                android:textColor="@color/white"
-                android:textSize="@dimen/_13ssp"
-                android:textStyle="bold"
-                app:cornerRadius="@dimen/_10sdp" />
+                android:layout_height="wrap_content">
+
+                <com.google.android.material.button.MaterialButton
+                    android:layout_marginBottom="@dimen/_50sdp"
+                    android:layout_marginHorizontal="@dimen/_10sdp"
+                    android:id="@+id/requestMake_button"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_50sdp"
+                    android:layout_marginTop="@dimen/_20sdp"
+                    android:backgroundTint="@color/main"
+                    android:text="Make Request"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/_13ssp"
+                    android:textStyle="bold"
+                    app:cornerRadius="@dimen/_10sdp" />
+                <ProgressBar
+                    android:id="@+id/reqProgressbar"
+                    android:indeterminate="true"
+                    android:indeterminateTintMode="src_atop"
+                    android:indeterminateTint="@color/main"
+                    android:visibility="invisible"
+                    android:layout_width="@dimen/_25sdp"
+                    android:layout_height="@dimen/_25sdp"
+                    android:layout_gravity="center"/>
+            </FrameLayout>
+
+
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>

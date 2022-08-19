@@ -10,11 +10,12 @@ public class DonarListItem implements Serializable {
     private String email;
     private String uId;
     private String imageUri;
+    private String fcmToken;
 
     public DonarListItem() {
     }
 
-    public DonarListItem(String name, String bloodType, String upazila, String age, String email, String uId, String imageUri) {
+    public DonarListItem(String name, String bloodType, String upazila, String age, String email, String uId, String imageUri, String fcmToken) {
         this.name = name;
         this.bloodType = bloodType;
         this.upazila = upazila;
@@ -22,6 +23,7 @@ public class DonarListItem implements Serializable {
         this.email = email;
         this.uId = uId;
         this.imageUri = imageUri;
+        this.fcmToken = fcmToken;
     }
 
     public String getName() {
@@ -78,5 +80,13 @@ public class DonarListItem implements Serializable {
 
     public void setImageUri(String imageUri) {
         this.imageUri = imageUri;
+    }
+
+    public String getFcmToken() {
+        return fcmToken;
+    }
+
+    public void setFcmToken(String fcmToken) {
+        this.fcmToken = fcmToken;
     }
 }

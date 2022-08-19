@@ -4,7 +4,6 @@ import static com.app.roktoDorkar.utilites.Constants.KEY_BLOODTYPE;
 import static com.app.roktoDorkar.utilites.Constants.KEY_COLLECTION_USERS;
 import static com.app.roktoDorkar.utilites.Constants.KEY_UPZILA;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -19,18 +18,18 @@ import com.app.roktoDorkar.adapter.DonarListAdapter;
 
 import com.app.roktoDorkar.databinding.ActivityDonarsListBinding;
 import com.app.roktoDorkar.model.DonarListItem;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
+import com.app.roktoDorkar.model.UserListener;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
-public class DonarsListActivity extends AppCompatActivity {
+import es.dmoral.toasty.Toasty;
+
+public class DonarsListActivity extends AppCompatActivity implements UserListener {
     private ActivityDonarsListBinding binding;
     private ArrayList<DonarListItem> donarListItems;
     private DonarListAdapter adapter;
@@ -58,7 +57,7 @@ public class DonarsListActivity extends AppCompatActivity {
         binding.donarListRecyclerView.setHasFixedSize(true);
         binding.donarListRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         donarListItems = new ArrayList<>();
-        adapter = new DonarListAdapter(DonarsListActivity.this, donarListItems);
+        adapter = new DonarListAdapter(DonarsListActivity.this, donarListItems, this);
         binding.donarListRecyclerView.setAdapter(adapter);
         type=getIntent().getStringExtra("type");
         location=getIntent().getStringExtra("location");
@@ -86,7 +85,6 @@ public class DonarsListActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        donarListItems.clear();
     }
 
     @Override
@@ -95,5 +93,19 @@ public class DonarsListActivity extends AppCompatActivity {
         super.onBackPressed();
         Intent intent=new Intent(getApplicationContext(),HomeActivity.class);
         startActivity(intent);
+    }
+
+    @Override
+    public void onUserClickedListeners(DonarListItem donarListItem) {
+
+
+        Intent intent=new Intent(getApplicationContext(),DonarChatActivity.class);
+        intent.putExtra("donar_uid",donarListItem.getuId());
+        intent.putExtra("donar_name",donarListItem.getName());
+        intent.putExtra("donar_image",donarListItem.getImageUri());
+        intent.putExtra("donar_token",donarListItem.getFcmToken());
+        intent.putExtra("color", R.color.chatPrimary_bg);
+        startActivity(intent);
+
     }
 }

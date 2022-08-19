@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.app.roktoDorkar.R;
 import com.app.roktoDorkar.utilites.PreferenceManager;
@@ -31,6 +32,8 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
+import es.dmoral.toasty.Toasty;
+
 
 public class MyRequestFrag extends Fragment implements UserLister {
     private ArrayList<ReceviedListModel> receviedListModelArrayList;
@@ -38,6 +41,7 @@ public class MyRequestFrag extends Fragment implements UserLister {
     private SentRequestAdapter adapter;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private PreferenceManager preferenceManager;
+    private TextView textViewData;
 
 
 
@@ -52,6 +56,7 @@ public class MyRequestFrag extends Fragment implements UserLister {
     }
 
     private void intiViews(ViewGroup root) {
+        textViewData=root.findViewById(R.id.dataText);
         recyclerView_receivedfrag=root.findViewById(R.id.recyclerviewReqSentList);
         recyclerView_receivedfrag.setHasFixedSize(true);
         recyclerView_receivedfrag.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -68,12 +73,17 @@ public class MyRequestFrag extends Fragment implements UserLister {
 
                               return;
                           }
+                          if (value.isEmpty())
+                          {
+                            textViewData.setVisibility(View.VISIBLE);
+                          }
                           for (DocumentChange documentChange:value.getDocumentChanges())
                           {
                               if (documentChange.getType()== DocumentChange.Type.ADDED)
                               {
-
                                   receviedListModelArrayList.add(documentChange.getDocument().toObject(ReceviedListModel.class));
+                                  textViewData.setVisibility(View.GONE);
+
                               }
                               adapter.notifyDataSetChanged();
                           }

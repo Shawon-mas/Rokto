@@ -11,6 +11,17 @@
         android:id="@+id/recyclerviewReqSentList"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:text="No sent request found"
+        android:textSize="@dimen/_16ssp"
+        android:textColor="@color/main_black"
+        android:fontFamily="@font/heebo_medium"
+        android:visibility="gone"
+        android:id="@+id/dataText"/>
 
 
 </RelativeLayout>
