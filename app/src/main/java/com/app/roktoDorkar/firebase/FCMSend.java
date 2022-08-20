@@ -2,6 +2,7 @@ package com.app.roktoDorkar.firebase;
 
 import android.content.Context;
 import android.os.StrictMode;
+import android.util.Log;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -16,9 +17,11 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
+import es.dmoral.toasty.Toasty;
+
 public class FCMSend {
     private static String BASE_URL = "https://fcm.googleapis.com/fcm/send";
-    private static String SERVER_KEY = "key=AAAA_d-ovxo:APA91bH9bJ5DdSa7baKIIYerLr5Zj3n0xy9Oqv9vMoVHtyqeHgAGEKn1zvdZlvHrGqd_lAFzbj12nb9a-I8ENnN7Sl_qafdU38qP3xTb-y7KLuD3fDFO7DK-sQGwOwIIfRW4Cu1_hoep";
+    private static String SERVER_KEY ="key=AAAA_d-ovxo:APA91bH9bJ5DdSa7baKIIYerLr5Zj3n0xy9Oqv9vMoVHtyqeHgAGEKn1zvdZlvHrGqd_lAFzbj12nb9a-I8ENnN7Sl_qafdU38qP3xTb-y7KLuD3fDFO7DK-sQGwOwIIfRW4Cu1_hoep";
 
     public static void pushNotification(Context context,String token,String title,String message){
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
@@ -41,6 +44,7 @@ public class FCMSend {
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
+                    Log.d("Error: ",error.networkResponse.toString());
 
                 }
             }){

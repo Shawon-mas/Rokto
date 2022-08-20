@@ -1,16 +1,11 @@
 package com.app.roktoDorkar.view;
 
-import static com.app.roktoDorkar.utilites.Constants.KEY_AVAILABILITY;
 import static com.app.roktoDorkar.utilites.Constants.KEY_COLLECTION_CHAT;
-import static com.app.roktoDorkar.utilites.Constants.KEY_COLLECTION_USERS;
-import static com.app.roktoDorkar.utilites.Constants.KEY_EMAIL;
-import static com.app.roktoDorkar.utilites.Constants.KEY_FCM_TOKEN;
 import static com.app.roktoDorkar.utilites.Constants.KEY_MESSAGE;
 import static com.app.roktoDorkar.utilites.Constants.KEY_NAME;
 import static com.app.roktoDorkar.utilites.Constants.KEY_RECEIVER_ID;
 import static com.app.roktoDorkar.utilites.Constants.KEY_SENDER_ID;
 import static com.app.roktoDorkar.utilites.Constants.KEY_TIMESTAMP;
-import static com.app.roktoDorkar.utilites.Constants.getRemoteMsgHeaders;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -18,36 +13,26 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Base64;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
-import androidx.annotation.NonNull;
-
 import com.app.roktoDorkar.R;
 import com.app.roktoDorkar.databinding.ActivityChatBinding;
+
 import com.app.roktoDorkar.model.DonarListItem;
 import com.app.roktoDorkar.model.User;
-import com.app.roktoDorkar.network.ApiClient;
-import com.app.roktoDorkar.network.ApiService;
+
 import com.app.roktoDorkar.utilites.PreferenceManager;
 import com.app.roktoDorkar.view.RequestFrag.adapter.ChatAdapter;
 import com.app.roktoDorkar.view.RequestFrag.model.ChatMessage;
 import com.deeplabstudio.fcmsend.FCMSend;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentChange;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -58,9 +43,7 @@ import java.util.List;
 import java.util.Locale;
 
 import es.dmoral.toasty.Toasty;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+
 
 public class DonarChatActivity extends BaseActivity {
     private ActivityChatBinding binding;
@@ -134,13 +117,43 @@ public class DonarChatActivity extends BaseActivity {
 
          FCMSend.Builder builder=new FCMSend.Builder(getIntent().getStringExtra("donar_token"))
                  .setTitle("Message from: "+ preferenceManager.getString(KEY_NAME))
-                 .setBody(binding.inputMessage.getText().toString())
-                 .setClickAction(".view.ChatActivity");
+                 .setBody(binding.inputMessage.getText().toString());
+
          builder.send();
+
          binding.inputMessage.setText(null);
 
      }
-     private void listenMessage()
+/*
+    private void send() {
+        FCMSend.pushNotification(
+                getApplicationContext(),
+                getIntent().getStringExtra("donar_token"),
+                "Message from: "+ preferenceManager.getString(KEY_NAME),  binding.inputMessage.getText().toString()
+        );
+
+        ApiUtils.getClients().sendNotification(
+                new PushNotification(new NotificationData(
+                        "Message from: "+ preferenceManager.getString(KEY_NAME),  binding.inputMessage.getText().toString()
+                ),getIntent().getStringExtra("donar_token"))
+        ).enqueue(new Callback<PushNotification>() {
+            @Override
+            public void onResponse(Call<PushNotification> call, Response<PushNotification> response) {
+                if (response.isSuccessful()){
+                    showToast("sent");
+                }else {
+                    showToast(response.errorBody().toString());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<PushNotification> call, Throwable t) {
+
+            }
+        });
+    }*/
+
+    private void listenMessage()
      {
          FirebaseUser user = mAuth.getCurrentUser();
          database.collection(KEY_COLLECTION_CHAT)

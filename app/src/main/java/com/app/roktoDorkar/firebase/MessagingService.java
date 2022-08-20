@@ -5,6 +5,7 @@ import static com.app.roktoDorkar.utilites.Constants.KEY_FCM_TOKEN;
 import static com.app.roktoDorkar.utilites.Constants.KEY_MESSAGE;
 import static com.app.roktoDorkar.utilites.Constants.KEY_NAME;
 
+import android.annotation.SuppressLint;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -34,18 +35,51 @@ public class MessagingService extends FirebaseMessagingService {
         super.onNewToken(token);
         Log.d("FCM","Token: " + token);
     }
-
-
-
+    @SuppressLint("NewApi")
     @Override
     public void onMessageReceived(@NonNull RemoteMessage message) {
         super.onMessageReceived(message);
-        String title = message.getData().get("title");
+        String title = message.getNotification().getTitle();
         String text = message.getNotification().getBody();
         String CHANNEL_ID = "MESSAGE";
+        CharSequence sequence;
+      NotificationChannel channel = new NotificationChannel(
+                CHANNEL_ID,
+                "Message Notification",
+                NotificationManager.IMPORTANCE_HIGH);
+        getSystemService(NotificationManager.class).createNotificationChannel(channel);
+        Notification.Builder notification = new Notification.Builder(this, CHANNEL_ID)
+                .setContentTitle(title)
+                .setContentText(text)
+                .setSmallIcon(R.mipmap.ic_launcher)
+                .setAutoCancel(true);
+        NotificationManagerCompat.from(this).notify(1, notification.build());
+
+    }
+}
+/*
+            String title = message.getNotification().getTitle();
+            String text = message.getNotification().getBody();
+            String CHANNEL_ID = "MESSAGE";
+            CharSequence sequence;
+            NotificationChannel channel = new NotificationChannel(
+                    CHANNEL_ID,
+                    "Message Notification",
+                    NotificationManager.IMPORTANCE_HIGH);
+            getSystemService(NotificationManager.class).createNotificationChannel(channel);
+            Notification.Builder notification = new Notification.Builder(this, CHANNEL_ID)
+                    .setContentTitle(title)
+                    .setContentText(text)
+                    .setSmallIcon(R.mipmap.ic_launcher)
+                    .setAutoCancel(true);
+            NotificationManagerCompat.from(this).notify(1, notification.build());
+               super.onMessageReceived(message);*/
 
 
-        if (Build.VERSION.SDK_INT>= Build.VERSION_CODES.O){
+
+
+
+     /*   if (Build.VERSION.SDK_INT>= Build.VERSION_CODES.O){
 
             Intent intent=new Intent(this, DonarChatActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -60,13 +94,8 @@ public class MessagingService extends FirebaseMessagingService {
         }
 
         if (Build.VERSION.SDK_INT>= Build.VERSION_CODES.O){
-            NotificationChannel channel = new NotificationChannel(
-                    CHANNEL_ID,
-                    "Message Notification",
-                    NotificationManager.IMPORTANCE_HIGH);
-            getSystemService(NotificationManager.class).createNotificationChannel(channel);
-        }
 
+        }*/
 
       /* String email=message.getData().get(KEY_EMAIL);
        String name=message.getData().get(KEY_NAME);
@@ -105,5 +134,3 @@ public class MessagingService extends FirebaseMessagingService {
         NotificationManagerCompat notificationManagerCompat=NotificationManagerCompat.from(this);
         notificationManagerCompat.notify(notificationId, builder.build());
 */
-    }
-}

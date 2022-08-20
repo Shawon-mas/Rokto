@@ -26,7 +26,7 @@ private ActivityRequestBinding binding;
     }
 
     private void implementTabLayout() {
-        binding.tabLayout.addTab(binding.tabLayout.newTab().setText("Received Requests"));
+        binding.tabLayout.addTab(binding.tabLayout.newTab().setText("Pending Requests"));
         binding.tabLayout.addTab(binding.tabLayout.newTab().setText("My Requests"));
         FragmentManager fragmentManager=getSupportFragmentManager();
         adapter=new MyFragmentAdapter(fragmentManager,getLifecycle());

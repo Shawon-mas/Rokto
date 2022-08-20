@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.app.roktoDorkar.R;
 import com.app.roktoDorkar.utilites.PreferenceManager;
 import com.app.roktoDorkar.view.ChatActivity;
@@ -42,6 +43,8 @@ public class MyRequestFrag extends Fragment implements UserLister {
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private PreferenceManager preferenceManager;
     private TextView textViewData;
+    private LottieAnimationView lottieAnimationView;
+
 
 
 
@@ -56,6 +59,7 @@ public class MyRequestFrag extends Fragment implements UserLister {
     }
 
     private void intiViews(ViewGroup root) {
+        lottieAnimationView=root.findViewById(R.id.animationView);
         textViewData=root.findViewById(R.id.dataText);
         recyclerView_receivedfrag=root.findViewById(R.id.recyclerviewReqSentList);
         recyclerView_receivedfrag.setHasFixedSize(true);
@@ -75,13 +79,17 @@ public class MyRequestFrag extends Fragment implements UserLister {
                           }
                           if (value.isEmpty())
                           {
-                            textViewData.setVisibility(View.VISIBLE);
+                              lottieAnimationView.setVisibility(View.VISIBLE);
+                              textViewData.setVisibility(View.VISIBLE);
                           }
                           for (DocumentChange documentChange:value.getDocumentChanges())
                           {
                               if (documentChange.getType()== DocumentChange.Type.ADDED)
                               {
                                   receviedListModelArrayList.add(documentChange.getDocument().toObject(ReceviedListModel.class));
+                                  lottieAnimationView.setVisibility(View.GONE
+                                  );
+
                                   textViewData.setVisibility(View.GONE);
 
                               }

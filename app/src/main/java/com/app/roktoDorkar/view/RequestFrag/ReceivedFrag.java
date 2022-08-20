@@ -19,6 +19,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import com.airbnb.lottie.LottieAnimationView;
 import com.app.roktoDorkar.R;
 import com.app.roktoDorkar.utilites.PreferenceManager;
 import com.app.roktoDorkar.view.ChatActivity;
@@ -43,6 +45,7 @@ public class ReceivedFrag extends Fragment implements UserLister {
     private TextView textView_message;
     private ProgressBar progressBar_received;
     private PreferenceManager preferenceManager;
+    private LottieAnimationView lottieAnimationView;
 
 
 
@@ -63,6 +66,7 @@ public class ReceivedFrag extends Fragment implements UserLister {
 
         progressBar_received=root.findViewById(R.id.receivedProgressbar);
         textView_message=root.findViewById(R.id.dataTextReceived);
+        lottieAnimationView=root.findViewById(R.id.animationView);
         recyclerView_receivedfrag=root.findViewById(R.id.recyclerviewReceivedList);
         recyclerView_receivedfrag.setHasFixedSize(true);
         recyclerView_receivedfrag.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -87,6 +91,7 @@ public class ReceivedFrag extends Fragment implements UserLister {
                         }
                         if (value.isEmpty())
                         {
+                            lottieAnimationView.setVisibility(View.VISIBLE);
                             textView_message.setVisibility(View.VISIBLE);
                         }
                         if (value!=null)
@@ -99,6 +104,7 @@ public class ReceivedFrag extends Fragment implements UserLister {
                                 {
 
                                     receviedListModelArrayList.add(documentChange.getDocument().toObject(ReceviedListModel.class));
+                                    lottieAnimationView.setVisibility(View.GONE);
                                     textView_message.setVisibility(View.GONE);
 
                                 }
@@ -113,20 +119,7 @@ public class ReceivedFrag extends Fragment implements UserLister {
 
 
 
-/*
-        int count=receviedListModelArrayList.size();
-        if (count==0)
-        {
-            recyclerView_receivedfrag.setVisibility(View.VISIBLE);
-            textView_message.setVisibility(View.GONE);
 
-        }else {
-
-            textView_message.setVisibility(View.VISIBLE);
-            textView_message.setText("No request Found");
-            recyclerView_receivedfrag.setVisibility(View.GONE);
-
-        }*/
     }
 
     @Override
