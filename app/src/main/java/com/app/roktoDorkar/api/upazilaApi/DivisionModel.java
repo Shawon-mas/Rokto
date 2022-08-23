@@ -5,16 +5,19 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
 
-public class UpzilaModel {
+public class DivisionModel {
     @SerializedName("status")
     @Expose
     private String status;
     @SerializedName("message")
     @Expose
     private String message;
-    @SerializedName("upazila")
+    @SerializedName("division")
     @Expose
-    private ArrayList<Upazila> upazila = null;
+    private ArrayList<Division> division = null;
+    @SerializedName("load_time")
+    @Expose
+    private String loadTime;
 
     public String getStatus() {
         return status;
@@ -32,21 +35,29 @@ public class UpzilaModel {
         this.message = message;
     }
 
-    public ArrayList<Upazila> getUpazila() {
-        return upazila;
+    public ArrayList<Division> getDivision() {
+        return division;
     }
 
-    public void setUpazila(ArrayList<Upazila> upazila) {
-        this.upazila = upazila;
+    public void setDivision(ArrayList<Division> division) {
+        this.division = division;
     }
-    public class Upazila {
+
+    public String getLoadTime() {
+        return loadTime;
+    }
+
+    public void setLoadTime(String loadTime) {
+        this.loadTime = loadTime;
+    }
+    public class Division {
 
         @SerializedName("id")
         @Expose
         private Integer id;
-        @SerializedName("upazila")
+        @SerializedName("name")
         @Expose
-        private String upazila;
+        private String name;
 
         public Integer getId() {
             return id;
@@ -56,12 +67,12 @@ public class UpzilaModel {
             this.id = id;
         }
 
-        public String getUpazila() {
-            return upazila;
+        public String getName() {
+            return name;
         }
 
-        public void setUpazila(String upazila) {
-            this.upazila = upazila;
+        public void setName(String name) {
+            this.name = name;
         }
 
     }

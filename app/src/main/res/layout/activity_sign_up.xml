@@ -172,7 +172,38 @@
                 android:layout_height="@dimen/_45sdp"
                 android:entries="@array/donate_type"/>
             <TextView
-                android:drawableEnd="@drawable/drop_down"
+                android:gravity="center_vertical"
+                android:id="@+id/editText_div"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_45ssp"
+                android:layout_marginTop="@dimen/_16sdp"
+                android:background="@drawable/inuput_bg"
+                android:fontFamily="@font/heebo_regular"
+                android:hint="@string/select_division"
+                android:maxLines="1"
+                android:paddingStart="@dimen/_16sdp"
+                android:paddingEnd="@dimen/_16sdp"
+                android:textColor="#000"
+                android:textSize="@dimen/_13ssp"
+                app:drawableEndCompat="@drawable/drop_down" />
+
+            <TextView
+                android:gravity="center_vertical"
+                android:id="@+id/editText_dis"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_45ssp"
+                android:layout_marginTop="@dimen/_16sdp"
+                android:background="@drawable/inuput_bg"
+                android:fontFamily="@font/heebo_regular"
+                android:hint="@string/select_district"
+                android:maxLines="1"
+                android:paddingStart="@dimen/_16sdp"
+                android:paddingEnd="@dimen/_16sdp"
+                android:textColor="#000"
+                android:textSize="@dimen/_13ssp"
+                app:drawableEndCompat="@drawable/drop_down" />
+
+            <TextView
                 android:gravity="center_vertical"
                 android:id="@+id/editText_up"
                 android:layout_width="match_parent"
@@ -185,35 +216,8 @@
                 android:paddingStart="@dimen/_16sdp"
                 android:paddingEnd="@dimen/_16sdp"
                 android:textColor="#000"
-                android:textSize="@dimen/_13ssp" />
-            <TextView
-                android:gravity="center_vertical"
-                android:id="@+id/editText_dis"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/_45ssp"
-                android:layout_marginTop="@dimen/_16sdp"
-                android:background="@drawable/inuput_bg"
-                android:fontFamily="@font/heebo_regular"
-                android:hint="District(Auto)"
-                android:maxLines="1"
-                android:paddingStart="@dimen/_16sdp"
-                android:paddingEnd="@dimen/_16sdp"
-                android:textColor="#000"
-                android:textSize="@dimen/_13ssp" />
-            <TextView
-                android:gravity="center_vertical"
-                android:id="@+id/editText_div"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/_45ssp"
-                android:layout_marginTop="@dimen/_16sdp"
-                android:background="@drawable/inuput_bg"
-                android:fontFamily="@font/heebo_regular"
-                android:hint="Division(Auto)"
-                android:maxLines="1"
-                android:paddingStart="@dimen/_16sdp"
-                android:paddingEnd="@dimen/_16sdp"
-                android:textColor="#000"
-                android:textSize="@dimen/_13ssp" />
+                android:textSize="@dimen/_13ssp"
+                app:drawableEndCompat="@drawable/drop_down" />
 
 
             <EditText

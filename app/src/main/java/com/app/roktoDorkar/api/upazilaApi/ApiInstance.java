@@ -6,7 +6,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ApiInstance {
-    private static String BASE_URL = " https://api.rabib.me/";
+    private static String BASE_URL = " https://bloodbag.org/";
     private static Retrofit retrofit;
 
     private static Retrofit getRetrofitInstance()
@@ -21,10 +21,10 @@ public class ApiInstance {
                 .build();
         return retrofit;
     }
-    public static UpzilaApiEndPoint getUpazilaApiEndpoint()
+    public static DivisionApiEndPoint getDivisionApiEndpoint()
     {
-        UpzilaApiEndPoint upzilaApiEndPoint=getRetrofitInstance().create(UpzilaApiEndPoint.class);
-        return upzilaApiEndPoint;
+        DivisionApiEndPoint divisionApiEndPoint =getRetrofitInstance().create(DivisionApiEndPoint.class);
+        return divisionApiEndPoint;
     }
 
 }

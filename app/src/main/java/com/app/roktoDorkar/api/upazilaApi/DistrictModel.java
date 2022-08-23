@@ -5,16 +5,16 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
 
-public class DisDivModel {
+public class DistrictModel {
     @SerializedName("status")
     @Expose
     private String status;
     @SerializedName("message")
     @Expose
     private String message;
-    @SerializedName("upazila")
+    @SerializedName("district")
     @Expose
-    private ArrayList<DisDiv> disdiv = null;
+    private ArrayList<District> district = null;
     @SerializedName("load_time")
     @Expose
     private String loadTime;
@@ -35,12 +35,12 @@ public class DisDivModel {
         this.message = message;
     }
 
-    public ArrayList<DisDiv> getDisDiv() {
-        return disdiv;
+    public ArrayList<District> getDistrict() {
+        return district;
     }
 
-    public void setUpazila(ArrayList<DisDiv> disdiv) {
-        this.disdiv = disdiv;
+    public void setDistrict(ArrayList<District> district) {
+        this.district = district;
     }
 
     public String getLoadTime() {
@@ -50,20 +50,14 @@ public class DisDivModel {
     public void setLoadTime(String loadTime) {
         this.loadTime = loadTime;
     }
-    public class DisDiv {
+    public class District {
 
         @SerializedName("id")
         @Expose
         private Integer id;
-        @SerializedName("division")
+        @SerializedName("name")
         @Expose
-        private String division;
-        @SerializedName("district")
-        @Expose
-        private String district;
-        @SerializedName("upazila")
-        @Expose
-        private String upazila;
+        private String name;
 
         public Integer getId() {
             return id;
@@ -73,28 +67,12 @@ public class DisDivModel {
             this.id = id;
         }
 
-        public String getDivision() {
-            return division;
+        public String getName() {
+            return name;
         }
 
-        public void setDivision(String division) {
-            this.division = division;
-        }
-
-        public String getDistrict() {
-            return district;
-        }
-
-        public void setDistrict(String district) {
-            this.district = district;
-        }
-
-        public String getUpazila() {
-            return upazila;
-        }
-
-        public void setUpazila(String upazila) {
-            this.upazila = upazila;
+        public void setName(String name) {
+            this.name = name;
         }
 
     }

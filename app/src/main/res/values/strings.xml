@@ -72,4 +72,6 @@
     <string name="select_upazila">Select Upazila</string>
     <string name="upazila_needs">Which Upazila needs blood ?</string>
     <string name="your_upazila">Select Your Upazila</string>
+    <string name="select_division">Select Division</string>
+    <string name="select_district">Select District</string>
 </resources>

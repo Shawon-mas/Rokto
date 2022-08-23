@@ -12,10 +12,8 @@ import static com.app.roktoDorkar.utilites.Constants.KEY_EMAIL;
 import static com.app.roktoDorkar.utilites.Constants.KEY_IMAGE_URI;
 import static com.app.roktoDorkar.utilites.Constants.KEY_NAME;
 import static com.app.roktoDorkar.utilites.Constants.KEY_NUMBER;
-import static com.app.roktoDorkar.utilites.Constants.KEY_SENDER_ID;
 import static com.app.roktoDorkar.utilites.Constants.KEY_UID;
 import static com.app.roktoDorkar.utilites.Constants.KEY_UPZILA;
-import static com.app.roktoDorkar.utilites.Constants.KEY_USER_ID;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -35,9 +33,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.text.Editable;
 import android.text.InputType;
-import android.text.TextWatcher;
 import android.util.Base64;
 import android.util.Log;
 import android.util.Patterns;
@@ -45,17 +41,19 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.app.roktoDorkar.R;
 import com.app.roktoDorkar.api.upazilaApi.ApiInstance;
-import com.app.roktoDorkar.api.upazilaApi.DisDivModel;
-import com.app.roktoDorkar.api.upazilaApi.UpItemClick;
-import com.app.roktoDorkar.api.upazilaApi.UpazilaAdapter;
-import com.app.roktoDorkar.api.upazilaApi.UpzilaModel;
+import com.app.roktoDorkar.api.upazilaApi.DistrictAdapter;
+import com.app.roktoDorkar.api.upazilaApi.DistrictClick;
+import com.app.roktoDorkar.api.upazilaApi.DistrictModel;
+import com.app.roktoDorkar.api.upazilaApi.DivisionClick;
+import com.app.roktoDorkar.api.upazilaApi.DivisionAdapter;
+import com.app.roktoDorkar.api.upazilaApi.DivisionModel;
 import com.app.roktoDorkar.databinding.ActivitySignUpBinding;
 import com.app.roktoDorkar.utilites.PreferenceManager;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -65,8 +63,6 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.io.ByteArrayOutputStream;
@@ -84,7 +80,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class SignUpActivity extends AppCompatActivity implements UpItemClick {
+public class SignUpActivity extends AppCompatActivity implements DivisionClick, DistrictClick {
     private DatePickerDialog datePickerDialog;
     private PreferenceManager preferenceManager;
     ActivitySignUpBinding binding;
@@ -93,13 +89,19 @@ public class SignUpActivity extends AppCompatActivity implements UpItemClick {
     String[] donateBlood,bloodType;
     public static String val;
     private FirebaseAuth mAuth;
+    Integer division_id,district_id;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private Dialog dialog;
-    private ArrayList<UpzilaModel.Upazila> upzilaModelArrayList;
-    private ArrayList<UpzilaModel.Upazila> filterUpList;
-    private ArrayList<DisDivModel.DisDiv> disDivModelArrayList;
-    private UpazilaAdapter adapter;
+    private Dialog dialog,dialog_dis;
+    private ArrayList<DivisionModel.Division> divisionModelArrayList;
+    private ArrayList<DivisionModel.Division> filterDivisionList;
+
+    private ArrayList<DistrictModel.District> districtsModelArrayList;
+    private ArrayList<DistrictModel.District> filterDistrictList;
+    private DivisionAdapter adapter;
+    private DistrictAdapter districtAdapter;
     private boolean passwordShowing = false;
+    private boolean isDivision=false;
+    private boolean isDistrict=false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -423,8 +425,18 @@ public class SignUpActivity extends AppCompatActivity implements UpItemClick {
             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             pickImage.launch(intent);
         });
-        binding.editTextUp.setOnClickListener(v -> {
-            getUpazila();
+        binding.editTextDiv.setOnClickListener(v -> {
+            getDivision(true);
+        });
+        binding.editTextDis.setOnClickListener(v -> {
+            if (division_id==null)
+            {
+                showErrorToast("Select Division");
+                return;
+            }else {
+                setDistrict(true,division_id);
+            }
+
         });
         binding.passIcon.setOnClickListener(v -> {
             if (passwordShowing) {
@@ -442,7 +454,7 @@ public class SignUpActivity extends AppCompatActivity implements UpItemClick {
 
     }
 
-    private void getUpazila() {
+    private void getDivision(Boolean isDivision) {
         dialog = new Dialog(this);
         dialog.setContentView(R.layout.upzila_list);
         dialog.getWindow().setLayout(800, 1500);
@@ -450,7 +462,11 @@ public class SignUpActivity extends AppCompatActivity implements UpItemClick {
         dialog.show();
         RecyclerView recyclerView = dialog.findViewById(R.id.upzila_listview);
         ProgressBar progressBar= dialog.findViewById(R.id.progressbar_upzilla);
-        EditText editText=dialog.findViewById(R.id.up_search);
+        TextView textView=dialog.findViewById(R.id.setName);
+        if (isDivision){
+            textView.setText("Select Division");
+        }
+        /*EditText editText=dialog.findViewById(R.id.up_search);
         editText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -464,28 +480,28 @@ public class SignUpActivity extends AppCompatActivity implements UpItemClick {
 
             @Override
             public void afterTextChanged(Editable s) {
-                filter(s.toString());
+              //  filter(s.toString());
 
             }
-        });
+        });*/
         progressBar.setVisibility(View.VISIBLE);
         ImageView imageView=dialog.findViewById(R.id.up_close);
         imageView.setOnClickListener(v -> {
             dialog.cancel();
         });
-        Call<UpzilaModel> call= ApiInstance.getUpazilaApiEndpoint().getUpazila();
-        call.enqueue(new Callback<UpzilaModel>() {
+        Call<DivisionModel> call= ApiInstance.getDivisionApiEndpoint().getDivision();
+        call.enqueue(new Callback<DivisionModel>() {
             @Override
-            public void onResponse(Call<UpzilaModel> call, Response<UpzilaModel> response) {
+            public void onResponse(Call<DivisionModel> call, Response<DivisionModel> response) {
                 if (response.isSuccessful()){
-                    upzilaModelArrayList=new ArrayList<>();
-                    upzilaModelArrayList=response.body().getUpazila();
-                    filterUpList=upzilaModelArrayList;
-                    for (UpzilaModel.Upazila upazila:upzilaModelArrayList)
+                    divisionModelArrayList=new ArrayList<>();
+                    divisionModelArrayList=response.body().getDivision();
+                    filterDivisionList=divisionModelArrayList;
+                    for (DivisionModel.Division upazila:divisionModelArrayList)
                     {
                         recyclerView.setHasFixedSize(true);
                         recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
-                        adapter=new UpazilaAdapter(getApplicationContext(),upzilaModelArrayList);
+                        adapter=new DivisionAdapter(getApplicationContext(),divisionModelArrayList);
                         recyclerView.setAdapter(adapter);
                         adapter.notifyDataSetChanged();
                         adapter.setOnItemClckListener(SignUpActivity.this);
@@ -497,7 +513,7 @@ public class SignUpActivity extends AppCompatActivity implements UpItemClick {
             }
 
             @Override
-            public void onFailure(Call<UpzilaModel> call, Throwable t) {
+            public void onFailure(Call<DivisionModel> call, Throwable t) {
                 showErrorToast("Something Went Wrong");
                 dialog.cancel();
 
@@ -506,18 +522,7 @@ public class SignUpActivity extends AppCompatActivity implements UpItemClick {
 
     }
 
-    private void filter(String toString) {
-        filterUpList=new ArrayList<>();
-        for (UpzilaModel.Upazila upazila:upzilaModelArrayList)
-        {
-            String search=upazila.getUpazila();
-            if (search.toLowerCase().contains(toString.toLowerCase()))
-            {
-                filterUpList.add(upazila);
-            }
-        }
-        adapter.filterListUp(filterUpList);
-    }
+
 
     @Override
     public void onStart() {
@@ -530,34 +535,51 @@ public class SignUpActivity extends AppCompatActivity implements UpItemClick {
     }
 
     @Override
-    public void onUPItemClick(int position) {
-        binding.editTextUp.setText(filterUpList.get(position).getUpazila());
-        Integer up_id=filterUpList.get(position).getId();
-        setDivDis(up_id);
-        dialog.cancel();
+    public void onDivisionItemClick(int position) {
+         binding.editTextDiv.setText(divisionModelArrayList.get(position).getName());
+        division_id=divisionModelArrayList.get(position).getId();
+         dialog.cancel();
+         showSuccessToast(division_id.toString());
+
     }
 
-    private void setDivDis(Integer up_id) {
-        binding.editTextDis.setTextColor(getResources().getColor(R.color.main));
-        binding.editTextDiv.setTextColor(getResources().getColor(R.color.main));
-        binding.editTextDis.setText("Loading...Please Wait");
-        binding.editTextDiv.setText("Loading...Please Wait");
-        Call<DisDivModel> call=ApiInstance.getUpazilaApiEndpoint().getDisDiv(up_id);
-        call.enqueue(new Callback<DisDivModel>() {
+    private void setDistrict(Boolean isDistrict,Integer division_id) {
+        dialog_dis = new Dialog(this);
+        dialog_dis.setContentView(R.layout.upzila_list);
+        dialog_dis.getWindow().setLayout(800, 1500);
+        dialog_dis.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog_dis.show();
+        RecyclerView recyclerView = dialog_dis.findViewById(R.id.upzila_listview);
+        ProgressBar progressBar= dialog_dis.findViewById(R.id.progressbar_upzilla);
+        TextView textView=dialog_dis.findViewById(R.id.setName);
+        if (isDistrict){
+            textView.setText("Select District");
+        }
+        progressBar.setVisibility(View.VISIBLE);
+        ImageView imageView=dialog_dis.findViewById(R.id.up_close);
+        imageView.setOnClickListener(v -> {
+            dialog_dis.cancel();
+        });
+
+        Call<DistrictModel> call=ApiInstance.getDivisionApiEndpoint().getDistrict(division_id);
+        call.enqueue(new Callback<DistrictModel>() {
             @Override
-            public void onResponse(Call<DisDivModel> call, Response<DisDivModel> response) {
+            public void onResponse(Call<DistrictModel> call, Response<DistrictModel> response) {
                 if (response.isSuccessful())
                 {
-                    disDivModelArrayList=new ArrayList<>();
-                    disDivModelArrayList=response.body().getDisDiv();
+                    districtsModelArrayList=new ArrayList<>();
+                    districtsModelArrayList=response.body().getDistrict();
 
-                    for (DisDivModel.DisDiv data:disDivModelArrayList)
+                    for (DistrictModel.District data:districtsModelArrayList)
                     {
+                        recyclerView.setHasFixedSize(true);
+                        recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+                        districtAdapter=new DistrictAdapter(getApplicationContext(),districtsModelArrayList);
+                        recyclerView.setAdapter(districtAdapter);
+                        districtAdapter.notifyDataSetChanged();
+                        districtAdapter.setOnItemClckListener(SignUpActivity.this);
+                        progressBar.setVisibility(View.GONE);
 
-                        binding.editTextDiv.setText(data.getDivision());
-                        binding.editTextDis.setText(data.getDistrict());
-                        binding.editTextDis.setTextColor(getResources().getColor(R.color.black));
-                        binding.editTextDiv.setTextColor(getResources().getColor(R.color.black));
 
                     }
 
@@ -565,12 +587,20 @@ public class SignUpActivity extends AppCompatActivity implements UpItemClick {
             }
 
             @Override
-            public void onFailure(Call<DisDivModel> call, Throwable t)
+            public void onFailure(Call<DistrictModel> call, Throwable t)
             {
                 showErrorToast("Something Went Wrong");
 
             }
         });
 
+    }
+
+
+    @Override
+    public void onDistrictItemClick(int position) {
+        binding.editTextDis.setText(districtsModelArrayList.get(position).getName());
+        district_id=districtsModelArrayList.get(position).getId();
+        dialog_dis.cancel();
     }
 }

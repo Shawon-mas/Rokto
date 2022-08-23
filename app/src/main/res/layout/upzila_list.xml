@@ -14,14 +14,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <TextView
-                android:id="@+id/one"
+                android:id="@+id/setName"
                 android:textColor="#000"
                 android:fontFamily="@font/heebo_medium"
                 android:textSize="@dimen/_14ssp"
                 android:textStyle="bold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/select_upazila"/>
+                />
             <ImageView
                 android:id="@+id/up_close"
                 app:tint="@color/main"
@@ -31,26 +31,6 @@
                 android:src="@drawable/close"/>
         </RelativeLayout>
 
-        <EditText
-           android:gravity="center_vertical"
-            android:id="@+id/up_search"
-            android:drawableTint="#000"
-            android:drawableEnd="@drawable/search"
-           android:paddingTop="@dimen/_10sdp"
-            android:paddingStart="@dimen/_10sdp"
-            android:paddingEnd="@dimen/_10sdp"
-            android:paddingBottom="@dimen/_10sdp"
-            android:layout_marginTop="@dimen/_10sdp"
-            android:layout_marginLeft="@dimen/_10sdp"
-            android:layout_marginRight="@dimen/_10sdp"
-            android:hint="@string/search_upazila"
-            android:textColor="#000"
-            android:textColorHint="#615E5E"
-            android:textSize="@dimen/_15ssp"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/_40sdp"
-            android:background="@drawable/inuput_bg"
-            />
         <ProgressBar
             android:indeterminate="true"
             android:indeterminateTintMode="src_atop"

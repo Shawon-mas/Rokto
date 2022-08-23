@@ -25,6 +25,7 @@ import com.app.roktoDorkar.utilites.PreferenceManager;
 import com.app.roktoDorkar.view.ChatActivity;
 import com.app.roktoDorkar.view.RequestFrag.model.ReceviedListModel;
 import com.app.roktoDorkar.view.RequestFrag.model.UserLister;
+import com.deeplabstudio.fcmsend.FCMSend;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -154,6 +155,12 @@ public class ReceivedListAdapter extends RecyclerView.Adapter<ReceivedListAdapte
                                                     public void onSuccess(Void unused) {
 
                                                         Toasty.success(context,"Request Accept",Toasty.LENGTH_SHORT,false).show();
+
+                                                        FCMSend.Builder builder=new FCMSend.Builder(receviedListModel.getSenderToken())
+                                                                .setTitle("Request Accepted")
+                                                                .setBody("Your request accepted by " +
+                                                                        ""+ preferenceManager.getString(KEY_NAME));
+                                                        builder.send();
 
                                                     }
                                                 });

@@ -1,33 +1,24 @@
 package com.app.roktoDorkar.view.bottomViewActivites;
 
-import static android.content.ContentValues.TAG;
-import static com.app.roktoDorkar.global.SharedPref.USER_NAME;
 import static com.app.roktoDorkar.utilites.Constants.KEY_COLLECTION_USERS;
+import static com.app.roktoDorkar.utilites.Constants.KEY_FCM_TOKEN;
 import static com.app.roktoDorkar.utilites.Constants.KEY_IMAGE_URI;
 import static com.app.roktoDorkar.utilites.Constants.KEY_NAME;
 import static com.app.roktoDorkar.utilites.Constants.KEY_NUMBER;
-import static com.app.roktoDorkar.view.DonarsListActivity.type;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TimePicker;
@@ -35,17 +26,14 @@ import android.widget.Toast;
 
 import com.app.roktoDorkar.R;
 import com.app.roktoDorkar.api.upazilaApi.ApiInstance;
-import com.app.roktoDorkar.api.upazilaApi.DisDivModel;
-import com.app.roktoDorkar.api.upazilaApi.UpItemClick;
-import com.app.roktoDorkar.api.upazilaApi.UpazilaAdapter;
-import com.app.roktoDorkar.api.upazilaApi.UpzilaModel;
+import com.app.roktoDorkar.api.upazilaApi.DistrictModel;
+import com.app.roktoDorkar.api.upazilaApi.DivisionClick;
+import com.app.roktoDorkar.api.upazilaApi.DivisionAdapter;
+import com.app.roktoDorkar.api.upazilaApi.DivisionModel;
 import com.app.roktoDorkar.databinding.ActivityBloodReqBinding;
-import com.app.roktoDorkar.databinding.ActivityRequestBinding;
 import com.app.roktoDorkar.model.DateValidatorWeekdays;
 import com.app.roktoDorkar.utilites.PreferenceManager;
-import com.app.roktoDorkar.view.DonarsListActivity;
 import com.app.roktoDorkar.view.HomeActivity;
-import com.app.roktoDorkar.view.SignUpActivity;
 import com.etebarian.meowbottomnavigation.MeowBottomNavigation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -60,15 +48,11 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
 
@@ -77,7 +61,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class BloodReqActivity extends AppCompatActivity implements UpItemClick {
+public class BloodReqActivity extends AppCompatActivity implements DivisionClick {
     private PreferenceManager preferenceManager;
     private ActivityBloodReqBinding binding;
     private MaterialDatePicker materialDatePicker;
@@ -89,10 +73,10 @@ public class BloodReqActivity extends AppCompatActivity implements UpItemClick {
     private String request_status="not_accept";
     DocumentReference ref = db.collection("BloodRequest").document();
     Dialog dialog;
-    private ArrayList<UpzilaModel.Upazila> upzilaModelArrayList;
-    private ArrayList<UpzilaModel.Upazila> filterUpList;
-    private ArrayList<DisDivModel.DisDiv> disDivModelArrayList;
-    private UpazilaAdapter adapter;
+    private ArrayList<DivisionModel.Division> upzilaModelArrayList;
+    private ArrayList<DivisionModel.Division> filterUpList;
+    private ArrayList<DistrictModel.District> disDivModelArrayList;
+    private DivisionAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -227,6 +211,7 @@ public class BloodReqActivity extends AppCompatActivity implements UpItemClick {
         requestInfo.put("senderName",preferenceManager.getString(KEY_NAME));
         requestInfo.put("senderEmail",FirebaseAuth.getInstance().getCurrentUser().getEmail());
         requestInfo.put("senderUid", FirebaseAuth.getInstance().getCurrentUser().getUid());
+        requestInfo.put("senderToken", preferenceManager.getString(KEY_FCM_TOKEN));
         requestInfo.put("senderRequiredBlood",type);
         requestInfo.put("senderRequiredQuantity",requiredBlood);
         requestInfo.put("senderPatientGender",patientGender);
@@ -302,6 +287,7 @@ public class BloodReqActivity extends AppCompatActivity implements UpItemClick {
           getUpazila();
       });
 
+
     }
 
     private void getUpazila() {
@@ -312,42 +298,25 @@ public class BloodReqActivity extends AppCompatActivity implements UpItemClick {
         dialog.show();
         RecyclerView recyclerView = dialog.findViewById(R.id.upzila_listview);
         ProgressBar progressBar= dialog.findViewById(R.id.progressbar_upzilla);
-        EditText editText=dialog.findViewById(R.id.up_search);
-        editText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                filter(s.toString());
-
-            }
-        });
         progressBar.setVisibility(View.VISIBLE);
         ImageView imageView=dialog.findViewById(R.id.up_close);
         imageView.setOnClickListener(v -> {
             dialog.cancel();
         });
-        Call<UpzilaModel> call= ApiInstance.getUpazilaApiEndpoint().getUpazila();
-        call.enqueue(new Callback<UpzilaModel>() {
+        Call<DivisionModel> call= ApiInstance.getDivisionApiEndpoint().getDivision();
+        call.enqueue(new Callback<DivisionModel>() {
             @Override
-            public void onResponse(Call<UpzilaModel> call, Response<UpzilaModel> response) {
+            public void onResponse(Call<DivisionModel> call, Response<DivisionModel> response) {
                 if (response.isSuccessful()){
                     upzilaModelArrayList=new ArrayList<>();
-                    upzilaModelArrayList=response.body().getUpazila();
+                    upzilaModelArrayList=response.body().getDivision();
                     filterUpList=upzilaModelArrayList;
-                    for (UpzilaModel.Upazila upazila:upzilaModelArrayList)
+                    for (DivisionModel.Division upazila:upzilaModelArrayList)
                     {
                         recyclerView.setHasFixedSize(true);
                         recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
-                        adapter=new UpazilaAdapter(getApplicationContext(),upzilaModelArrayList);
+                        adapter=new DivisionAdapter(getApplicationContext(),upzilaModelArrayList);
                         recyclerView.setAdapter(adapter);
                         adapter.notifyDataSetChanged();
                         adapter.setOnItemClckListener(BloodReqActivity.this);
@@ -359,7 +328,7 @@ public class BloodReqActivity extends AppCompatActivity implements UpItemClick {
             }
 
             @Override
-            public void onFailure(Call<UpzilaModel> call, Throwable t) {
+            public void onFailure(Call<DivisionModel> call, Throwable t) {
 
                 dialog.cancel();
 
@@ -371,12 +340,12 @@ public class BloodReqActivity extends AppCompatActivity implements UpItemClick {
 
     private void filter(String toString) {
         filterUpList=new ArrayList<>();
-        for (UpzilaModel.Upazila upazila:upzilaModelArrayList)
+        for (DivisionModel.Division division:upzilaModelArrayList)
         {
-            String search=upazila.getUpazila();
+            String search=division.getName();
             if (search.toLowerCase().contains(toString.toLowerCase()))
             {
-                filterUpList.add(upazila);
+                filterUpList.add(division);
             }
         }
         adapter.filterListUp(filterUpList);
@@ -554,8 +523,8 @@ public class BloodReqActivity extends AppCompatActivity implements UpItemClick {
     }
 
     @Override
-    public void onUPItemClick(int position) {
-        binding.reqUpazila.setText(filterUpList.get(position).getUpazila());
+    public void onDivisionItemClick(int position) {
+        binding.reqUpazila.setText(filterUpList.get(position).getName());
         dialog.dismiss();
     }
 }

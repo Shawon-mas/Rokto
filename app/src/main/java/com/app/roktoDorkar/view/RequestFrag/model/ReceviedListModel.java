@@ -23,11 +23,12 @@ public class ReceviedListModel implements Serializable {
     private String accept;
     private String zReceiverImage;
     private String zSenderImage;
+    private String senderToken;
 
     public ReceviedListModel() {
     }
 
-    public ReceviedListModel(String requestStatus, String senderGiftAmount, String senderName, String senderPatientGender, String senderPhoneNumber, String senderRequestDetails, String senderRequestForDate, String senderRequestForTime, String senderRequestLocation, String senderRequestUpazila, String senderRequiredBlood, String senderRequiredQuantity, String senderUid, String senderEmail, String requestReceiverUid, String documentId, String requestReceiverName, String accept, String zReceiverImage, String zSenderImage) {
+    public ReceviedListModel(String requestStatus, String senderGiftAmount, String senderName, String senderPatientGender, String senderPhoneNumber, String senderRequestDetails, String senderRequestForDate, String senderRequestForTime, String senderRequestLocation, String senderRequestUpazila, String senderRequiredBlood, String senderRequiredQuantity, String senderUid, String senderEmail, String requestReceiverUid, String documentId, String requestReceiverName, String accept, String zReceiverImage, String zSenderImage, String senderToken) {
         this.requestStatus = requestStatus;
         this.senderGiftAmount = senderGiftAmount;
         this.senderName = senderName;
@@ -48,6 +49,7 @@ public class ReceviedListModel implements Serializable {
         this.accept = accept;
         this.zReceiverImage = zReceiverImage;
         this.zSenderImage = zSenderImage;
+        this.senderToken = senderToken;
     }
 
     public String getRequestStatus() {
@@ -208,5 +210,13 @@ public class ReceviedListModel implements Serializable {
 
     public void setzSenderImage(String zSenderImage) {
         this.zSenderImage = zSenderImage;
+    }
+
+    public String getSenderToken() {
+        return senderToken;
+    }
+
+    public void setSenderToken(String senderToken) {
+        this.senderToken = senderToken;
     }
 }
