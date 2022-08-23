@@ -102,6 +102,7 @@ public class SignUpActivity extends AppCompatActivity implements DivisionClick, 
     private boolean passwordShowing = false;
     private boolean isDivision=false;
     private boolean isDistrict=false;
+    private boolean isUpazila=false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
