@@ -5,6 +5,7 @@ import static com.app.roktoDorkar.utilites.Constants.KEY_COLLECTION_CHAT;
 import static com.app.roktoDorkar.utilites.Constants.KEY_COLLECTION_USERS;
 import static com.app.roktoDorkar.utilites.Constants.KEY_FCM_TOKEN;
 import static com.app.roktoDorkar.utilites.Constants.KEY_MESSAGE;
+import static com.app.roktoDorkar.utilites.Constants.KEY_NAME;
 import static com.app.roktoDorkar.utilites.Constants.KEY_RECEIVER_ID;
 import static com.app.roktoDorkar.utilites.Constants.KEY_SENDER_ID;
 import static com.app.roktoDorkar.utilites.Constants.KEY_TIMESTAMP;
@@ -30,6 +31,7 @@ import com.app.roktoDorkar.model.User;
 import com.app.roktoDorkar.utilites.PreferenceManager;
 import com.app.roktoDorkar.view.RequestFrag.adapter.ChatAdapter;
 import com.app.roktoDorkar.view.RequestFrag.model.ChatMessage;
+import com.deeplabstudio.fcmsend.FCMSend;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -151,9 +153,14 @@ public class ChatActivity extends BaseActivity {
          HashMap<String,Object> message=new HashMap<>();
          message.put(KEY_SENDER_ID,user.getUid());
          message.put(KEY_RECEIVER_ID,getIntent().getStringExtra("receiver_id"));
-         message.put(KEY_MESSAGE,binding.inputMessage.getText().toString());
+         message.put(KEY_MESSAGE,binding.inputMessage.getText().toString().trim());
          message.put(KEY_TIMESTAMP,new Date());
          database.collection(KEY_COLLECTION_CHAT).add(message);
+         FCMSend.Builder builder=new FCMSend.Builder(getIntent().getStringExtra("sender_token"))
+                 .setTitle("Message from: "+ preferenceManager.getString(KEY_NAME))
+                 .setBody(binding.inputMessage.getText().toString());
+
+         builder.send();
          binding.inputMessage.setText(null);
 
      }

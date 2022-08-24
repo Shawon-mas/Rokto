@@ -87,8 +87,7 @@ public class MyRequestFrag extends Fragment implements UserLister {
                               if (documentChange.getType()== DocumentChange.Type.ADDED)
                               {
                                   receviedListModelArrayList.add(documentChange.getDocument().toObject(ReceviedListModel.class));
-                                  lottieAnimationView.setVisibility(View.GONE
-                                  );
+                                  lottieAnimationView.setVisibility(View.GONE);
 
                                   textViewData.setVisibility(View.GONE);
 
@@ -116,6 +115,7 @@ public class MyRequestFrag extends Fragment implements UserLister {
         intent.putExtra("document_id",receviedListModel.getDocumentId());
         intent.putExtra("receiver_id",receviedListModel.getRequestReceiverUid());
         intent.putExtra("receiver_image",receviedListModel.getzReceiverImage());
+        intent.putExtra("sender_token",receviedListModel.getSenderToken());
         intent.putExtra("color",R.color.chatPrimary_bg);
         startActivity(intent);
 

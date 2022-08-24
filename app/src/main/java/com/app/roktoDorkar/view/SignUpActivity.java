@@ -54,6 +54,9 @@ import com.app.roktoDorkar.api.upazilaApi.DistrictModel;
 import com.app.roktoDorkar.api.upazilaApi.DivisionClick;
 import com.app.roktoDorkar.api.upazilaApi.DivisionAdapter;
 import com.app.roktoDorkar.api.upazilaApi.DivisionModel;
+import com.app.roktoDorkar.api.upazilaApi.ThanaAdapter;
+import com.app.roktoDorkar.api.upazilaApi.ThanaClick;
+import com.app.roktoDorkar.api.upazilaApi.ThanaModel;
 import com.app.roktoDorkar.databinding.ActivitySignUpBinding;
 import com.app.roktoDorkar.utilites.PreferenceManager;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -80,7 +83,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class SignUpActivity extends AppCompatActivity implements DivisionClick, DistrictClick {
+public class SignUpActivity extends AppCompatActivity implements DivisionClick, DistrictClick, ThanaClick {
     private DatePickerDialog datePickerDialog;
     private PreferenceManager preferenceManager;
     ActivitySignUpBinding binding;
@@ -89,20 +92,20 @@ public class SignUpActivity extends AppCompatActivity implements DivisionClick, 
     String[] donateBlood,bloodType;
     public static String val;
     private FirebaseAuth mAuth;
-    Integer division_id,district_id;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private Dialog dialog,dialog_dis;
-    private ArrayList<DivisionModel.Division> divisionModelArrayList;
-    private ArrayList<DivisionModel.Division> filterDivisionList;
 
+    Integer division_id,district_id;
+    private Dialog dialog,dialog_dis,dialog_thana;
+    private ArrayList<DivisionModel.Division> divisionModelArrayList;
     private ArrayList<DistrictModel.District> districtsModelArrayList;
-    private ArrayList<DistrictModel.District> filterDistrictList;
+    private ArrayList<ThanaModel.UpThana> upThanaArrayList;
     private DivisionAdapter adapter;
     private DistrictAdapter districtAdapter;
+    private ThanaAdapter thanaAdapter;
     private boolean passwordShowing = false;
-    private boolean isDivision=false;
-    private boolean isDistrict=false;
-    private boolean isUpazila=false;
+    private final boolean isDivision=false;
+    private final boolean isDistrict=false;
+    private final boolean isUpazila=false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -439,6 +442,15 @@ public class SignUpActivity extends AppCompatActivity implements DivisionClick, 
             }
 
         });
+        binding.editTextUp.setOnClickListener(v -> {
+            if (district_id==null)
+            {
+                showErrorToast("Select District");
+                return;
+            }else {
+                setThana(true,district_id);
+            }
+        });
         binding.passIcon.setOnClickListener(v -> {
             if (passwordShowing) {
                 passwordShowing = false;
@@ -454,7 +466,6 @@ public class SignUpActivity extends AppCompatActivity implements DivisionClick, 
         });
 
     }
-
     private void getDivision(Boolean isDivision) {
         dialog = new Dialog(this);
         dialog.setContentView(R.layout.upzila_list);
@@ -467,24 +478,6 @@ public class SignUpActivity extends AppCompatActivity implements DivisionClick, 
         if (isDivision){
             textView.setText("Select Division");
         }
-        /*EditText editText=dialog.findViewById(R.id.up_search);
-        editText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-              //  filter(s.toString());
-
-            }
-        });*/
         progressBar.setVisibility(View.VISIBLE);
         ImageView imageView=dialog.findViewById(R.id.up_close);
         imageView.setOnClickListener(v -> {
@@ -497,7 +490,6 @@ public class SignUpActivity extends AppCompatActivity implements DivisionClick, 
                 if (response.isSuccessful()){
                     divisionModelArrayList=new ArrayList<>();
                     divisionModelArrayList=response.body().getDivision();
-                    filterDivisionList=divisionModelArrayList;
                     for (DivisionModel.Division upazila:divisionModelArrayList)
                     {
                         recyclerView.setHasFixedSize(true);
@@ -522,28 +514,6 @@ public class SignUpActivity extends AppCompatActivity implements DivisionClick, 
         });
 
     }
-
-
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        // Check if user is signed in (non-null) and update UI accordingly.
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-        if(currentUser != null){
-           // reload();
-        }
-    }
-
-    @Override
-    public void onDivisionItemClick(int position) {
-         binding.editTextDiv.setText(divisionModelArrayList.get(position).getName());
-        division_id=divisionModelArrayList.get(position).getId();
-         dialog.cancel();
-         showSuccessToast(division_id.toString());
-
-    }
-
     private void setDistrict(Boolean isDistrict,Integer division_id) {
         dialog_dis = new Dialog(this);
         dialog_dis.setContentView(R.layout.upzila_list);
@@ -596,12 +566,80 @@ public class SignUpActivity extends AppCompatActivity implements DivisionClick, 
         });
 
     }
+    private void setThana(boolean isUpazila, Integer district_id) {
+        dialog_thana = new Dialog(this);
+        dialog_thana.setContentView(R.layout.upzila_list);
+        dialog_thana.getWindow().setLayout(800, 1500);
+        dialog_thana.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog_thana.show();
+        RecyclerView recyclerView = dialog_thana.findViewById(R.id.upzila_listview);
+        ProgressBar progressBar= dialog_thana.findViewById(R.id.progressbar_upzilla);
+        TextView textView=dialog_thana.findViewById(R.id.setName);
+        if (isUpazila){
+            textView.setText("Select Upazila/Thana");
+        }
+        progressBar.setVisibility(View.VISIBLE);
+        ImageView imageView=dialog_thana.findViewById(R.id.up_close);
+        imageView.setOnClickListener(v -> {
+            dialog_thana.cancel();
+        });
+        Call<ThanaModel> call=ApiInstance.getDivisionApiEndpoint().getThana(division_id,district_id);
+        call.enqueue(new Callback<ThanaModel>() {
+            @Override
+            public void onResponse(Call<ThanaModel> call, Response<ThanaModel> response) {
+                if (response.isSuccessful()){
+                    upThanaArrayList=new ArrayList<>();
+                    upThanaArrayList=response.body().getUpThana();
+                    for (ThanaModel.UpThana upThana:upThanaArrayList)
+                    {
+                        recyclerView.setHasFixedSize(true);
+                        recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+                        thanaAdapter=new ThanaAdapter(getApplicationContext(),upThanaArrayList);
+                        recyclerView.setAdapter(thanaAdapter);
+                        thanaAdapter.notifyDataSetChanged();
+                        thanaAdapter.setOnItemClckListener(SignUpActivity.this);
+                        progressBar.setVisibility(View.GONE);
+                    }
+                }
+            }
 
+            @Override
+            public void onFailure(Call<ThanaModel> call, Throwable t) {
+
+            }
+        });
+
+
+
+    }
+    @Override
+    public void onDivisionItemClick(int position) {
+        binding.editTextDiv.setText(divisionModelArrayList.get(position).getName());
+        division_id=divisionModelArrayList.get(position).getId();
+        dialog.cancel();
+    }
 
     @Override
     public void onDistrictItemClick(int position) {
         binding.editTextDis.setText(districtsModelArrayList.get(position).getName());
         district_id=districtsModelArrayList.get(position).getId();
         dialog_dis.cancel();
+    }
+
+    @Override
+    public void onThanaItemClick(int position) {
+        binding.editTextUp.setText(upThanaArrayList.get(position).getName());
+        dialog_thana.cancel();
+    }
+
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        // Check if user is signed in (non-null) and update UI accordingly.
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if(currentUser != null){
+            // reload();
+        }
     }
 }

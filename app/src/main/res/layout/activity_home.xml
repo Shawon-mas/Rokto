@@ -7,21 +7,23 @@
     tools:context=".view.HomeActivity">
 
     <LinearLayout
-        android:gravity="center_horizontal"
-        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="start"
             android:layout_marginHorizontal="@dimen/_10sdp"
-            android:layout_marginTop="@dimen/_40sdp"
+            android:layout_marginTop="@dimen/_20sdp"
             android:fontFamily="@font/heebo_black"
             android:text="@string/find_donor"
             android:textColor="@color/black"
             android:textSize="@dimen/_25ssp"
             android:textStyle="bold" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -29,28 +31,27 @@
             android:layout_marginHorizontal="@dimen/_10sdp"
             android:fontFamily="@font/heebo_regular"
             android:text="@string/search_blood"
-            android:textSize="@dimen/_12ssp"
-           />
+            android:textSize="@dimen/_12ssp" />
+
         <com.google.android.material.textfield.TextInputLayout
 
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/_10sdp"
-            android:hint="Select Blood Group"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
             android:layout_marginTop="@dimen/_10sdp"
+            android:hint="Select Blood Group"
 
             >
 
             <AutoCompleteTextView
-                android:fontFamily="@font/heebo_regular"
-                android:textColor="@color/black"
-                android:editable="false"
-                android:inputType="none"
                 android:id="@+id/homeBloodGroup"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-            </AutoCompleteTextView>
+                android:layout_height="wrap_content"
+                android:editable="false"
+                android:fontFamily="@font/heebo_regular"
+                android:inputType="none"
+                android:textColor="@color/black"></AutoCompleteTextView>
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -59,52 +60,38 @@
             android:layout_height="wrap_content"
             android:layout_gravity="start"
             android:layout_marginHorizontal="@dimen/_10sdp"
+            android:layout_marginTop="@dimen/_10sdp"
             android:fontFamily="@font/heebo_regular"
             android:text="@string/location"
-            android:textSize="@dimen/_12ssp"
-            android:layout_marginTop="@dimen/_10sdp"
-            />
-        <TextView
-            android:drawableEnd="@drawable/drop_down"
+            android:textSize="@dimen/_12ssp" />
 
-            android:layout_marginHorizontal="@dimen/_10sdp"
-            android:gravity="center_vertical"
-            android:id="@+id/location"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/_45ssp"
-            android:layout_marginTop="@dimen/_10sdp"
-            android:background="@drawable/inuput_bg"
-            android:fontFamily="@font/heebo_regular"
-            android:hint="@string/your_upazila"
-            android:importantForAutofill="no"
-            android:inputType="none"
-            android:maxLines="1"
-            android:paddingStart="@dimen/_16sdp"
-            android:paddingEnd="@dimen/_16sdp"
-            android:textColor="#000"
-            android:textSize="@dimen/_13ssp" />
 
         <com.google.android.material.progressindicator.CircularProgressIndicator
             android:id="@+id/homeIndicator"
-            android:visibility="gone"
-            android:indeterminate="true"
-            android:layout_marginTop="@dimen/_15sdp"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_15sdp"
+            android:indeterminate="true"
+            android:visibility="gone" />
+
+        <include
+            android:id="@+id/includeLocation"
+            layout="@layout/user_location" />
+
         <com.google.android.material.button.MaterialButton
-            android:layout_marginTop="@dimen/_50sdp"
-            android:layout_marginHorizontal="@dimen/_10sdp"
             android:id="@+id/button"
-            android:backgroundTint="@color/main"
-            app:cornerRadius="@dimen/_10sdp"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_50sdp"
-            android:text="Search Donor"
-            android:textColor="@color/white"
+            android:layout_below="@id/spinnerdonateBlood"
+            android:layout_marginHorizontal="@dimen/_10sdp"
+            android:layout_marginTop="@dimen/_50sdp"
+            android:backgroundTint="@color/main"
             android:fontFamily="@font/heebo_regular"
-            android:textSize="@dimen/_14ssp"
+            android:text="Search Donor"
             android:textAllCaps="false"
-            android:layout_below="@id/spinnerdonateBlood"/>
+            android:textColor="@color/white"
+            android:textSize="@dimen/_14ssp"
+            app:cornerRadius="@dimen/_10sdp" />
 
 
     </LinearLayout>

@@ -1,16 +1,20 @@
 package com.app.roktoDorkar.view.bottomViewActivites;
 
+import static com.app.roktoDorkar.utilites.Constants.KEY_BLOODTYPE;
 import static com.app.roktoDorkar.utilites.Constants.KEY_COLLECTION_USERS;
 import static com.app.roktoDorkar.utilites.Constants.KEY_FCM_TOKEN;
 import static com.app.roktoDorkar.utilites.Constants.KEY_IMAGE_URI;
 import static com.app.roktoDorkar.utilites.Constants.KEY_NAME;
 import static com.app.roktoDorkar.utilites.Constants.KEY_NUMBER;
+import static com.app.roktoDorkar.utilites.Constants.KEY_REQBLOOD;
+import static com.app.roktoDorkar.utilites.Constants.KEY_REQUPTHANA;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
@@ -19,17 +23,24 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.app.roktoDorkar.R;
 import com.app.roktoDorkar.api.upazilaApi.ApiInstance;
+import com.app.roktoDorkar.api.upazilaApi.DistrictAdapter;
+import com.app.roktoDorkar.api.upazilaApi.DistrictClick;
 import com.app.roktoDorkar.api.upazilaApi.DistrictModel;
 import com.app.roktoDorkar.api.upazilaApi.DivisionClick;
 import com.app.roktoDorkar.api.upazilaApi.DivisionAdapter;
 import com.app.roktoDorkar.api.upazilaApi.DivisionModel;
+import com.app.roktoDorkar.api.upazilaApi.ThanaAdapter;
+import com.app.roktoDorkar.api.upazilaApi.ThanaClick;
+import com.app.roktoDorkar.api.upazilaApi.ThanaModel;
 import com.app.roktoDorkar.databinding.ActivityBloodReqBinding;
 import com.app.roktoDorkar.model.DateValidatorWeekdays;
 import com.app.roktoDorkar.utilites.PreferenceManager;
@@ -40,6 +51,9 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.datepicker.CalendarConstraints;
+import com.google.android.material.datepicker.CompositeDateValidator;
+import com.google.android.material.datepicker.DateValidatorPointBackward;
+import com.google.android.material.datepicker.DateValidatorPointForward;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 import com.google.android.material.timepicker.MaterialTimePicker;
@@ -52,6 +66,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TimeZone;
@@ -61,7 +76,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class BloodReqActivity extends AppCompatActivity implements DivisionClick {
+public class BloodReqActivity extends AppCompatActivity implements DivisionClick, DistrictClick, ThanaClick {
     private PreferenceManager preferenceManager;
     private ActivityBloodReqBinding binding;
     private MaterialDatePicker materialDatePicker;
@@ -72,11 +87,19 @@ public class BloodReqActivity extends AppCompatActivity implements DivisionClick
     @TimeFormat private int clockFormat;
     private String request_status="not_accept";
     DocumentReference ref = db.collection("BloodRequest").document();
-    Dialog dialog;
-    private ArrayList<DivisionModel.Division> upzilaModelArrayList;
-    private ArrayList<DivisionModel.Division> filterUpList;
-    private ArrayList<DistrictModel.District> disDivModelArrayList;
+    Integer division_id,district_id;
+    private Dialog dialog,dialog_dis,dialog_thana;
+    private ArrayList<DivisionModel.Division> divisionModelArrayList;
+    private ArrayList<DistrictModel.District> districtsModelArrayList;
+    private ArrayList<ThanaModel.UpThana> upThanaArrayList;
     private DivisionAdapter adapter;
+    private DistrictAdapter districtAdapter;
+    private ThanaAdapter thanaAdapter;
+    private boolean passwordShowing = false;
+    private final boolean isDivision=false;
+    private final boolean isDistrict=false;
+    private final boolean isUpazila=false;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,6 +107,7 @@ public class BloodReqActivity extends AppCompatActivity implements DivisionClick
         binding = ActivityBloodReqBinding.inflate(getLayoutInflater());
         preferenceManager=new PreferenceManager(getApplicationContext());
         setContentView(binding.getRoot());
+        selectDate();
         getBloodType();
         getBloodAmount();
         getPatientGender();
@@ -103,6 +127,8 @@ public class BloodReqActivity extends AppCompatActivity implements DivisionClick
     }
 
     private void initViews() {
+
+
         clockFormat = TimeFormat.CLOCK_12H;
         binding.requestMakeButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -136,10 +162,18 @@ public class BloodReqActivity extends AppCompatActivity implements DivisionClick
         }else if (binding.reqTime.getText().toString().isEmpty()) {
             showErrorToast("Select  Time");
             return false;
-        }else if (binding.reqUpazila.getText().toString().isEmpty()) {
-            showErrorToast("Select  Upazila");
+        }else if (binding.includeBloodReq.editTextDiv.getText().toString().isEmpty()) {
+            showErrorToast("Select  division");
             return false;
-        }else if (binding.reqNumber.getText().toString().isEmpty()) {
+        }else if (binding.includeBloodReq.editTextDis.getText().toString().isEmpty()) {
+            showErrorToast("Select  district");
+            return false;
+        }else if (binding.includeBloodReq.editTextUp.getText().toString().isEmpty()) {
+            showErrorToast("Select  upazila/thana");
+            return false;
+        }
+
+        else if (binding.reqNumber.getText().toString().isEmpty()) {
             showErrorToast("Enter phone number");
             return false;
         }else if (binding.reqLocation.getText().toString().isEmpty()) {
@@ -151,8 +185,10 @@ public class BloodReqActivity extends AppCompatActivity implements DivisionClick
         }else if (binding.reqBloodPatientType.getText().toString().isEmpty()) {
             showErrorToast("Select patient type");
             return false;
+        }else if (Integer.parseInt(binding.gift.getText().toString())<1000) {
+            showErrorToast("Gift Amount will be below 1000");
+            return false;
         }
-
         else if (binding.description.getText().toString().isEmpty()) {
             showErrorToast("Write some details");
             return false;
@@ -167,11 +203,11 @@ public class BloodReqActivity extends AppCompatActivity implements DivisionClick
 
     private void submitRequest()
     {
-        //type = binding.reqBloodType.getSelectedItem().toString();
+
 
         db.collection(KEY_COLLECTION_USERS)
                 .whereEqualTo("bloodType",type )
-                .whereEqualTo("upazila", binding.reqUpazila.getText().toString())
+                .whereEqualTo("upazila", binding.includeBloodReq.editTextUp.getText().toString())
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -218,7 +254,9 @@ public class BloodReqActivity extends AppCompatActivity implements DivisionClick
         requestInfo.put("senderPatientType",patientType);
         requestInfo.put("senderRequestForDate",binding.reqDate.getText().toString());
         requestInfo.put("senderRequestForTime",binding.reqTime.getText().toString());
-        requestInfo.put("senderRequestUpazila",binding.reqUpazila.getText().toString());
+        requestInfo.put("senderRequestUpazila",binding.includeBloodReq.editTextUp.getText().toString());
+        requestInfo.put("senderRequestDivision",binding.includeBloodReq.editTextDiv.getText().toString());
+        requestInfo.put("senderRequestDistrict",binding.includeBloodReq.editTextDis.getText().toString());
         requestInfo.put("senderPhoneNumber",binding.reqNumber.getText().toString());
         requestInfo.put("senderRequestLocation",binding.reqLocation.getText().toString());
         requestInfo.put("senderGiftAmount",binding.gift.getText().toString());
@@ -250,7 +288,7 @@ public class BloodReqActivity extends AppCompatActivity implements DivisionClick
         myRequestInfo.put("senderPatientType",patientType);
         myRequestInfo.put("senderRequestForDate",binding.reqDate.getText().toString());
         myRequestInfo.put("senderRequestForTime",binding.reqTime.getText().toString());
-        myRequestInfo.put("senderRequestUpazila",binding.reqUpazila.getText().toString());
+        myRequestInfo.put("senderRequestUpazila",binding.includeBloodReq.editTextUp.getText().toString());
         myRequestInfo.put("senderPhoneNumber",binding.reqNumber.getText().toString());
         myRequestInfo.put("senderRequestLocation",binding.reqLocation.getText().toString());
         myRequestInfo.put("senderGiftAmount",binding.gift.getText().toString());
@@ -266,6 +304,8 @@ public class BloodReqActivity extends AppCompatActivity implements DivisionClick
             @Override
             public void onSuccess(Void unused)
             {
+                preferenceManager.putString(KEY_REQBLOOD,binding.reqBloodGroup.getText().toString());
+                preferenceManager.putString(KEY_REQUPTHANA,binding.includeBloodReq.editTextUp.getText().toString());
               showSuccessToast("Request Sent");
               binding.bottomNavBloodReq.show(2,true);
 
@@ -276,21 +316,139 @@ public class BloodReqActivity extends AppCompatActivity implements DivisionClick
     }
 
     private void clickListener() {
-        selectDate();
+
+        binding.includeBloodReq.editTextDiv.setOnClickListener(v -> {
+            getDivision(true);
+        });
+        binding.includeBloodReq.editTextDis.setOnClickListener(v -> {
+            if (division_id==null)
+            {
+                showErrorToast("Select Division");
+                return;
+            }else {
+                setDistrict(true,division_id);
+            }
+        });
+        binding.includeBloodReq.editTextUp.setOnClickListener(v -> {
+            if (district_id==null)
+            {
+                showErrorToast("Select District");
+                return;
+            }else {
+                setThana(true,district_id);
+            }
+        });
+
         binding.reqTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 selectTime();
             }
         });
-      binding.reqUpazila.setOnClickListener(v -> {
-          getUpazila();
-      });
+
 
 
     }
 
-    private void getUpazila() {
+    private void setThana(boolean isUpazila, Integer district_id) {
+        dialog_thana = new Dialog(this);
+        dialog_thana.setContentView(R.layout.upzila_list);
+        dialog_thana.getWindow().setLayout(800, 1500);
+        dialog_thana.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog_thana.show();
+        RecyclerView recyclerView = dialog_thana.findViewById(R.id.upzila_listview);
+        ProgressBar progressBar= dialog_thana.findViewById(R.id.progressbar_upzilla);
+        TextView textView=dialog_thana.findViewById(R.id.setName);
+        if (isUpazila){
+            textView.setText("Select Upazila/Thana");
+        }
+        progressBar.setVisibility(View.VISIBLE);
+        ImageView imageView=dialog_thana.findViewById(R.id.up_close);
+        imageView.setOnClickListener(v -> {
+            dialog_thana.cancel();
+        });
+        Call<ThanaModel> call=ApiInstance.getDivisionApiEndpoint().getThana(division_id,district_id);
+        call.enqueue(new Callback<ThanaModel>() {
+            @Override
+            public void onResponse(Call<ThanaModel> call, Response<ThanaModel> response) {
+                if (response.isSuccessful()){
+                    upThanaArrayList=new ArrayList<>();
+                    upThanaArrayList=response.body().getUpThana();
+                    for (ThanaModel.UpThana upThana:upThanaArrayList)
+                    {
+                        recyclerView.setHasFixedSize(true);
+                        recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+                        thanaAdapter=new ThanaAdapter(getApplicationContext(),upThanaArrayList);
+                        recyclerView.setAdapter(thanaAdapter);
+                        thanaAdapter.notifyDataSetChanged();
+                        thanaAdapter.setOnItemClckListener(BloodReqActivity.this);
+                        progressBar.setVisibility(View.GONE);
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ThanaModel> call, Throwable t) {
+
+            }
+        });
+
+    }
+
+    private void setDistrict(boolean isDistrict, Integer division_id) {
+        dialog_dis = new Dialog(this);
+        dialog_dis.setContentView(R.layout.upzila_list);
+        dialog_dis.getWindow().setLayout(800, 1500);
+        dialog_dis.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog_dis.show();
+        RecyclerView recyclerView = dialog_dis.findViewById(R.id.upzila_listview);
+        ProgressBar progressBar= dialog_dis.findViewById(R.id.progressbar_upzilla);
+        TextView textView=dialog_dis.findViewById(R.id.setName);
+        if (isDistrict){
+            textView.setText("Select District");
+        }
+        progressBar.setVisibility(View.VISIBLE);
+        ImageView imageView=dialog_dis.findViewById(R.id.up_close);
+        imageView.setOnClickListener(v -> {
+            dialog_dis.cancel();
+        });
+
+        Call<DistrictModel> call=ApiInstance.getDivisionApiEndpoint().getDistrict(division_id);
+        call.enqueue(new Callback<DistrictModel>() {
+            @Override
+            public void onResponse(Call<DistrictModel> call, Response<DistrictModel> response) {
+                if (response.isSuccessful())
+                {
+                    districtsModelArrayList=new ArrayList<>();
+                    districtsModelArrayList=response.body().getDistrict();
+
+                    for (DistrictModel.District data:districtsModelArrayList)
+                    {
+                        recyclerView.setHasFixedSize(true);
+                        recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+                        districtAdapter=new DistrictAdapter(getApplicationContext(),districtsModelArrayList);
+                        recyclerView.setAdapter(districtAdapter);
+                        districtAdapter.notifyDataSetChanged();
+                        districtAdapter.setOnItemClckListener(BloodReqActivity.this);
+                        progressBar.setVisibility(View.GONE);
+
+
+                    }
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<DistrictModel> call, Throwable t)
+            {
+                showErrorToast("Something Went Wrong");
+
+            }
+        });
+
+    }
+
+    private void getDivision(boolean isDivision) {
         dialog = new Dialog(this);
         dialog.setContentView(R.layout.upzila_list);
         dialog.getWindow().setLayout(800, 1500);
@@ -298,7 +456,10 @@ public class BloodReqActivity extends AppCompatActivity implements DivisionClick
         dialog.show();
         RecyclerView recyclerView = dialog.findViewById(R.id.upzila_listview);
         ProgressBar progressBar= dialog.findViewById(R.id.progressbar_upzilla);
-
+        TextView textView=dialog.findViewById(R.id.setName);
+        if (isDivision){
+            textView.setText("Select Division");
+        }
         progressBar.setVisibility(View.VISIBLE);
         ImageView imageView=dialog.findViewById(R.id.up_close);
         imageView.setOnClickListener(v -> {
@@ -309,14 +470,13 @@ public class BloodReqActivity extends AppCompatActivity implements DivisionClick
             @Override
             public void onResponse(Call<DivisionModel> call, Response<DivisionModel> response) {
                 if (response.isSuccessful()){
-                    upzilaModelArrayList=new ArrayList<>();
-                    upzilaModelArrayList=response.body().getDivision();
-                    filterUpList=upzilaModelArrayList;
-                    for (DivisionModel.Division upazila:upzilaModelArrayList)
+                    divisionModelArrayList=new ArrayList<>();
+                    divisionModelArrayList=response.body().getDivision();
+                    for (DivisionModel.Division upazila:divisionModelArrayList)
                     {
                         recyclerView.setHasFixedSize(true);
                         recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
-                        adapter=new DivisionAdapter(getApplicationContext(),upzilaModelArrayList);
+                        adapter=new DivisionAdapter(getApplicationContext(),divisionModelArrayList);
                         recyclerView.setAdapter(adapter);
                         adapter.notifyDataSetChanged();
                         adapter.setOnItemClckListener(BloodReqActivity.this);
@@ -329,27 +489,14 @@ public class BloodReqActivity extends AppCompatActivity implements DivisionClick
 
             @Override
             public void onFailure(Call<DivisionModel> call, Throwable t) {
-
+                showErrorToast("Something Went Wrong");
                 dialog.cancel();
 
             }
         });
-
-
     }
 
-    private void filter(String toString) {
-        filterUpList=new ArrayList<>();
-        for (DivisionModel.Division division:upzilaModelArrayList)
-        {
-            String search=division.getName();
-            if (search.toLowerCase().contains(toString.toLowerCase()))
-            {
-                filterUpList.add(division);
-            }
-        }
-        adapter.filterListUp(filterUpList);
-    }
+
     private void getBloodType()
     {
         String[] bloodGroup=new String[] {"A+","A-","B+","B-","O+","O-","AB+","AB-"};
@@ -414,10 +561,7 @@ public class BloodReqActivity extends AppCompatActivity implements DivisionClick
     }
 
     private void selectTime() {
-        /*Calendar calendar = Calendar.getInstance();
-        int hour = calendar.get(Calendar.HOUR_OF_DAY);
-        int minute = calendar.get(Calendar.MINUTE);
-        String time = String.format(Locale.getDefault(), "%02d:%02d", hour, minute);*/
+
         TimePickerDialog timePickerDialog=new TimePickerDialog(
                 BloodReqActivity.this, new TimePickerDialog.OnTimeSetListener() {
             @Override
@@ -438,14 +582,32 @@ public class BloodReqActivity extends AppCompatActivity implements DivisionClick
 
     }
 
-    private void selectDate() {
-        Calendar calendar =Calendar.getInstance(TimeZone.getTimeZone("UTC"));
-        calendar.clear();
-        CalendarConstraints.Builder constraintsBuilder = new CalendarConstraints.Builder();
-        constraintsBuilder.setValidator(new DateValidatorWeekdays());
-        long today=MaterialDatePicker.todayInUtcMilliseconds();
 
-        MaterialDatePicker.Builder builder=MaterialDatePicker.Builder.datePicker();
+
+
+    private void selectDate() {
+
+
+        Calendar calendar =Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+        calendar.add(Calendar.DAY_OF_MONTH,6);
+        Date res=calendar.getTime();
+        CalendarConstraints.Builder constraintsBuilder = new CalendarConstraints.Builder();
+
+        MaterialDatePicker.Builder<Long> builder=MaterialDatePicker.Builder.datePicker();
+        long today=MaterialDatePicker.todayInUtcMilliseconds();
+        CalendarConstraints.DateValidator pastDateValidator = DateValidatorPointForward.from(today);
+        CalendarConstraints.DateValidator futureDateValidator = DateValidatorPointBackward.before(res.getTime());
+        ArrayList<CalendarConstraints.DateValidator> listValidators =
+                new ArrayList<CalendarConstraints.DateValidator>();
+        listValidators.add(pastDateValidator);
+        listValidators.add(futureDateValidator);
+
+        CalendarConstraints.DateValidator validators = CompositeDateValidator.allOf(listValidators);
+        constraintsBuilder.setValidator(validators);
+
+        builder.setCalendarConstraints(constraintsBuilder.build());
+
+
         builder.setTitleText("SELECT A DATE");
         builder.setTheme(R.style.MaterialCalendarTheme);
         builder.setSelection(today);
@@ -454,6 +616,7 @@ public class BloodReqActivity extends AppCompatActivity implements DivisionClick
         binding.reqDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 materialDatePicker.show(getSupportFragmentManager(),"Date_Picke");
 
             }
@@ -520,11 +683,27 @@ public class BloodReqActivity extends AppCompatActivity implements DivisionClick
     public void onBackPressed() {
         binding.bottomNavBloodReq.show(1,true);
         super.onBackPressed();
+        finish();
     }
 
     @Override
     public void onDivisionItemClick(int position) {
-        binding.reqUpazila.setText(filterUpList.get(position).getName());
-        dialog.dismiss();
+        binding.includeBloodReq.editTextDiv.setText(divisionModelArrayList.get(position).getName());
+        division_id=divisionModelArrayList.get(position).getId();
+        dialog.cancel();
     }
+
+    @Override
+    public void onDistrictItemClick(int position) {
+        binding.includeBloodReq.editTextDis.setText(districtsModelArrayList.get(position).getName());
+        district_id=districtsModelArrayList.get(position).getId();
+        dialog_dis.cancel();
+    }
+
+    @Override
+    public void onThanaItemClick(int position) {
+        binding.includeBloodReq.editTextUp.setText(upThanaArrayList.get(position).getName());
+        dialog_thana.cancel();
+    }
+
 }

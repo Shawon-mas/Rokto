@@ -14,4 +14,8 @@ public interface DivisionApiEndPoint {
   @POST("location/division")
   Call<DistrictModel> getDistrict(@Field("division") Integer id);
 
+  @FormUrlEncoded
+  @POST("location/division")
+  Call<ThanaModel> getThana(@Field("division") Integer id,@Field("district") Integer district_id);
+
 }

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_marginHorizontal="@dimen/_10sdp"
+    android:layout_height="wrap_content">
+    <TextView
+        android:gravity="center_vertical"
+        android:id="@+id/editText_div"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_45ssp"
+        android:layout_marginTop="@dimen/_16sdp"
+        android:background="@drawable/inuput_bg"
+        android:fontFamily="@font/heebo_regular"
+        android:hint="@string/select_division"
+        android:maxLines="1"
+        android:paddingStart="@dimen/_16sdp"
+        android:paddingEnd="@dimen/_16sdp"
+        android:textColor="#000"
+        android:textSize="@dimen/_13ssp"
+        app:drawableEndCompat="@drawable/drop_down" />
+
+    <TextView
+        android:gravity="center_vertical"
+        android:id="@+id/editText_dis"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_45ssp"
+        android:layout_marginTop="@dimen/_16sdp"
+        android:background="@drawable/inuput_bg"
+        android:fontFamily="@font/heebo_regular"
+        android:hint="@string/select_district"
+        android:maxLines="1"
+        android:paddingStart="@dimen/_16sdp"
+        android:paddingEnd="@dimen/_16sdp"
+        android:textColor="#000"
+        android:textSize="@dimen/_13ssp"
+        app:drawableEndCompat="@drawable/drop_down" />
+
+    <TextView
+        android:gravity="center_vertical"
+        android:id="@+id/editText_up"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_45ssp"
+        android:layout_marginTop="@dimen/_16sdp"
+        android:background="@drawable/inuput_bg"
+        android:fontFamily="@font/heebo_regular"
+        android:hint="@string/select_Upazila"
+        android:maxLines="1"
+        android:paddingStart="@dimen/_16sdp"
+        android:paddingEnd="@dimen/_16sdp"
+        android:textColor="#000"
+        android:textSize="@dimen/_13ssp"
+        app:drawableEndCompat="@drawable/drop_down" />
+
+</LinearLayout>

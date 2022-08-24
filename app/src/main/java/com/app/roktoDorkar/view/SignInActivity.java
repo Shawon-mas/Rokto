@@ -143,14 +143,12 @@ public class SignInActivity extends AppCompatActivity {
                                     public void onComplete(@NonNull Task<AuthResult> task) {
                                         if (task.isSuccessful()) {
 
-                                            // Sign in success, update UI with the signed-in user's information
-                                            Log.d("message", "signInWithEmail:success");
                                             FirebaseUser user = mAuth.getCurrentUser();
                                             if (user.isEmailVerified())
                                             {
 
                                                 startActivity(new Intent(getApplicationContext(), HomeActivity.class));
-                                                getUserInfo();
+
                                             }else {
                                                 loading(false);
                                                 user.sendEmailVerification();
@@ -162,7 +160,6 @@ public class SignInActivity extends AppCompatActivity {
                                         }
                                         else {
                                             loading(false);
-
                                             Log.w("message", "signInWithEmail:failure", task.getException());
                                             Toast.makeText(SignInActivity.this, "Wrong credentials",
                                                     Toast.LENGTH_SHORT).show();
@@ -185,9 +182,6 @@ public class SignInActivity extends AppCompatActivity {
 
     }
 
-    private void getUserInfo() {
-
-    }
 
     @Override
     protected void onStart() {

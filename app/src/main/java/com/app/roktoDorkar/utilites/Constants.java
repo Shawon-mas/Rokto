@@ -15,6 +15,8 @@ public class Constants {
     public static final String KEY_UPZILA="upazila";
     public static final String KEY_ABOUT="about";
     public static final String KEY_BLOODTYPE="bloodType";
+    public static final String KEY_REQBLOOD="reqbloodType";
+    public static final String KEY_REQUPTHANA="requpthana";
 
     public static final String KEY_IMAGE_URI="imageUri";
     public static final String KEY_IS_SIGNED_IN="isSignedId";

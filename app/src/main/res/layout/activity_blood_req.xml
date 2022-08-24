@@ -32,7 +32,6 @@
                 android:hint="Select Blood Group"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
                 android:layout_marginTop="@dimen/_10sdp"
-
                 >
 
                 <AutoCompleteTextView
@@ -68,9 +67,9 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <LinearLayout
+                android:layout_marginTop="@dimen/_10sdp"
                 android:layout_marginHorizontal="@dimen/_10sdp"
                 android:weightSum="2"
-                android:gravity="center_vertical"
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -85,7 +84,6 @@
                     android:paddingEnd="@dimen/_16sdp"
                     android:background="@drawable/inuput_bg"
                     android:hint="Date"
-                    android:layout_marginTop="@dimen/_16sdp"
                     android:layout_weight="1"
                     android:layout_width="0dp"
                     android:layout_height="@dimen/_46sdp"
@@ -103,28 +101,14 @@
                     android:paddingEnd="@dimen/_16sdp"
                     android:background="@drawable/inuput_bg"
                     android:hint="Time"
-                    android:layout_marginTop="@dimen/_16sdp"
                     android:layout_weight="1"
                     android:layout_width="0dp"
                     android:layout_height="@dimen/_46sdp"
                     />
             </LinearLayout>
-            <TextView
-                android:drawableEnd="@drawable/drop_down"
-                android:layout_marginHorizontal="@dimen/_10sdp"
-                android:gravity="center_vertical"
-                android:id="@+id/req_upazila"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/_45ssp"
-                android:layout_marginTop="@dimen/_20sdp"
-                android:background="@drawable/inuput_bg"
-                android:fontFamily="@font/heebo_regular"
-                android:hint="@string/upazila_needs"
-                android:maxLines="1"
-                android:paddingStart="@dimen/_16sdp"
-                android:paddingEnd="@dimen/_16sdp"
-                android:textColor="#000"
-                android:textSize="@dimen/_13ssp" />
+            <include
+                android:id="@+id/includeBloodReq"
+                layout="@layout/user_location"/>
             <EditText
                 android:maxLength="11"
                 android:layout_marginHorizontal="@dimen/_10sdp"
@@ -132,7 +116,7 @@
                 android:id="@+id/req_number"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_45ssp"
-                android:layout_marginTop="@dimen/_20sdp"
+                android:layout_marginTop="@dimen/_10sdp"
                 android:background="@drawable/inuput_bg"
                 android:fontFamily="@font/heebo_regular"
                 android:hint="Enter your phone number"
@@ -150,7 +134,7 @@
                 android:id="@+id/req_location"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_45ssp"
-                android:layout_marginTop="@dimen/_20sdp"
+                android:layout_marginTop="@dimen/_10sdp"
                 android:background="@drawable/inuput_bg"
                 android:fontFamily="@font/heebo_regular"
                 android:hint="Which hospital need blood ?"
@@ -213,12 +197,13 @@
                 android:id="@+id/gift"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_45ssp"
-                android:layout_marginTop="@dimen/_20sdp"
+                android:layout_marginTop="@dimen/_10sdp"
                 android:background="@drawable/inuput_bg"
                 android:fontFamily="@font/heebo_regular"
                 android:hint="If you want enter gift amount (৳)"
                 android:imeOptions="actionNext"
                 android:importantForAutofill="no"
+                android:inputType="number"
                 android:maxLines="1"
                 android:paddingStart="@dimen/_16sdp"
                 android:paddingEnd="@dimen/_16sdp"
@@ -230,7 +215,7 @@
                 android:id="@+id/description"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_100ssp"
-                android:layout_marginTop="@dimen/_20sdp"
+                android:layout_marginTop="@dimen/_10sdp"
                 android:background="@drawable/inuput_bg"
                 android:fontFamily="@font/heebo_regular"
                 android:hint="Description"
@@ -244,14 +229,13 @@
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
-
                 <com.google.android.material.button.MaterialButton
                     android:layout_marginBottom="@dimen/_50sdp"
                     android:layout_marginHorizontal="@dimen/_10sdp"
                     android:id="@+id/requestMake_button"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_50sdp"
-                    android:layout_marginTop="@dimen/_20sdp"
+                    android:layout_marginTop="@dimen/_10sdp"
                     android:backgroundTint="@color/main"
                     android:text="Make Request"
                     android:textColor="@color/white"

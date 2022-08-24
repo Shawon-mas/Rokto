@@ -111,13 +111,14 @@ public class DonarChatActivity extends BaseActivity {
          HashMap<String,Object> message=new HashMap<>();
          message.put(KEY_SENDER_ID,user.getUid());
          message.put(KEY_RECEIVER_ID,getIntent().getStringExtra("donar_uid"));
-         message.put(KEY_MESSAGE,binding.inputMessage.getText().toString());
+         message.put(KEY_MESSAGE,binding.inputMessage.getText().toString().trim());
          message.put(KEY_TIMESTAMP,new Date());
          database.collection(KEY_COLLECTION_CHAT).add(message);
 
          FCMSend.Builder builder=new FCMSend.Builder(getIntent().getStringExtra("donar_token"))
                  .setTitle("Message from: "+ preferenceManager.getString(KEY_NAME))
-                 .setBody(binding.inputMessage.getText().toString());
+                 .setBody(binding.inputMessage.getText().toString())
+                 .setClickAction("com.app.roktoDorkar");
 
          builder.send();
 

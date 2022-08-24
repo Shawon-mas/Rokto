@@ -149,8 +149,7 @@ public class AccountActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         binding.bottomNavAccount.show(1,true);
-        finish();
         super.onBackPressed();
-
+        finish();
     }
 }

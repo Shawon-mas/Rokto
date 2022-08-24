@@ -1,5 +1,8 @@
 package com.app.roktoDorkar.view.RequestFrag.adapter;
 
+import static com.app.roktoDorkar.utilites.Constants.KEY_REQBLOOD;
+import static com.app.roktoDorkar.utilites.Constants.KEY_REQUPTHANA;
+
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.app.roktoDorkar.R;
+import com.app.roktoDorkar.utilites.PreferenceManager;
 import com.app.roktoDorkar.view.RequestFrag.model.ReceviedListModel;
 import com.app.roktoDorkar.view.RequestFrag.model.UserLister;
 import com.google.android.material.button.MaterialButton;
@@ -23,6 +27,7 @@ public class SentRequestAdapter extends RecyclerView.Adapter<SentRequestAdapter.
     private ArrayList<ReceviedListModel> receviedListModelArrayList;
     private final UserLister userLister;
     private String type;
+    private PreferenceManager preferenceManager;
 
 
 
@@ -42,9 +47,13 @@ public class SentRequestAdapter extends RecyclerView.Adapter<SentRequestAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull sMyViewHolder holder, int position) {
+        preferenceManager=new PreferenceManager(context.getApplicationContext());
         ReceviedListModel receviedListModel=receviedListModelArrayList.get(position);
         type= receviedListModel.getRequestStatus();
 
+        holder.textViewBloodgroup.setText(preferenceManager.getString(KEY_REQBLOOD));
+        holder.textViewLocation.setText(preferenceManager.getString(KEY_REQUPTHANA));
+        holder.textViewReqTime.setText(receviedListModel.getSenderRequestForDate());
 
 
         if (type.equals("accept"))
@@ -54,10 +63,8 @@ public class SentRequestAdapter extends RecyclerView.Adapter<SentRequestAdapter.
 
             holder.materialButtonChat.setVisibility(View.VISIBLE);
             holder.materialButtonFriend.setVisibility(View.VISIBLE);
-
-            holder.textViewBloodgroup.setText(receviedListModel.getSenderRequiredBlood());
             holder.textViewDonarName.setText("Accepted by "+receviedListModel.getRequestReceiverName());
-            holder.textViewLocation.setText(receviedListModel.getSenderRequestUpazila());
+
 
 
         }else if (type.equals("not_accept")){
@@ -84,7 +91,7 @@ public class SentRequestAdapter extends RecyclerView.Adapter<SentRequestAdapter.
     }
 
     public class sMyViewHolder extends RecyclerView.ViewHolder{
-        TextView textViewBloodgroup,textViewDonarName,textViewLocation,textViewGiftAmount,textViewDesType;
+        TextView textViewBloodgroup,textViewDonarName,textViewLocation,textViewGiftAmount,textViewDesType,textViewReqTime;
         MaterialButton materialButtonAccept,materialButtonDecline,materialButtonChat,materialButtonFriend,materialButtonp;
         MaterialCardView materialCardView_received;
         ImageView imageView;
@@ -94,6 +101,7 @@ public class SentRequestAdapter extends RecyclerView.Adapter<SentRequestAdapter.
             textViewBloodgroup=itemView.findViewById(R.id.blood_group);
             textViewDonarName=itemView.findViewById(R.id.donar_name);
             textViewLocation=itemView.findViewById(R.id.locationDonar);
+            textViewReqTime=itemView.findViewById(R.id.dateNtime);
             materialButtonAccept=itemView.findViewById(R.id.accept);
             materialButtonDecline=itemView.findViewById(R.id.decline);
             materialButtonChat=itemView.findViewById(R.id.reqToChat);
