@@ -5,7 +5,7 @@
     <TextView
         android:id="@+id/upzila_item_textview"
         android:padding="10dp"
-        android:textColor="#000"
+        android:textColor="@color/black"
         android:fontFamily="@font/heebo_regular"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"

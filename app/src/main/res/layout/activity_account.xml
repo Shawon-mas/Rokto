@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     tools:context=".view.bottomViewActivites.AccountActivity">
 
 
@@ -35,6 +36,7 @@
            android:layout_height="wrap_content"
           >
            <com.google.android.material.card.MaterialCardView
+               app:cardBackgroundColor="@color/white"
                android:layout_marginHorizontal="@dimen/_10sdp"
                app:cardCornerRadius="@dimen/_10sdp"
                app:cardUseCompatPadding="true"
@@ -118,6 +120,7 @@
 
        </LinearLayout>
        <com.google.android.material.card.MaterialCardView
+           app:cardBackgroundColor="@color/white"
            android:layout_marginHorizontal="@dimen/_10sdp"
            app:cardCornerRadius="@dimen/_10sdp"
            app:cardUseCompatPadding="true"

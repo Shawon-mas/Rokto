@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     tools:context=".view.bottomViewActivites.BloodReqActivity">
 
     <androidx.core.widget.NestedScrollView
@@ -32,6 +33,12 @@
                 android:hint="Select Blood Group"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
                 android:layout_marginTop="@dimen/_10sdp"
+                android:background="@color/white"
+                app:boxBackgroundColor="@color/white"
+                app:boxStrokeColor="@color/main_black"
+                app:hintTextColor="@color/main_gray"
+                android:textColorHint="@color/main_gray"
+                app:endIconTint="@color/black"
                 >
 
                 <AutoCompleteTextView
@@ -52,6 +59,12 @@
                 android:hint="Select Required Blood Amount"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
                 android:layout_marginTop="@dimen/_10sdp"
+                android:background="@color/white"
+                app:boxBackgroundColor="@color/white"
+                app:boxStrokeColor="@color/main_black"
+                app:hintTextColor="@color/main_gray"
+                android:textColorHint="@color/main_gray"
+                app:endIconTint="@color/black"
                 >
 
                 <AutoCompleteTextView
@@ -84,12 +97,15 @@
                     android:paddingEnd="@dimen/_16sdp"
                     android:background="@drawable/inuput_bg"
                     android:hint="Date"
+                    android:textColorHint="@color/main_gray"
+                    android:textColor="@color/main_black"
                     android:layout_weight="1"
                     android:layout_width="0dp"
                     android:layout_height="@dimen/_46sdp"
                     />
                 <TextView
-
+                    android:textColorHint="@color/main_gray"
+                    android:textColor="@color/main_black"
                     android:id="@+id/req_time"
                     android:layout_marginLeft="@dimen/_10sdp"
                     android:drawableTint="@color/black"
@@ -144,7 +160,8 @@
                 android:maxLines="1"
                 android:paddingStart="@dimen/_16sdp"
                 android:paddingEnd="@dimen/_16sdp"
-                android:textColor="#000"
+                android:textColorHint="@color/main_gray"
+                android:textColor="@color/main_black"
                 android:textSize="@dimen/_13ssp" />
             <com.google.android.material.textfield.TextInputLayout
 
@@ -154,7 +171,12 @@
                 android:hint="Select Patient Gender"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
                 android:layout_marginTop="@dimen/_10sdp"
-
+                android:background="@color/white"
+                app:boxBackgroundColor="@color/white"
+                app:boxStrokeColor="@color/main_black"
+                app:hintTextColor="@color/main_gray"
+                android:textColorHint="@color/main_gray"
+                app:endIconTint="@color/black"
                 >
 
                 <AutoCompleteTextView
@@ -176,18 +198,22 @@
                 android:hint="Select Patient Type"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
                 android:layout_marginTop="@dimen/_10sdp"
-
+                android:background="@color/white"
+                app:boxBackgroundColor="@color/white"
+                app:boxStrokeColor="@color/main_black"
+                app:hintTextColor="@color/main_gray"
+                android:textColorHint="@color/main_gray"
+                app:endIconTint="@color/black"
                 >
 
                 <AutoCompleteTextView
-                    android:fontFamily="@font/heebo_regular"
-                    android:textColor="@color/black"
-                    android:editable="false"
-                    android:inputType="none"
                     android:id="@+id/reqBloodPatientType"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                </AutoCompleteTextView>
+                    android:layout_height="wrap_content"
+                    android:editable="false"
+                    android:fontFamily="@font/heebo_regular"
+                    android:inputType="none"
+                    android:textColor="@color/black" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -207,7 +233,8 @@
                 android:maxLines="1"
                 android:paddingStart="@dimen/_16sdp"
                 android:paddingEnd="@dimen/_16sdp"
-                android:textColor="#000"
+                android:textColorHint="@color/main_gray"
+                android:textColor="@color/main_black"
                 android:textSize="@dimen/_13ssp" />
             <EditText
                 android:layout_marginHorizontal="@dimen/_10sdp"
@@ -223,7 +250,8 @@
                 android:importantForAutofill="no"
                 android:paddingStart="@dimen/_16sdp"
                 android:paddingEnd="@dimen/_16sdp"
-                android:textColor="#000"
+                android:textColorHint="@color/main_gray"
+                android:textColor="@color/main_black"
                 android:textSize="@dimen/_13ssp" />
 
             <FrameLayout

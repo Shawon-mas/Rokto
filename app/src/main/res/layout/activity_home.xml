@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     tools:context=".view.HomeActivity">
 
     <LinearLayout
@@ -25,6 +26,7 @@
             android:textStyle="bold" />
 
         <TextView
+            android:textColor="@color/main_gray"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="start"
@@ -41,6 +43,12 @@
             android:layout_marginHorizontal="@dimen/_10sdp"
             android:layout_marginTop="@dimen/_10sdp"
             android:hint="Select Blood Group"
+            android:background="@color/white"
+            app:boxBackgroundColor="@color/white"
+            app:boxStrokeColor="@color/main_black"
+            app:hintTextColor="@color/main_gray"
+            android:textColorHint="@color/main_gray"
+            app:endIconTint="@color/black"
 
             >
 
@@ -51,7 +59,7 @@
                 android:editable="false"
                 android:fontFamily="@font/heebo_regular"
                 android:inputType="none"
-                android:textColor="@color/black"></AutoCompleteTextView>
+                android:textColor="@color/black" />
 
         </com.google.android.material.textfield.TextInputLayout>
 

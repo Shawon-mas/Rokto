@@ -17,7 +17,8 @@
         android:maxLines="1"
         android:paddingStart="@dimen/_16sdp"
         android:paddingEnd="@dimen/_16sdp"
-        android:textColor="#000"
+        android:textColor="@color/main_black"
+        android:textColorHint="@color/main_gray"
         android:textSize="@dimen/_13ssp"
         app:drawableEndCompat="@drawable/drop_down" />
 
@@ -33,7 +34,8 @@
         android:maxLines="1"
         android:paddingStart="@dimen/_16sdp"
         android:paddingEnd="@dimen/_16sdp"
-        android:textColor="#000"
+        android:textColor="@color/main_black"
+        android:textColorHint="@color/main_gray"
         android:textSize="@dimen/_13ssp"
         app:drawableEndCompat="@drawable/drop_down" />
 
@@ -49,7 +51,8 @@
         android:maxLines="1"
         android:paddingStart="@dimen/_16sdp"
         android:paddingEnd="@dimen/_16sdp"
-        android:textColor="#000"
+        android:textColor="@color/main_black"
+        android:textColorHint="@color/main_gray"
         android:textSize="@dimen/_13ssp"
         app:drawableEndCompat="@drawable/drop_down" />
 

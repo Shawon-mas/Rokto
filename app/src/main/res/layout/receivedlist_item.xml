@@ -5,6 +5,7 @@
     app:cardUseCompatPadding="true"
     android:id="@+id/receivedCard"
     app:cardCornerRadius="@dimen/_10sdp"
+    app:cardBackgroundColor="@color/white"
     android:layout_height="wrap_content">
     <RelativeLayout
         android:layout_gravity="center_horizontal"

@@ -4,105 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     tools:context=".view.bottomViewActivites.RequestActivity">
-      <!--<com.google.android.material.card.MaterialCardView
-          android:layout_width="match_parent"
-          android:layout_height="@dimen/_150sdp">
-          <RelativeLayout
-              android:layout_gravity="center_horizontal"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent">
-              <TextView
-                  android:id="@+id/blood_group"
-                  android:layout_marginHorizontal="@dimen/_10sdp"
-                  android:layout_marginVertical="@dimen/_10sdp"
-                  android:padding="@dimen/_5sdp"
-                  android:layout_width="wrap_content"
-                  android:layout_height="wrap_content"
-                  android:hint="A+"
-                  android:textColor="@color/main"
-                  android:background="#F4B4B4"
-                  android:textSize="@dimen/_14ssp"
-                  android:fontFamily="@font/heebo_medium"
-                  />
 
-              <TextView
-                  android:id="@+id/donar_name"
-                  android:layout_width="wrap_content"
-                  android:layout_height="wrap_content"
-                  android:layout_marginHorizontal="@dimen/_10sdp"
-                  android:layout_marginVertical="@dimen/_10sdp"
-                  android:layout_toRightOf="@id/blood_group"
-                  android:fontFamily="@font/heebo_medium"
-                  android:padding="@dimen/_5sdp"
-                  android:hint="David Liam"
-                  android:textColor="@color/black"
-                  android:textSize="@dimen/_16ssp" />
-              <TextView
-                  android:layout_toRightOf="@id/blood_group"
-                  android:layout_below="@id/donar_name"
-                  android:layout_marginHorizontal="@dimen/_10sdp"
-                  android:padding="@dimen/_5sdp"
-                  android:layout_width="wrap_content"
-                  android:layout_height="wrap_content"
-                  android:hint="Last Donate"
-                  android:textColor="@color/black"
-                  android:textSize="@dimen/_12ssp"
-                  android:fontFamily="@font/heebo_regular"
-                  android:id="@+id/lastDonateText"
-                  />
-
-              <TextView
-                  android:id="@+id/lastDonateDate"
-                  android:layout_width="wrap_content"
-                  android:layout_height="wrap_content"
-                  android:layout_below="@id/donar_name"
-                  android:layout_toRightOf="@id/lastDonateText"
-                  android:fontFamily="@font/heebo_regular"
-                  android:padding="@dimen/_5sdp"
-                  android:text="12/5/2022"
-                  android:textColor="@color/black"
-                  android:textSize="@dimen/_12ssp" />
-              <TextView
-                  android:layout_marginHorizontal="@dimen/_10sdp"
-                  android:id="@+id/locationText"
-                  android:layout_toRightOf="@id/blood_group"
-                  android:layout_below="@id/lastDonateText"
-                  android:padding="@dimen/_5sdp"
-                  android:layout_width="wrap_content"
-                  android:layout_height="wrap_content"
-                  android:text="Location"
-                  android:textColor="@color/black"
-                  android:textSize="@dimen/_12ssp"
-                  android:fontFamily="@font/heebo_regular"
-                  />
-
-              <TextView
-
-                  android:id="@+id/locationDonar"
-                  android:layout_width="wrap_content"
-                  android:layout_height="wrap_content"
-                  android:layout_below="@id/lastDonateText"
-                  android:layout_toRightOf="@id/locationText"
-                  android:fontFamily="@font/heebo_regular"
-                  android:padding="@dimen/_5sdp"
-                  android:hint="Lohagara"
-                  android:textColor="@color/black"
-                  android:textSize="@dimen/_12ssp" />
-              <com.google.android.material.button.MaterialButton
-                  android:id="@+id/acceptRequest"
-                  android:layout_width="wrap_content"
-                  android:layout_height="wrap_content"
-                  android:layout_below="@id/locationDonar"
-                  android:layout_toRightOf="@id/blood_group"
-                  android:layout_marginHorizontal="@dimen/_10sdp"
-                  android:text="Accept"
-                  android:textColor="@color/white"
-                  android:textAllCaps="false"
-                  android:backgroundTint="@color/main"/>
-
-          </RelativeLayout>
-      </com.google.android.material.card.MaterialCardView>-->
     <com.google.android.material.tabs.TabLayout
         android:layout_marginLeft="@dimen/_5sdp"
         android:layout_marginRight="@dimen/_5sdp"
@@ -111,13 +15,12 @@
         android:layout_height="50dp"
         android:id="@+id/tabLayout"
         app:tabMode="fixed"
-
         app:tabGravity="fill"
-        app:tabTextColor="#000000"
+        app:tabTextColor="@color/black"
         app:tabIndicatorGravity="stretch"
         app:tabSelectedTextColor="@color/main"
         app:tabIndicatorAnimationMode="elastic"
-        app:tabIndicatorColor="#F4B4B4"
+        app:tabIndicatorColor="@color/chatPrimary_bg"
         app:tabIndicator="@drawable/tab_indicator"/>
     <androidx.viewpager2.widget.ViewPager2
         android:layout_below="@id/tabLayout"
