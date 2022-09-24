@@ -63,7 +63,7 @@ private ActivityRequestBinding binding;
         binding.bottomNavRequest.add(new MeowBottomNavigation.Model(1,R.drawable.search_donar));
         binding.bottomNavRequest.add(new MeowBottomNavigation.Model(2,R.drawable.request));
         binding.bottomNavRequest.add(new MeowBottomNavigation.Model(3,R.drawable.add));
-        binding.bottomNavRequest.add(new MeowBottomNavigation.Model(4,R.drawable.history));
+        binding.bottomNavRequest.add(new MeowBottomNavigation.Model(4,R.drawable.group));
         binding.bottomNavRequest.add(new MeowBottomNavigation.Model(5,R.drawable.account));
         binding.bottomNavRequest.setOnShowListener(new MeowBottomNavigation.ShowListener() {
             @Override

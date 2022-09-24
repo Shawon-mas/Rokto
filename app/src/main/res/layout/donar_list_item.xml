@@ -55,8 +55,6 @@
             android:src="@drawable/chat" />
 
 
-
-
     </RelativeLayout>
 
 </com.google.android.material.card.MaterialCardView>

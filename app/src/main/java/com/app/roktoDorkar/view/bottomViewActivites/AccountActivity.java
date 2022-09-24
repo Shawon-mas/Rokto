@@ -3,11 +3,14 @@ package com.app.roktoDorkar.view.bottomViewActivites;
 import static com.app.roktoDorkar.utilites.Constants.KEY_ABOUT;
 import static com.app.roktoDorkar.utilites.Constants.KEY_BLOODTYPE;
 import static com.app.roktoDorkar.utilites.Constants.KEY_COLLECTION_USERS;
+import static com.app.roktoDorkar.utilites.Constants.KEY_DISTRICT;
+import static com.app.roktoDorkar.utilites.Constants.KEY_DIVISION;
 import static com.app.roktoDorkar.utilites.Constants.KEY_EMAIL;
 import static com.app.roktoDorkar.utilites.Constants.KEY_FCM_TOKEN;
 import static com.app.roktoDorkar.utilites.Constants.KEY_IMAGE_URI;
 import static com.app.roktoDorkar.utilites.Constants.KEY_NAME;
 import static com.app.roktoDorkar.utilites.Constants.KEY_NUMBER;
+import static com.app.roktoDorkar.utilites.Constants.KEY_UPZILA;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -52,11 +55,15 @@ public class AccountActivity extends AppCompatActivity {
     }
 
     private void initViews() {
+
         binding.nameProfile.setText(preferenceManager.getString(KEY_NAME));
         binding.bloodProfile.setText(preferenceManager.getString(KEY_BLOODTYPE));
         binding.aboutProfile.setText(preferenceManager.getString(KEY_ABOUT));
         binding.profileNumber.setText(preferenceManager.getString(KEY_NUMBER));
         binding.emailProfile.setText(preferenceManager.getString(KEY_EMAIL));
+        binding.division.setText(preferenceManager.getString(KEY_DIVISION));
+        binding.district.setText(preferenceManager.getString(KEY_DISTRICT));
+        binding.upazila.setText(preferenceManager.getString(KEY_UPZILA));
 
         byte[] bytes= Base64.decode(preferenceManager.getString(KEY_IMAGE_URI),Base64.DEFAULT);
         Bitmap bitmap= BitmapFactory.decodeByteArray(bytes,0,bytes.length);
@@ -98,7 +105,7 @@ public class AccountActivity extends AppCompatActivity {
         binding.bottomNavAccount.add(new MeowBottomNavigation.Model(1,R.drawable.search_donar));
         binding.bottomNavAccount.add(new MeowBottomNavigation.Model(2,R.drawable.request));
         binding.bottomNavAccount.add(new MeowBottomNavigation.Model(3,R.drawable.add));
-        binding.bottomNavAccount.add(new MeowBottomNavigation.Model(4,R.drawable.history));
+        binding.bottomNavAccount.add(new MeowBottomNavigation.Model(4, R.drawable.group));
         binding.bottomNavAccount.add(new MeowBottomNavigation.Model(5,R.drawable.account));
         binding.bottomNavAccount.setOnShowListener(new MeowBottomNavigation.ShowListener() {
             @Override

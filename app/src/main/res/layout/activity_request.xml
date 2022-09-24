@@ -6,8 +6,19 @@
     android:layout_height="match_parent"
     android:background="@color/white"
     tools:context=".view.bottomViewActivites.RequestActivity">
-
+    <TextView
+        android:id="@+id/req"
+        android:textColor="@color/main_black"
+        android:textSize="@dimen/_20ssp"
+        android:fontFamily="@font/heebo_bold"
+        android:layout_marginTop="@dimen/_20sdp"
+        android:text="Request"
+        android:layout_marginHorizontal="@dimen/_10sdp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        />
     <com.google.android.material.tabs.TabLayout
+        android:layout_below="@id/req"
         android:layout_marginLeft="@dimen/_5sdp"
         android:layout_marginRight="@dimen/_5sdp"
         android:layout_marginTop="@dimen/_5sdp"

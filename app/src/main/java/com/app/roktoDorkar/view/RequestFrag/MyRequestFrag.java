@@ -115,7 +115,7 @@ public class MyRequestFrag extends Fragment implements UserLister {
         intent.putExtra("document_id",receviedListModel.getDocumentId());
         intent.putExtra("receiver_id",receviedListModel.getRequestReceiverUid());
         intent.putExtra("receiver_image",receviedListModel.getzReceiverImage());
-        intent.putExtra("sender_token",receviedListModel.getSenderToken());
+        intent.putExtra("token",receviedListModel.getReceiverToken());
         intent.putExtra("color",R.color.chatPrimary_bg);
         startActivity(intent);
 

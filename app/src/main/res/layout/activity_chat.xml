@@ -78,6 +78,7 @@
         tools:listitem="@layout/item_container_sent_message" />
 
     <ProgressBar
+        android:indeterminateTint="@color/main"
          android:id="@+id/chatProgressbar"
          android:layout_width="@dimen/_25sdp"
          android:layout_height="@dimen/_25sdp"

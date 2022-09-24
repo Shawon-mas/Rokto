@@ -51,14 +51,14 @@ public class SentRequestAdapter extends RecyclerView.Adapter<SentRequestAdapter.
         ReceviedListModel receviedListModel=receviedListModelArrayList.get(position);
         type= receviedListModel.getRequestStatus();
 
-        holder.textViewBloodgroup.setText(preferenceManager.getString(KEY_REQBLOOD));
-        holder.textViewLocation.setText(preferenceManager.getString(KEY_REQUPTHANA));
+        holder.textViewBloodgroup.setText(receviedListModel.getSenderRequiredBlood());
+        holder.textViewLocation.setText(receviedListModel.getSenderRequestLocation());
         holder.textViewReqTime.setText(receviedListModel.getSenderRequestForDate());
 
 
         if (type.equals("accept"))
         {
-            holder.materialButtonDecline.setVisibility(View.GONE);
+//            holder.materialButtonDecline.setVisibility(View.GONE);
             holder.materialButtonAccept.setVisibility(View.GONE);
 
             holder.materialButtonChat.setVisibility(View.VISIBLE);
@@ -70,7 +70,7 @@ public class SentRequestAdapter extends RecyclerView.Adapter<SentRequestAdapter.
         }else if (type.equals("not_accept")){
             holder.materialButtonp.setVisibility(View.VISIBLE);
 
-            holder.materialButtonDecline.setVisibility(View.GONE);
+        //    holder.materialButtonDecline.setVisibility(View.GONE);
             holder.materialButtonAccept.setVisibility(View.GONE);
             holder.materialButtonChat.setVisibility(View.GONE);
             holder.materialButtonFriend.setVisibility(View.GONE);

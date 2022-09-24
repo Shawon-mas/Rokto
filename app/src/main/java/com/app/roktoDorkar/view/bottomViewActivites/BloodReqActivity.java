@@ -185,7 +185,8 @@ public class BloodReqActivity extends AppCompatActivity implements DivisionClick
         }else if (binding.reqBloodPatientType.getText().toString().isEmpty()) {
             showErrorToast("Select patient type");
             return false;
-        }else if (Integer.parseInt(binding.gift.getText().toString())<1000) {
+        }else if (
+                Integer.parseInt(binding.gift.getText().toString())>1000) {
             showErrorToast("Gift Amount will be below 1000");
             return false;
         }
@@ -306,8 +307,8 @@ public class BloodReqActivity extends AppCompatActivity implements DivisionClick
             {
                 preferenceManager.putString(KEY_REQBLOOD,binding.reqBloodGroup.getText().toString());
                 preferenceManager.putString(KEY_REQUPTHANA,binding.includeBloodReq.editTextUp.getText().toString());
-              showSuccessToast("Request Sent");
-              binding.bottomNavBloodReq.show(2,true);
+                showSuccessToast("Request Sent");
+                binding.bottomNavBloodReq.show(2,true);
 
             }
         });
@@ -633,7 +634,7 @@ public class BloodReqActivity extends AppCompatActivity implements DivisionClick
         binding.bottomNavBloodReq.add(new MeowBottomNavigation.Model(1,R.drawable.search_donar));
         binding.bottomNavBloodReq.add(new MeowBottomNavigation.Model(2,R.drawable.request));
         binding.bottomNavBloodReq.add(new MeowBottomNavigation.Model(3,R.drawable.add));
-        binding.bottomNavBloodReq.add(new MeowBottomNavigation.Model(4,R.drawable.history));
+        binding.bottomNavBloodReq.add(new MeowBottomNavigation.Model(4,R.drawable.group));
         binding.bottomNavBloodReq.add(new MeowBottomNavigation.Model(5,R.drawable.account));
         binding.bottomNavBloodReq.setOnShowListener(new MeowBottomNavigation.ShowListener() {
             @Override

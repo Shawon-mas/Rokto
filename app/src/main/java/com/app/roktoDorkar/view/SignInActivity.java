@@ -15,15 +15,20 @@ import static com.app.roktoDorkar.utilites.Constants.KEY_UID;
 import static com.app.roktoDorkar.utilites.Constants.KEY_UPZILA;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Paint;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.InputType;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.app.roktoDorkar.R;
@@ -32,6 +37,7 @@ import com.app.roktoDorkar.utilites.PreferenceManager;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -68,6 +74,11 @@ public class SignInActivity extends AppCompatActivity {
     }
 
     private void setListeners() {
+        binding.forgetpassword.setPaintFlags(binding.forgetpassword.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+        binding.forgetpassword.setOnClickListener(v -> {
+          //  Toast.makeText(getApplicationContext(),"Enter email",Toast.LENGTH_LONG).show();
+            RecoverPassword();
+        });
          binding.passIconSignIn.setOnClickListener(v -> {
              if (passwordShowing) {
                  passwordShowing = false;
@@ -115,6 +126,55 @@ public class SignInActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    private void RecoverPassword()
+    {
+        final ProgressDialogRecover progressDialogRecover=new ProgressDialogRecover(this);
+        AlertDialog.Builder builder=new AlertDialog.Builder(this);
+        builder.setTitle("Recover Password");
+        LinearLayout linearLayout=new LinearLayout(this);
+        final TextInputEditText textInputEditText=new TextInputEditText(this);
+        textInputEditText.setHint("Enter registered email");
+        textInputEditText.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
+        textInputEditText.setMinEms(15);
+        linearLayout.addView(textInputEditText);
+        linearLayout.setPadding(10,10,10,10);
+        builder.setView(linearLayout);
+        builder.setPositiveButton("Recover", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+                String email=textInputEditText.getText().toString().trim();
+                if (email.isEmpty()){
+                    Toast.makeText(getApplicationContext(),"Enter email",Toast.LENGTH_LONG).show();
+                }else {
+                    progressDialogRecover.startLoadingDialog();
+                    Handler handler=new Handler();
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            progressDialogRecover.dismissDialog();
+
+                        }
+                    },2000);
+                    mAuth.sendPasswordResetEmail(email).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if(task.isSuccessful()){
+                                Toast.makeText(getApplicationContext(),"Check your email/spam to change your password",Toast.LENGTH_LONG).show();
+                            }
+                            else {
+                                Toast.makeText(getApplicationContext(),"No user found",Toast.LENGTH_LONG).show();
+                            }
+                        }
+                    });
+                }
+
+
+            }
+        });
+        builder.create().show();
     }
 
     private void userSignIn(String email, String pass) {

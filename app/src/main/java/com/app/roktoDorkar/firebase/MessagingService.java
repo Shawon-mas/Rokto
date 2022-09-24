@@ -43,9 +43,7 @@ public class MessagingService extends FirebaseMessagingService {
         String text = message.getNotification().getBody();
         String CHANNEL_ID = "MESSAGE";
         CharSequence sequence;
-        Intent intent=new Intent(this, DonarChatActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        PendingIntent pendingIntent=PendingIntent.getActivity(this,0,intent,0);
+
       NotificationChannel channel = new NotificationChannel(
                 CHANNEL_ID,
                 "Message Notification",
@@ -55,7 +53,6 @@ public class MessagingService extends FirebaseMessagingService {
                 .setContentTitle(title)
                 .setContentText(text)
                 .setSmallIcon(R.mipmap.ic_launcher)
-                .setContentIntent(pendingIntent)
                 .setAutoCancel(true);
         NotificationManagerCompat.from(this).notify(1, notification.build());
 

@@ -383,7 +383,7 @@ public class HomeActivity extends BaseActivity implements DivisionClick, Distric
         binding.bottomNavHome.add(new MeowBottomNavigation.Model(1, R.drawable.search_donar));
         binding.bottomNavHome.add(new MeowBottomNavigation.Model(2, R.drawable.request));
         binding.bottomNavHome.add(new MeowBottomNavigation.Model(3, R.drawable.add));
-        binding.bottomNavHome.add(new MeowBottomNavigation.Model(4, R.drawable.history));
+        binding.bottomNavHome.add(new MeowBottomNavigation.Model(4, R.drawable.group));
         binding.bottomNavHome.add(new MeowBottomNavigation.Model(5, R.drawable.account));
         binding.bottomNavHome.setOnShowListener(new MeowBottomNavigation.ShowListener() {
             @Override

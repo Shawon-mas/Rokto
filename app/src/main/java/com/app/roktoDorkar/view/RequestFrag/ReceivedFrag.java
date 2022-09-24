@@ -61,9 +61,6 @@ public class ReceivedFrag extends Fragment implements UserLister {
 
     private void intiViews(ViewGroup root) {
 
-
-
-
         progressBar_received=root.findViewById(R.id.receivedProgressbar);
         textView_message=root.findViewById(R.id.dataTextReceived);
         lottieAnimationView=root.findViewById(R.id.animationView);
@@ -78,6 +75,7 @@ public class ReceivedFrag extends Fragment implements UserLister {
 
 
         db.collection("BloodRequest").whereEqualTo("senderRequiredBlood",preferenceManager.getString(KEY_BLOODTYPE))
+
                 .whereEqualTo("senderRequestUpazila",preferenceManager.getString(KEY_UPZILA))
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
@@ -140,7 +138,7 @@ public class ReceivedFrag extends Fragment implements UserLister {
         intent.putExtra("document_id",receviedListModel.getDocumentId());
         intent.putExtra("receiver_id",receviedListModel.getSenderUid());
         intent.putExtra("receiver_image",receviedListModel.getzSenderImage());
-        intent.putExtra("sender_token",receviedListModel.getSenderToken());
+        intent.putExtra("token",receviedListModel.getSenderToken());
 
         intent.putExtra("color",R.color.chatPrimary_bg);
         startActivity(intent);

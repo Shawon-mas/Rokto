@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     android:clipToPadding="false"
     android:overScrollMode="never"
+    android:background="@color/white"
     android:scrollbars="none"
     tools:context=".view.SignUpActivity">
 
@@ -25,6 +26,7 @@
                 android:fontFamily="@font/heebo_black"
                 android:text="@string/sign_up"
                 android:textColor="@color/black"
+                android:textColorHint="@color/main_gray"
                 android:textSize="@dimen/_25ssp"
                 android:textStyle="bold" />
             <FrameLayout
@@ -64,7 +66,8 @@
                 android:maxLines="1"
                 android:paddingStart="@dimen/_16sdp"
                 android:paddingEnd="@dimen/_16sdp"
-                android:textColor="#000"
+                android:textColor="@color/black"
+                android:textColorHint="@color/main_gray"
                 android:textSize="@dimen/_13ssp" />
             <EditText
                 android:gravity="center_vertical"
@@ -81,7 +84,8 @@
                 android:maxLines="1"
                 android:paddingStart="@dimen/_16sdp"
                 android:paddingEnd="@dimen/_16sdp"
-                android:textColor="#000"
+                android:textColor="@color/black"
+                android:textColorHint="@color/main_gray"
                 android:textSize="@dimen/_13ssp" />
             <EditText
                 android:maxLength="11"
@@ -99,11 +103,11 @@
                 android:maxLines="1"
                 android:paddingStart="@dimen/_16sdp"
                 android:paddingEnd="@dimen/_16sdp"
-                android:textColor="#000"
+                android:textColor="@color/black"
+                android:textColorHint="@color/main_gray"
                 android:textSize="@dimen/_13ssp" />
             <TextView
                 android:id="@+id/birthDate"
-
                 android:drawableTint="@color/black"
                 android:drawableRight="@drawable/calender"
                 android:textSize="@dimen/_13ssp"
@@ -113,6 +117,8 @@
                 android:paddingEnd="@dimen/_16sdp"
                 android:background="@drawable/inuput_bg"
                 android:hint="Date of birth"
+                android:textColor="@color/black"
+                android:textColorHint="@color/main_gray"
                 android:layout_marginTop="@dimen/_16sdp"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_46sdp"
@@ -128,6 +134,7 @@
                     android:textSize="@dimen/_13ssp"
                     android:fontFamily="@font/heebo_regular"
                     android:textColor="@color/black"
+                    android:textColorHint="@color/main_gray"
                     android:text="Age"
                     android:layout_weight="1"
                     android:layout_width="wrap_content"
@@ -144,6 +151,7 @@
                     android:textSize="@dimen/_13ssp"
                     android:fontFamily="@font/heebo_regular"
                     android:textColor="@color/black"
+                    android:textColorHint="@color/main_gray"
                     android:layout_weight="1"
                     android:layout_width="wrap_content"
                     android:layout_height="@dimen/_46sdp"/>
@@ -155,7 +163,8 @@
                 android:layout_marginTop="@dimen/_16sdp"
                 android:id="@+id/spinnerdonateBlood"
                 android:textSize="@dimen/_15ssp"
-                android:textColor="#000000"
+                android:textColor="@color/black"
+                android:textColorHint="@color/main_gray"
                 android:background="@drawable/inuput_bg"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_45sdp"
@@ -166,7 +175,8 @@
                 android:layout_marginTop="@dimen/_16sdp"
                 android:id="@+id/bloodtype_spinner"
                 android:textSize="@dimen/_15ssp"
-                android:textColor="#000000"
+                android:textColor="@color/black"
+                android:textColorHint="@color/main_gray"
                 android:background="@drawable/inuput_bg"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_45sdp"
@@ -183,7 +193,8 @@
                 android:maxLines="1"
                 android:paddingStart="@dimen/_16sdp"
                 android:paddingEnd="@dimen/_16sdp"
-                android:textColor="#000"
+                android:textColor="@color/black"
+                android:textColorHint="@color/main_gray"
                 android:textSize="@dimen/_13ssp"
                 app:drawableEndCompat="@drawable/drop_down" />
 
@@ -199,7 +210,8 @@
                 android:maxLines="1"
                 android:paddingStart="@dimen/_16sdp"
                 android:paddingEnd="@dimen/_16sdp"
-                android:textColor="#000"
+                android:textColor="@color/black"
+                android:textColorHint="@color/main_gray"
                 android:textSize="@dimen/_13ssp"
                 app:drawableEndCompat="@drawable/drop_down" />
 
@@ -215,7 +227,8 @@
                 android:maxLines="1"
                 android:paddingStart="@dimen/_16sdp"
                 android:paddingEnd="@dimen/_16sdp"
-                android:textColor="#000"
+                android:textColor="@color/black"
+                android:textColorHint="@color/main_gray"
                 android:textSize="@dimen/_13ssp"
                 app:drawableEndCompat="@drawable/drop_down" />
 
@@ -235,7 +248,8 @@
                 android:maxLines="1"
                 android:paddingStart="@dimen/_16sdp"
                 android:paddingEnd="@dimen/_16sdp"
-                android:textColor="#000"
+                android:textColor="@color/black"
+                android:textColorHint="@color/main_gray"
                 android:textSize="@dimen/_13ssp" />
 
             <RelativeLayout
@@ -256,7 +270,8 @@
                     android:maxLines="1"
                     android:paddingStart="@dimen/_16sdp"
                     android:paddingEnd="@dimen/_16sdp"
-                    android:textColor="#000"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/main_gray"
                     android:textSize="@dimen/_13ssp" />
 
                 <ImageView
@@ -267,6 +282,7 @@
                     android:layout_centerVertical="true"
                     android:adjustViewBounds="true"
                     android:padding="@dimen/_10sdp"
+                    app:tint="@color/black"
                     android:src="@drawable/pass_show" />
             </RelativeLayout>
 

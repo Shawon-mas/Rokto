@@ -73,18 +73,19 @@
             android:text="@string/location"
             android:textSize="@dimen/_12ssp" />
 
-
+        <include
+            android:id="@+id/includeLocation"
+            layout="@layout/user_location" />
         <com.google.android.material.progressindicator.CircularProgressIndicator
             android:id="@+id/homeIndicator"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_15sdp"
             android:indeterminate="true"
+            app:indicatorColor="@color/main"
             android:visibility="gone" />
 
-        <include
-            android:id="@+id/includeLocation"
-            layout="@layout/user_location" />
+
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/button"

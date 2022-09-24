@@ -24,11 +24,12 @@ public class ReceviedListModel implements Serializable {
     private String zReceiverImage;
     private String zSenderImage;
     private String senderToken;
+    private String receiverToken;
 
     public ReceviedListModel() {
     }
 
-    public ReceviedListModel(String requestStatus, String senderGiftAmount, String senderName, String senderPatientGender, String senderPhoneNumber, String senderRequestDetails, String senderRequestForDate, String senderRequestForTime, String senderRequestLocation, String senderRequestUpazila, String senderRequiredBlood, String senderRequiredQuantity, String senderUid, String senderEmail, String requestReceiverUid, String documentId, String requestReceiverName, String accept, String zReceiverImage, String zSenderImage, String senderToken) {
+    public ReceviedListModel(String requestStatus, String senderGiftAmount, String senderName, String senderPatientGender, String senderPhoneNumber, String senderRequestDetails, String senderRequestForDate, String senderRequestForTime, String senderRequestLocation, String senderRequestUpazila, String senderRequiredBlood, String senderRequiredQuantity, String senderUid, String senderEmail, String requestReceiverUid, String documentId, String requestReceiverName, String accept, String zReceiverImage, String zSenderImage, String senderToken, String receiverToken) {
         this.requestStatus = requestStatus;
         this.senderGiftAmount = senderGiftAmount;
         this.senderName = senderName;
@@ -50,6 +51,7 @@ public class ReceviedListModel implements Serializable {
         this.zReceiverImage = zReceiverImage;
         this.zSenderImage = zSenderImage;
         this.senderToken = senderToken;
+        this.receiverToken = receiverToken;
     }
 
     public String getRequestStatus() {
@@ -218,5 +220,13 @@ public class ReceviedListModel implements Serializable {
 
     public void setSenderToken(String senderToken) {
         this.senderToken = senderToken;
+    }
+
+    public String getReceiverToken() {
+        return receiverToken;
+    }
+
+    public void setReceiverToken(String receiverToken) {
+        this.receiverToken = receiverToken;
     }
 }

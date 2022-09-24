@@ -3,6 +3,7 @@ package com.app.roktoDorkar.view.RequestFrag.adapter;
 import static android.content.Context.MODE_PRIVATE;
 import static com.app.roktoDorkar.global.SharedPref.USER_NAME;
 import static com.app.roktoDorkar.utilites.Constants.KEY_COLLECTION_USERS;
+import static com.app.roktoDorkar.utilites.Constants.KEY_FCM_TOKEN;
 import static com.app.roktoDorkar.utilites.Constants.KEY_IMAGE_URI;
 import static com.app.roktoDorkar.utilites.Constants.KEY_NAME;
 
@@ -85,7 +86,7 @@ public class ReceivedListAdapter extends RecyclerView.Adapter<ReceivedListAdapte
         if ( FirebaseAuth.getInstance().getCurrentUser().getUid().equals(receviedListModel.getRequestReceiverUid()) && type.equals("accept") )
         {
 
-            holder.materialButtonDecline.setVisibility(View.GONE);
+           // holder.materialButtonDecline.setVisibility(View.GONE);
             holder.materialButtonAccept.setVisibility(View.GONE);
 
             holder.materialButtonChat.setVisibility(View.VISIBLE);
@@ -135,18 +136,18 @@ public class ReceivedListAdapter extends RecyclerView.Adapter<ReceivedListAdapte
                                             @Override
                                             public void onSuccess(Void unused)
                                             {
-                                                holder.materialButtonDecline.setVisibility(View.GONE);
-                                                holder.materialButtonAccept.setVisibility(View.GONE);
 
+                                               // holder.materialButtonDecline.setVisibility(View.GONE);
+                                                holder.materialButtonAccept.setVisibility(View.GONE);
                                                 holder.materialButtonChat.setVisibility(View.VISIBLE);
                                                 holder.materialButtonFriend.setVisibility(View.VISIBLE);
 
                                                 Map<String, Object> updatesSent = new HashMap<>();
-
                                                 updatesSent.put("requestStatus",updateStatus);
                                                 updatesSent.put("requestReceiverUid",FirebaseAuth.getInstance().getCurrentUser().getUid());
                                                 updatesSent.put("requestReceiverName",preferenceManager.getString(KEY_NAME));
                                                 updatesSent.put("zReceiverImage",preferenceManager.getString(KEY_IMAGE_URI));
+                                                updatesSent.put("receiverToken",preferenceManager.getString(KEY_FCM_TOKEN));
 
 
                                                 DocumentReference ref2 = db.collection(KEY_COLLECTION_USERS).document(receviedListModel.getSenderEmail()).collection("MyBloodRequest").document(receviedListModel.getDocumentId());

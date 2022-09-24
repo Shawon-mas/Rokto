@@ -156,7 +156,7 @@ public class ChatActivity extends BaseActivity {
          message.put(KEY_MESSAGE,binding.inputMessage.getText().toString().trim());
          message.put(KEY_TIMESTAMP,new Date());
          database.collection(KEY_COLLECTION_CHAT).add(message);
-         FCMSend.Builder builder=new FCMSend.Builder(getIntent().getStringExtra("sender_token"))
+         FCMSend.Builder builder=new FCMSend.Builder(getIntent().getStringExtra("token"))
                  .setTitle("Message from: "+ preferenceManager.getString(KEY_NAME))
                  .setBody(binding.inputMessage.getText().toString());
 
@@ -223,6 +223,8 @@ public class ChatActivity extends BaseActivity {
         binding.imageBack.setOnClickListener(v -> {
             onBackPressed();
         });
+
+
         binding.layoutSend.setOnClickListener(v -> {
             if (binding.inputMessage.getText().toString().isEmpty())
             {
